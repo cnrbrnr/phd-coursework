@@ -1,0 +1,112 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+\usepackage{stmaryrd}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+\graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)}
+\newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}}
+\newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\sgn}{sgn}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\newenvironment{indented}[1][2cm]{\setlength{\leftskip}{#1}}{\setlength{\leftskip}{0pt}}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 1\hfill {\bf Connor Braun} \hfill {\bf 2024-09-10}
+    \end{center}
+    \vspace{5pt}
+    \begin{center}
+        \begin{minipage}{\dimexpr\paperwidth-10cm}
+            {\bf Acknowledgements}: Problem 2b was completed with some helpful
+            discussion with Osman Bicer. 
+        \end{minipage}
+    \end{center}
+    \noindent{\bf Problem 1} Let $\mbb{X}$ be a vector space over $\mbb{R}$, and
+    let $p:\mbb{X}\rightarrow\mbb{R}_{\geq 0}$ be a seminorm on
+    $\mbb{X}$.\\[5pt]
+    {\bf a)} Prove that $p$ is symmetric.\\[5pt]
+    {\bf Proof}. Let $x\in\mbb{X}$. Since $p$ is absolutely homogeneous by
+    virtue of being a seminorm, we get
+    $p(-x)=|-1|p(x)=p(x)$.\hfill{$\qed$}\\[5pt]
+    {\bf b)} Prove that $|p(x)-p(y)|\leq p(x-y)$ for any $x,y\in\mbb{X}$.\\[5pt]
+    {\bf Proof}. Take any $x,y\in\mbb{X}$. Then we have 
+    \begin{align*}
+        p(x)=p(x-y+y)\leq p(x-y)+p(y)\quad&\Rightarrow\quad p(x)-p(y)\leq p(x-y)\tag{1}\\
+        p(y)=p(y-x+x)\leq p(y-x)+p(x)=p(x-y)+p(x)\quad&\Rightarrow\quad -(p(x)-p(y))\leq p(x-y).\tag{2}
+    \end{align*}
+    Combining (1) and (2), we get $|p(x)-p(y)|\leq p(x-y)$, as
+    desired.\hfill{$\qed$}\\[5pt]
+    {\bf c)} Let $E=\{x\in\mbb{X}:p(x)=0\}$ be the kernel of the seminorm $p$.
+    Prove that $E$ is closed. That is, prove that for any $(x_n)_{n\geq
+    1}\subset E$ with $\lim_{n\rightarrow\infty}p(x_n-x)=0$ for some
+    $x\in\mbb{X}$, it follows that $x\in E$.\\[5pt]
+    {\bf Proof}. Take $(x_n)_{n\geq 1}$ as prescribed, converging to some
+    $x\in\mbb{X}$ with respect to $p$. By the aforeshown reverse triangle
+    inequality, we produce the bound
+    \begin{align*}
+        |p(x_n)-p(x)|\leq p(x_n-x)\quad\Rightarrow\quad |p(x)|\leq p(x_n-x)
+    \end{align*}
+    where the implication follows $x_n\in E$ $\forall n\geq 1$. Taking the limit
+    as $n\rightarrow\infty$: we obtain
+    \[|p(x)|\leq\lim_{n\rightarrow\infty}p(x_n-x)=0\] so, indeed, $p(x)=0$
+    (since $p$ is nonnegative), which means the limit $x\in
+    E$.\hfill{$\qed$}\\[5pt]
+    {\bf d)} Define a {\it pseudo-metric} $d:\mbb{X}\times\mbb{X}\rightarrow
+    \mbb{R}$ as $d(x,y)=p(x-y)$. Prove that $d$ is a metric if and only if $p$
+    is a norm.\\[5pt]
+    {\bf Proof}. Suppose that $d$ is a metric, and further that $x\in\mbb{X}$
+    satisfies $p(x)=0$. Then $0=p(x)=p(x-0)=d(x,0)$, implying that $x=0$. Of
+    course, $p$ is already nonnegative, absolutely homogeneous and satisfies the
+    triangle inequality, so this is sufficient to certify $p$ as a proper
+    norm.\\[5pt]
+    For the reverse direction, let us suppose that $p$ is a norm. Fix arbitrary
+    elements $x,y,z\in\mbb{X}$. Then, we first have $d(x,x)=p(x-x)=p(0)=0$.
+    Alternatively, if we assume $d(x,y)=0$, then $p(x-y)=0$, so $x=y$ by the
+    normhood of $p$. Clearly, $d(x,y)=p(x-y)\geq 0$ regardless of
+    $x,y\in\mbb{X}$. Symmetry of $d$ is also simple:
+    $d(x,y)=p(x-y)=p(y-x)=d(y,x)$. Finally, for the triangle inequality:
+    \begin{align*}
+        d(x,y)=p(x-y)=p(x-z+z-y)\leq p(x-z)+p(z-y)=d(x,z)+d(z,y)
+    \end{align*}
+    as required. Thus, $p$ a norm $\Rightarrow$ $d$ is a metric, and vise
+    versa.\hfill{$\qed$}
+\end{document}

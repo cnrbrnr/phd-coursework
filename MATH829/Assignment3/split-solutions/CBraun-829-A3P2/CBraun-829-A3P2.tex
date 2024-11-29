@@ -1,0 +1,137 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+\usepackage{stmaryrd}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+\graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)}
+\newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}}
+\newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\sgn}{sgn}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\newenvironment{indented}[1][2cm]{\setlength{\leftskip}{#1}}{\setlength{\leftskip}{0pt}}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 1\hfill {\bf Connor Braun} \hfill {\bf 2024-09-10}
+    \end{center}
+    \vspace{5pt}
+    \noindent{\bf Problem 2} Recall the normed vector spaces $(\ell_p,\|\cdot\|_p)$,
+    where $1\leq p\leq \infty$.\\[5pt]
+    {\bf a)} Show that if $1\leq p,\leq q<\infty$, then $\|x\|_q\leq
+    \|x\|_p$.\\[5pt]
+    {\bf Solution}. Fix $1\leq p<q<\infty$ (the case of $q=p$ holds trivially)
+    and take $x\in\ell_p$, supposing first that $\|x\|_p\leq 1$. That is,
+    $\sum_{j=1}^\infty|x_j|^p\leq 1$, so in particular, $|x_j|\leq 1$ $\forall
+    j\geq 1$. But then $|x_j|^p\geq |x_j|^q$ $\forall j\geq 1$, so
+    $\sum_{j=1}^\infty|x_j|^q\leq \sum_{j=1}^\infty|x_j|^p\leq 1$, and further
+    $(\sum_{j=1}^\infty|x_j|^q)^{1/q}\leq (\sum_{j=1}^\infty|x_j|^p)^{1/p}$,
+    i.e. $\|x\|_q\leq\|x\|_p$ (which holds since both series are $\leq 1$, and
+    $q>p$).\\[5pt]
+    More generally, for $x\in\ell_p$ such that $x\neq 0$ (which is also trivial:
+    $\|0\|_p=0\geq 0=\|0\|_q$) so that $0<\|x\|_p<\infty$, we consider
+    $\tilde{x}:=\tfrac{1}{\|x\|_p}x$, which satisfies
+    $\|\tilde{x}\|_p=\tfrac{1}{\|x\|_p}\|x\|_p=1$. But then
+    \begin{align*}
+        \|\tilde{x}\|_q\leq 1\quad\Rightarrow\quad\frac{1}{\|x\|_p}\|x\|_q\leq 1\quad\Rightarrow\quad \|x\|_q\leq\|x\|_p
+    \end{align*}
+    with the first expression following the preliminary
+    case.\hfill{$\qed$}\\[5pt]
+    {\bf b)} Part (a) shows that $\ell_p\subseteq\ell_q$ for $p<q$. Determine
+    whether either of the statements
+    \begin{align*}
+        \ell_p=\bigcap_{q>p}\ell_q\tag{$\mathfrak{A}$}\\
+        \ell_q=\bigcup_{1\leq p<q}\ell_p\tag{$\mathfrak{B}$}
+    \end{align*}
+    are true, and provide a proof.\\[5pt]
+    {\bf Solution}. Both statements are false, and we will begin with the
+    relatively simpler counterexample for $\mathfrak{A}$. Consider the sequence
+    $x=(\tfrac{1}{n^{1/p}})_{n\geq 1}$. Then $x\in\ell_q$ for all $q>p$ since
+    \begin{align*}
+        \|x\|_q^q=\sum_{n\geq 1}\frac{1}{n^{q/p}}<\infty
+    \end{align*}
+    because $q/p>1$. However, $\|x\|^p_p=\sum_{n\geq 1}\tfrac{1}{n}$ diverges,
+    so $x\notin\ell_p$, disproving $\mathfrak{A}$.\\[5pt]
+    As a counterexample to $\mathfrak{B}$, fix some $q>p$ and consider the
+    sequence $x=(x_n)_{n\geq 1}$ with
+    \begin{align*}
+        x_n=\frac{1}{[(n+2)(\log(n+2))^2]^{1/q}},\quad n\geq 1,\quad\text{and}\quad\|x\|_q^q=\sum_{n\geq 1}\frac{1}{(n+2)(\log(n+2))^2}
+    \end{align*}
+    To show $x\in\ell_q$, we will use the integral test (since the $x_j$ can be
+    interpretted by a continuous, decreasing function on $[1,\infty)$):
+    \begin{align*}
+        \int_1^\infty\frac{dx}{(x+2)(\log(x+2))^2}=\int_{\log(3)}^\infty\frac{(x+2)du}{(x+2)u^2}&=\int_{\log(3)}^\infty\frac{du}{u^2}\tag{change of variables $u=\log(x+2)$}\\
+        &=-\frac{1}{u}\bigg|^\infty_{\log(3)}\\
+        &=\lim_{u\rightarrow\infty}-\frac{1}{u}+\frac{1}{\log(3)}<\infty
+    \end{align*}
+    which implies that $\|x\|_q^q<\infty$, so $x\in\ell_q$. We next claim that
+    for any $1\leq p<q$, $\|x\|_p=\infty$. First, observe that
+    $\log(n+2)>\log(e)=1$ for all $n\geq 1$. Then, whenever $0<m<1$ we get
+    \begin{align*}
+        \frac{1}{[(n+2)(\log(n+2))^2]^m}=\frac{1}{(n+2)^m(\log(n+2))^{2m}}\geq\frac{1}{(n+2)^m(\log(n+2))^2},\quad n\geq 1.
+    \end{align*}
+    In particular, this says $\sum_{n\geq
+    1}\tfrac{1}{[(n+2)(\log(n+2))^2]^m}\geq\sum_{n\geq
+    1}\frac{1}{(n+2)^m(\log(n+2))^2}$. Fixing such an $m\in(0,1)$, let us once
+    again use the integral test to determine the convergence of the latter
+    series (this is once again justified by the existence of a continuous,
+    decreasing interpolant):
+    \begin{align*}
+        \int_1^\infty\frac{dx}{(x+2)^m(\log(x+2))^2}&=\int_{\log(3)}^\infty\frac{(x+2)^{1-m}du}{u^2}\tag{change of variables $u=\log(x+2)$}\\
+        &=\int_{\log(3)}^\infty\frac{e^{u(1-m)}du}{u^2}\tag{$(x+2)=e^u$}\\
+        &=\frac{-e^{u(1-m)}}{u}\bigg|_{\log(3)}^\infty+\int_{\log(3)}^\infty\frac{(1-m)e^{u(1-m)}du}{u}\tag{integration by parts}\\
+        &\geq \lim_{u\rightarrow\infty}-\frac{e^{u(1-m)}}{u}+\frac{3^{(1-m)}}{\log(3)}\tag{$\int_{\log(3)}^\infty\tfrac{(1-m)e^{u(1-m)}du}{u}\geq 0$}\\
+        &=\infty
+    \end{align*} 
+    where the limit is easily evaluated with L'H\^opital's rule given the
+    indeterminate $\tfrac{\infty}{\infty}$. Since this integral diverges, so too
+    does the series; that is
+    \begin{align*}
+        \sum_{n\geq 1}\frac{1}{[(n+2)(\log(n+2))^2]^m}=\infty,\quad 0<m<1.
+    \end{align*}
+    Of course, with $q>p\geq 1$, this means that
+    \begin{align*}
+        \|x\|_p^p=\sum_{n\geq 1}\frac{1}{[(n+2)(\log(n+2))^2]^{p/q}}=\infty,\quad\text{since $0<p/q<1$.}
+    \end{align*}
+    In total, we've found a sequence $x$ with $x\in\ell_q$, but
+    $x\notin\bigcup_{1\leq p<q}\ell_p$. Thus, $\mathfrak{B}$ is
+    false.\hfill{$\qed$}
+\end{document}

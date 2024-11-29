@@ -1,0 +1,89 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+\graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)}
+\newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}}
+\newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 2\hfill {\bf Connor Braun} \hfill {\bf 2024-09-19}
+    \end{center}
+    \vspace{5pt}
+    \noindent{\bf Problem 4} Prove that $(\ell_p,\|\cdot\|_p)$ with $1\leq p<\infty$ is separable.\\[5pt]
+    {\bf Proof}. For this, we further assume $\mbb{K}\in\{\mbb{R},\mbb{C}\}$, or at least that $\mbb{K}$ is itself separable, and take $\widetilde{\mbb{K}}\subset\mbb{K}$ to be a countable dense subset.
+    For $m\geq 1$, define $s^\ast_m:=\{\alpha:\mbb{N}\rightarrow\widetilde{\mbb{K}}:\alpha_j=0$ for $j>m\}$, the $\widetilde{\mbb{K}}$-valued sequences with support on $\{1,2,\dots,m-1\}$, and with $s^\ast_0=\{(0,0,0,\dots)\}$.
+    Then each $s^\ast_m$ for $m\geq 0$ is at most countable, since every element can be associated with an entry of $\widetilde{\mbb{K}}^{m}$. Furthermore, $\cup_{m\geq 0}s^\ast_m=:\widetilde{s}^\ast$ is a countable union of countable sets, and is thus itself
+    countable. I claim that $\widetilde{s}^\ast$ is dense in $(\ell_p,\|\cdot\|_p)$.\\[5pt]
+    First, show that $\widetilde{s}^\ast\subseteq\ell_p$. But for any $\alpha\in\widetilde{s}^\ast$, $\exists N\geq 1$ so that $\alpha_j=0$ whenever $j\geq N$, so
+    \[\|\alpha\|_p=(\sum_{j=1}^\infty|\alpha_j|^p)^{1/p}=(\sum_{j=1}^{N-1}|\alpha_j|^p)^{1/p}<\infty\]
+    and $\widetilde{s}^\ast\subseteq\ell_p$ follows. Now, fix $\beta=(\beta_j)_{j\geq 1}\in\ell_p$, and define $(\hat{\beta}^n)_{n\geq 1}\subset\ell_p$ with $\hat{\beta}^n=(\beta_1,\beta_2,\dots,\beta_{n-1},0,0,\dots)$ for $n\geq 2$ and $\hat{\beta}^1=(0,0,0,\dots)$.
+    Note that since $\|\beta\|_p<\infty$, we have for $\varepsilon>0$, $\exists N\geq 1$ so that
+    \begin{align*}
+        \left|\sum_{j=1}^\infty|\beta_j|^p-\sum_{j=1}^{N-1}|\beta_j|^p\right|=\sum_{j\geq N}|\beta_j|^p<\left(\frac{\varepsilon}{2}\right)^{p}\tag{10}
+    \end{align*}
+    that is, the partial sums can be made arbitrarily close to the series. This difference can be expressed using the approximant $\hat{\beta}^N$ as follows:
+    \begin{align*}
+        \|\beta-\hat{\beta}^N\|_p^p=\sum_{j=1}^{N-1}|\beta_j-\hat{\beta}_j^N|^p+\sum_{j\geq N}|\beta_j-\hat{\beta}_j^N|^p=\sum_{j\geq N}|\beta_j|^p\tag{11}
+    \end{align*}
+    where the last equality follows the definition of $\hat{\beta}^N$ (that $\hat{\beta}^N_j=\beta_j$ for $j\leq N-1$ and is $0$ otherwise). Next, we shall approximate $\hat{\beta}^N$ with elements of $\widetilde{s}^\ast$.
+    For this, define $(\alpha^n)_{n\geq 1}\subset\widetilde{s}^\ast$, where $\alpha^n_j\rightarrow\hat{\beta}^N_j$ as $n\rightarrow\infty$, but $\alpha^n_j=0$ for $j\geq N$. Such a sequence exists for each
+    $1\leq j<N$ since $\widetilde{\mbb{K}}$ is dense in $\mbb{K}$. Then, for $j\in\{1,2,\dots,N-1\}$, $\exists N_j\geq 1$ so that $n\geq N_j$ implies
+    \[|\alpha^n_j-\hat{\beta}^N_j|<\frac{\varepsilon}{2(N-1)^{1/p}}.\tag{12}\]
+    Thus, setting $N^\ast=\max\{N_j\}_{j=1}^{N-1}$ and $n\geq N^\ast$, we obtain
+    \begin{align*}
+        \|\hat{\beta}^N-\alpha^n\|_p^p=\sum_{j=1}^\infty|\hat{\beta}^N_j-\alpha^n_j|^p&=\sum_{j=1}^{N-1}|\hat{\beta}^N_j-\alpha^n_j|^p\\
+        &<(N-1)\left(\frac{\varepsilon}{2(N-1)^{1/p}}\right)^p\\
+        &=\left(\frac{\varepsilon}{2}\right)^p\tag{13}
+    \end{align*}
+    where the inequality follows (12). Finally, we get, for $n\geq N^\ast$,
+    \begin{align*}
+        \|\beta-\alpha^n\|_p&\leq\|\beta-\hat{\beta}^N\|_p+\|\hat{\beta}^N-\alpha^n\|_p\\
+        &<\frac{\varepsilon}{2}+\|\hat{\beta}^N-\alpha^n\|_p\tag{14}\\
+        &<\varepsilon\tag{15}
+    \end{align*}
+    where (14) follows the sequential application of (11) and (10), and (15) follows (13). But then any element $\beta\in\ell_p$ can be
+    approximated by a sequence on $\widetilde{s}^\ast$, which is countable. Thus, $\widetilde{s}^\ast$ is a countable dense subset of $(\ell_p,\|\cdot\|_p)$, and $(\ell_p,\|\cdot\|_p)$ is
+    separable for $1\leq p<\infty$.\hfill{$\qed$}
+\end{document}

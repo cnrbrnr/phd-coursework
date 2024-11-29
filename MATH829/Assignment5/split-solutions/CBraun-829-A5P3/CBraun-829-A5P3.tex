@@ -1,0 +1,102 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} \graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}} \newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}} \newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\ip}[2]{\left\langle#1,#2\right\rangle }
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\makeatletter
+\def\Ddots{\mathinner{\mkern1mu\raise\p@
+\vbox{\kern7\p@\hbox{.}}\mkern2mu
+\raise4\p@\hbox{.}\mkern2mu\raise7\p@\hbox{.}\mkern1mu}}
+\makeatother
+
+\def\powertower#1#2{#1\ifnum#2>1 ^{\powertower{#1}{\numexpr#2-1\relax}}\fi}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 5\hfill {\bf Connor Braun} \hfill {\bf 2024-10-16}
+    \end{center}
+    \vspace{5pt}
+    \noindent{\bf Problem 3}. Let $(e_j)_{j\geq 0}$ be an orthonormal basis for the separable Hilbert space $(X,\ip{\cdot}{\cdot})$ over $\mbb{K}$. We define two
+    sequences of vectors $(u_j)_{j\geq 0}$ and $(v_j)_{j\geq 0}$, where $u_j:=e_{2j}$ and $v_j:=e_{2j}+\frac{1}{j+1}e_{2j+1}$ for $j\geq 0$. Let
+    \begin{align*}
+        \mc{Y}:=\overline{\left\{\sum_{j=0}^n\alpha_ju_j:\;n\geq 0,\;\alpha_0,\dots,\alpha_n\in\mbb{K}\right\}},\quad\text{and}\quad \mc{Z}:=\overline{\left\{\sum_{j=0}^m\beta_jv_j:\;n\geq 0,\;\beta,\dots,\beta\in\mbb{K}\right\}}.
+    \end{align*}
+    Show that $\mc{Y}+\mc{Z}$ is not closed.\\[5pt]
+    {\bf Solution}. We first show that $\mc{Y}+\mc{Z}$ is dense in $X$. For $n\geq 0$, $e_{2n}=u_n+0$, so $e_{2n}\in\mc{Y}+\mc{Z}$, and $e_{2n+1}=-(n+1)u_n+(n+1)v_n$, so $e_{2n+1}\in\mc{Y}+\mc{Z}$. That is, $\{e_n\}_{n\geq 0}\subset \mc{Y}+\mc{Z}$.
+    Now, for any $x\in X$, $\exists!(\alpha_j)_{j\geq 0}$ so that $x=\sum_{j=0}^\infty\alpha_je_j=\lim_{N\rightarrow\infty}\sum_{j=0}^N\alpha_je_j$, and $(\sum_{j=0}^N\alpha_je_j)_{N\geq 0}\subset \mc{Y}+\mc{Z}$. From this we conclude that $\overline{\mc{Y}+\mc{Z}}=X$, so our query reduces to
+    demonstrating that $X\supsetneq\mc{Y}+\mc{Z}$.\\[5pt]
+    Now, consider the series $x^\ast=\sum_{j=0}^\infty\frac{1}{(j+1)}e_{2j+1}$. First,
+    \begin{align*}
+        \|x^\ast\|^2=\left\|\sum_{n=0}^\infty\frac{e_{2n+1}}{n+1}\right\|^2=\ip{\sum_{n=0}^\infty\frac{e_{2n+1}}{n+1}}{\sum_{n=0}^\infty\frac{e_{2n+1}}{n+1}}&=\ip{\lim_{N\rightarrow\infty}\sum_{n=0}^N\frac{e_{2n+1}}{n+1}}{\lim_{M\rightarrow\infty}\sum_{m=0}^M\frac{e_{2m+1}}{m+1}}\\
+        &=\lim_{N\rightarrow\infty}\lim_{M\rightarrow\infty}\sum_{n=0}^N\sum_{m=0}^M\ip{\frac{e_{2n+1}}{n+1}}{\frac{e_{2m+1}}{m+1}}\\
+        &=\lim_{N\rightarrow\infty}\lim_{M\rightarrow\infty}\sum_{n=0}^N\sum_{m=0}^M\frac{1}{n+1}\frac{1}{m+1}\ip{e_{2n+1}}{e_{2m+1}}\\
+        &=\lim_{N\rightarrow\infty}\sum_{n=0}^N\frac{1}{(n+1)^2}\\
+        &=\sum_{n=0}^\infty\frac{1}{(n+1)^2}\tag{1}\\
+        &<\infty
+    \end{align*}
+    so $x^\ast\in X$. Now assume for the purpose of deriving a contradiction that $x^\ast\in\mc{Y}+\mc{Z}$. That is, $\exists y\in\mc{Y}$, $z\in\mc{Z}$ so that $x^\ast=y+z$. In particular, we now have
+    \begin{align*}
+        \|x^\ast\|^2=\ip{\sum_{n=0}^\infty\frac{e_{2n+1}}{n+1}}{y+z}=\ip{\sum_{n=0}^\infty\frac{e_{2n+1}}{n+1}}{y}+\ip{\sum_{n=0}^\infty\frac{e_{2n+1}}{n+1}}{z}\tag{2}
+    \end{align*}
+    but $y\in\mc{Y}$ implies that $\exists\left(\sum_{j=0}^J\alpha_je_{2j}\right)_{J\geq 0}\subset\mc{Y}$ so that $\lim_{J\rightarrow\infty}\sum_{j=0}^J\alpha_je_{2j}=y$, and similarly $\exists\left(\sum_{j=0}^J\beta_j(e_{2j}+\frac{e_{2j+1}}{j+1})\right)_{J\geq 0}\subset\mc{Z}$ with $\lim_{J\rightarrow\infty}\sum_{j=0}^J\beta_j(e_{2j}+\frac{e_{2j+1}}{j+1})=z$. We now compute
+    (2) using these representations -- taking advantage of the continuity of the inner product (as above):
+    \begin{align*}
+        \ip{\sum_{n=0}^\infty\frac{e_{2n+1}}{n+1}}{y}=\ip{\sum_{n=0}^\infty\frac{e_{2n+1}}{n+1}}{\sum_{j=0}^\infty\alpha_je_{2j}}&=\lim_{N\rightarrow\infty}\lim_{J\rightarrow\infty}\sum_{n=0}^N\sum_{j=0}^J\frac{\overline{a_j}}{n+1}\ip{e_{2n+1}}{e_{2j}}=0
+    \end{align*}
+    and
+    \begin{align*}
+        \ip{\sum_{n=0}^\infty\frac{e_{2n+1}}{n+1}}{z}=\ip{\sum_{n=0}^\infty\frac{e_{2n+1}}{n+1}}{\sum_{j=0}^\infty\beta_j(e_{2j}+\frac{e_{2j+1}}{j+1})}&=\lim_{N\rightarrow\infty}\lim_{J\rightarrow\infty}\sum_{n=0}^N\sum_{j=0}^J\frac{1}{n+1}\overline{\beta_j}\left(\ip{e_{2n+1}}{e_{2j}}+\ip{e_{2n+1}}{\frac{e_{2j+1}}{j+1}}\right)\\
+        &=\lim_{N\rightarrow\infty}\lim_{J\rightarrow\infty}\sum_{n=0}^N\sum_{j=0}^J\frac{1}{n+1}\overline{\beta_j}\frac{1}{j+1}\ip{e_{2n+1}}{e_{2j+1}}\\
+        &=\lim_{N\rightarrow\infty}\sum_{n=0}^N\left(\frac{1}{n+1}\right)^2\overline{\beta_n}\\
+    \end{align*}
+    thus, for equality between (1) and (2), we need $\overline{\beta_n}=1$ for $n\geq 0$. In particular, $x^\ast=z$ and thus
+    \begin{align*}
+        \sum_{n=0}^\infty\frac{e_{2n+1}}{n+1}=\sum_{n=0}^\infty e_{2n}+\frac{e_{2n+1}}{n+1}
+    \end{align*}
+    and, furthermore,
+    \begin{align*}
+        \|x^\ast\|^2&=\ip{\sum_{n=0}^\infty e_{2n}+\frac{e_{2n+1}}{n+1}}{\sum_{j=0}^\infty e_{2j}+\frac{e_{2j+1}}{j+1}}\\
+        &=\lim_{N\rightarrow\infty}\lim_{J\rightarrow\infty}\sum_{n=0}^N\sum_{j=0}^J\left(\ip{e_{2n}}{e_{2j}}+\frac{1}{j+1}\ip{e_{2n}}{e_{2j+1}}+\frac{1}{n+1}\ip{e_{2n+1}}{e_{2j}}+\frac{1}{(n+1)(j+1)}\ip{e_{2n+1}}{e_{2j+1}}\right)\\
+        &=\lim_{N\rightarrow\infty}\sum_{n=0}^N\left(1+\frac{1}{(n+1)^2}\right)\\
+        &=\infty
+    \end{align*}
+    which contradicts the previously established $\|x^\ast\|^2<\infty$. We conclude that $x^\ast\notin\mc{Y}+\mc{Z}$, so $\mc{Y}+\mc{Z}\neq X$, and thus $\mc{Y}+\mc{Z}\neq \overline{\mc{Y}+\mc{Z}}$. That is, $\mc{Y}+\mc{Z}$ is not closed.\hfill{$\qed$}\\[5pt]
+\end{document}

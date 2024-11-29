@@ -1,0 +1,280 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+\graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)}
+\newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}}
+\newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 1\hfill {\bf Connor Braun} \hfill {\bf 2024-09-10}
+    \end{center}
+    \vspace{5pt}
+    \begin{center}
+        \begin{minipage}{\dimexpr\paperwidth-10cm}
+            I did not work with anybody in completing this assignment.
+        \end{minipage}
+    \end{center}
+    \noindent{\bf Problem 1} By following the steps below, prove the formula
+    \begin{align}
+        \lim_{n\rightarrow\infty}a_1^{(n)}=\prod_{j=2}^\infty\frac{(2j-1)^2}{4j^2-4j}=\frac{4}{\pi}\label{eq1}
+    \end{align}
+    where $a^{(n)}_j$ for $1\leq j\leq n$ and $n\in\mbb{N}$ are from Fourier's truncated linear system.\\[5pt]
+    {\bf i)} Let $\mc{J}[n]=\int_0^\pi\sim^n(x)dx$ for $n\geq 0$. Use integration by parts to show that $\mc{J}[n]=\frac{n-1}{n}\mc{J}[n-2]$
+    for $n\geq 2$. Deduce that $\tfrac{\mc{J}[2n-1]}{\mc{J}[2n+1]}=\tfrac{2n+1}{2n}$.\\[5pt]
+    {\bf Solution}. As suggested, via integration by parts we obtain
+    \begin{align*}
+        \mc{J}[n]=\int_0^\pi\sin^n(x)dx&=-\sin^{n-1}(x)cos(x)\bigg|^\pi_0+(n-1)\int_0^\pi\cos^2(x)\sin^{n-2}(x)dx\\
+        &=(n-1)\int_0^\pi(1-\sin^2(x))\sin^{n-2}(x)dx\\
+        &=(n-1)\left[\int_0^\pi\sin^{n-2}(x)dx-\int_0^\pi\sin^n(x)dx\right]\\
+        &=(n-1)\mc{J}[n-2]-n\mc{J}[n]+\mc{J}[n]
+    \end{align*}
+    whereby it is clear that $\mc{J}[n]=\tfrac{n-1}{n}\mc{J}[n-2]$. For the second claim,
+    \begin{align*}
+        \frac{\mc{J}[2n-1]}{\mc{J}[2n+1]}=\frac{\tfrac{2n-2}{2n-1}\mc{J}[2n-3]}{\tfrac{2n}{2n+1}\mc{J}[2n-1]}&=\frac{2n-2}{2n-1}\frac{2n+1}{2n}\frac{\mc{J}[2n-3]}{\tfrac{2n-2}{2n-1}\mc{J}[2n-3]}\\
+        &=\frac{2n+1}{2n}
+    \end{align*}
+    as desired.\hfill{$\qed$}\\[5pt]
+    {\bf ii)} Show that $1\leq \frac{\mc{J}[2n]}{\mc{J}[2n+1]}\leq\frac{2n+1}{2n}$ for $n\geq 1$ and compute $\lim_{n\rightarrow\infty}\frac{\mc{J}[2n]}{\mc{J}[2n+1]}$.\\[5pt]
+    {\bf Solution}. The critical observation here is that $\forall x\in[0,\pi]$, $0\leq \sin(x)\leq 1$ such that $\sin^{n}(x)\leq \sin^{n-1}(x)$ for $n\geq 2$. This furnishes the inequality
+    \begin{align*}
+        \mc{J}[2n]=\int_0^\pi\sin^{2n}(x)dx\leq\int_0^\pi\sin^{2n-1}(x)dx=\mc{J}[2n-1]
+    \end{align*}
+    for $n\geq 1$, and in precisely the same way $\mc{J}[2n+1]\leq \mc{J}[2n]$. Thus,
+    \begin{align*}
+        1=\frac{\mc{J}[2n+1]}{\mc{J}[2n+1]}\leq \frac{\mc{J}[2n]}{\mc{J}[2n+1]}\leq \frac{\mc{J}[2n-1]}{\mc{J}[2n+1]}=\frac{2n+1}{2n}
+    \end{align*}
+    from part (i). Of course, $\lim_{n\rightarrow\infty}\tfrac{2n+1}{2n}=1$, so via the squeeze theorem, $\lim_{n\rightarrow\infty}\tfrac{\mc{J}[2n]}{\mc{J}[2n+1]}=1$.\hfill{$\qed$}\\[5pt]
+    {\bf iii)} Write $\mc{J}[2n]$ and $\mc{J}[2n+1]$ as products using (i), and then use the limit from (ii) to show that 
+    \[\prod_{j=1}^\infty\left(\frac{2j}{2j-1}\frac{2n}{2j+1}\right)=\frac{\pi}{2}.\]
+    {\bf Solution}. Following instructions, we find that
+    \begin{align*}
+        \mc{J}[2n]=\frac{2n-1}{2n}\mc{J}[2n-2]=\frac{2n-1}{2n}\frac{2n-3}{2n-2}\mc{J}[2n-4]=\cdots&=\left[\prod_{j=0}^{n-1}\frac{2n-(2j+1)}{2n-2j}\right]\mc{J}[0]
+    \end{align*}
+    where clearly, $\mc{J}[0]=\pi$ and thus $\mc{J}[2n]=\pi \prod_{j=0}^{n-1}\tfrac{2n-(2j+1)}{2n-2j}$, for $n\geq 1$. Using the same program,
+    \begin{align*}
+        \mc{J}[2n+1]=\frac{2n}{2n+1}\mc{J}[2n-1]=\frac{2n}{2n+1}\frac{2n-2}{2n-1}\mc{J}[2n-3]=\cdots=\left[\prod_{j=0}^{n-1}\frac{2n+1-(2j+1)}{2n+1-2j}\right]\mc{J}[1]
+    \end{align*}\
+    and further $\mc{J}[1]=-\cos(x)\big|^\pi_0=2$, so $\mc{J}[2n+1]=2\prod_{j=0}^{n-1}\tfrac{2n+1-(2j+1)}{2n+1-2j}$ for $n\geq 1$. Next, form the ratio
+    \begin{align*}
+        \frac{\mc{J}[2n+1]}{2}\frac{\pi}{\mc{J}[2n]}=\prod_{j=0}^{n-1}\frac{2n-2j}{2n-2j+1}\frac{2n-2j}{2n-2j-1}.
+    \end{align*}
+    Now, define a change of variables $k=n-j$ and reverse the order of the product such that the first index is $j=n-1$ and the last is $j=0$. Then this same finite product can be realized by
+    the range of indices $k=1$ to $k=n$, so
+    \begin{align*}
+        \frac{\pi}{2}\left(\frac{\mc{J}[2n+1]}{\mc{J}[2n]}\right)=\prod_{j=0}^{n-1}\frac{2n-2j}{2n-2j+1}\frac{2n-2j}{2n-2j-1}=\prod_{k=1}^n\frac{2k}{2k+1}\frac{2k}{2k-1}.
+    \end{align*}
+    Finally, taking the limit as $n\rightarrow\infty$ produces the desired result:
+    \begin{align*}
+        \lim_{n\rightarrow\infty}\frac{\pi}{2}\left(\frac{\mc{J}[2n+1]}{\mc{J}[2n]}\right)=\frac{\pi}{2}=\prod_{k=1}^\infty\frac{2k}{2k+1}\frac{2k}{2k-1}
+    \end{align*}
+    where the first equality holds by part (ii).\hfill{$\qed$}\\[5pt]
+    {\bf iv)} Use (iii) to prove (\ref{eq1}).\\[5pt]
+    {\bf Solution}. In part (iii) we obtained the sequence of identities
+    \begin{align}
+        \frac{2}{\pi}\left(\frac{\mc{J}[2n]}{\mc{J}[2n+1]}\right)=\prod_{k=1}^n\frac{2k+1}{2k}\frac{2k-1}{2k}.\label{eq2}
+    \end{align} 
+    for $n\geq 1$. Defining the partial product $P_n:=\prod_{j=2}^n\tfrac{(2j-1)^2}{4j^2-4j}$ for $n\geq 2$, we can manipulate (\ref{eq2}) to produce the chain of
+    implications:
+    \begin{align}
+        (\ref{eq2})\quad\Rightarrow\quad 2\frac{3}{4}\left[\prod_{j=2}^n\frac{2j+1}{2j}\frac{2j-1}{2j}\right]=\frac{4}{\pi}\left(\frac{\mc{J}[2n]}{\mc{J}[2n+1]}\right)\quad&\Rightarrow\quad\frac{3}{2}\left[\prod_{j=2}^n\frac{(2j-1)^2}{4j^2(1-1/j)}\frac{(2j+1)(1-1/j)}{2j-1}\right]=\frac{4}{\pi}\frac{\mc{J}[2n]}{\mc{J}[2n+1]}\\
+        &\Rightarrow\quad\frac{3}{2}P_n\left[\prod_{j=2}^n\frac{(2j+1)(j-1)}{j(2j-1)}\right]=\frac{4}{\pi}\frac{\mc{J}[2n]}{\mc{J}[2n+1]}.\label{eq3}
+    \end{align}
+    From here, take $Q_n:=\prod_{j=2}^n\tfrac{(2j+1)(j-1)}{j(2j-1)}$ and observe that this partial product has a telescopic property:
+    \begin{align*}
+        Q_n&=\frac{(5)(1)}{(2)(3)}\times\frac{(7)(2)}{(3)(5)}\times\frac{(9)(3)}{(4)(7)}\times\cdots\times\frac{(2n-1)(n-2)}{(n-1)(2n-3)}\frac{(2n+1)(n-1)}{(n)(2n-1)}\\
+        &=\frac{1}{3}\left(\frac{2n+1}{n}\right)
+    \end{align*}
+    such that $Q_n\rightarrow\tfrac{2}{3}$ as $n\rightarrow\infty$. Finally, picking up at (3) and taking the limit:
+    \begin{align*}
+        \lim_{n\rightarrow\infty}\frac{3}{2}P_nQ_n=\lim_{n\rightarrow\infty}\frac{4}{\pi}\frac{\mc{J}[2n]}{\mc{J}[2n+1]}\quad\Rightarrow\quad \lim_{n\rightarrow\infty}P_n=\frac{4}{\pi}.
+    \end{align*}
+    And we are done.\hfill{$\qed$}\\[5pt]
+    {\bf Problem 2} Prove that $\tfrac{a^{(n)}_{m+1}}{a^{(n)}_m}=\frac{2m-1}{2m+1}\frac{m-n}{m+n}$.\\[5pt]
+    {\bf Proof}. Fix the truncation $n\geq 1$, and let $\mc{N}:=\{1,2,\dots,n\}$. For $1\leq m\leq n$, define the sets $C_m^-=\{k\in\mc{N}:k<m\}$, $C_m^+=\{k\in\mc{N}:m<k\}$
+    and $C_m=C_m^-\cup C_m^+$. Further, define the matrix
+    \begin{align*}
+        \mc{X}^{(n)}=\begin{pmatrix}
+            1 & 1 & 1 & \cdots & 1\\
+            1^2 & 3^2 & 5^2 & \cdots & (2n-1)^2\\
+            1^4 & 3^4 & 5^4 & \cdots & (2n-1)^4\\
+            \vdots & \vdots & \vdots& \ddots & \vdots\\
+            1^{2n-2} & 3^{2n-2} & 5^{2n-2} & \cdots & (2n-1)^{2n-2} 
+        \end{pmatrix}
+    \end{align*}
+    and for $i\in\mc{N}$ denote with $\mc{X}^{(n)}_i$ the matrix $\mc{X}^{(n)}$ where column $i$ has been replaced with $(1,0,0,\dots,0)^T\in\mbb{R}^n$. Then all of $\mc{X}^{(n)}$, $\mc{X}^{(n)}_i$ for $i\in\mc{N}$ are
+    Vandermonde, and so admit the determinants
+    \begin{align*}
+        \det(\mc{X}^{(n)})=\prod_{1\leq k<j\leq n}((2j-1)^2-(2k-1)^2),\quad\text{and}\quad\det(\mc{X}_i^{(n)})=\prod_{1\leq k<j\leq n}(x^i_j-x^i_k)
+    \end{align*}
+    where $x_j^i=(2j-1)^2$ if $j\neq i$ and $x_i^i=0$. By Cramer's rule, the ratio of interest can be written
+    \begin{align}
+        \frac{a^{(n)}_{m+1}}{a^{(n)}_m}=\frac{\det(\mc{X}^{(n)}_{m+1})}{\det(\mc{X}^{(n)}_m)}&=\frac{\prod_{1\leq i<j\leq n}(x_j^{m+1}-x_i^{m+1})}{\prod_{1\leq i<j\leq n}(x_j^{m}-x_i^{m})}\notag\\
+        &=\frac{\prod_{j\in C_{m+1}^-}(-(2j-1)^2)\prod_{j\in C_{m+1}^+}((2j-1)^2)\prod_{\substack{i,j\in C_{m+1} \\ i<j}}((2j-1)^2-(2i-1)^2)}{\prod_{j\in C_{m}^-}(-(2j-1)^2)\prod_{j\in C_{m}^+}((2j-1)^2)\prod_{\substack{i,j\in C_{m} \\ i<j}}((2j-1)^2-(2i-1)^2)}.\label{eq4}
+    \end{align}
+    Now, the fact that $C_m^-\subset C_{m+1}^-$ and $C_{m+1}^+\subset C_m^+$ while $C_{m+1}^-\setminus C_{m}^-=\{m\}$ and $C_m^+\setminus C_{m+1}^+=\{m+1\}$ means that equation (\ref{eq4}) simplifies to
+    \begin{align*}
+        \frac{a^{(n)}_{m+1}}{a^{(n)}_m}=\frac{-(2m-1)^2}{(2m+1)^2}\frac{\prod_{j<m}((2m-1)^2-(2j-1)^2)\prod_{j>m}((2j-1)^2-(2m-1)^2)}{\prod_{j<m+1}((2m+1)^2-(2j-1)^2)\prod_{j>m+1}((2j-1)^2-(2m+1)^2)}.
+    \end{align*}
+    By expanding the quadratic terms in each of the indexed products and simplifying (which is extremely straightforward and tedious, thus omitted) we next obtain
+    \begin{align*}
+        \frac{a^{(n)}_{m+1}}{a^{(n)}_m}=\frac{-(2m-1)^2}{(2m+1)^2}\frac{\prod_{j<m}4(m-j)[m+j-1]\prod_{j>m}4(j-m)[j+m-1]}{\prod_{j<m+1}4(m+j)[m-j+1]\prod_{j>m+1}4(m+j)[j-m-1]}.
+    \end{align*}
+    Noticing that the $m$-th factor of the bottom left product is equal to the first factor of the top right, this can be further simplified
+    \begin{align*}
+        \frac{a^{(n)}_{m+1}}{a^{(n)}_m}&=\frac{-(2m-1)^2}{(2m+1)^2}\frac{\prod_{j<m}(m-j)[m+j-1]\prod_{j>m+1}(j-m)[j+m-1]}{\prod_{j<m}(m+j)[m-j+1]\prod_{j>m+1}(m+j)[j-m-1]}\\
+        &=\frac{-(2m-1)^2}{(2m+1)^2}\prod_{j<m}\frac{(m-j)[m+j-1]}{(m+j)[m-j+1]}\prod_{j>m+1}\frac{(j-m)[j+m-1]}{(m+j)[j-m-1]}.
+    \end{align*}
+    Now, both of $P_m:=\prod_{j<m}\tfrac{(m-j)[m+j-1]}{(m+j)[m-j+1]}$ and $Q_m=\prod_{j>m+1}\tfrac{(j-m)[j+m-1]}{(m+j)[j-m-1]}$ have some nice telescopic properties:
+    \begin{align*}
+        P_m&=\frac{(m-1)}{(m+1)}\times\frac{(m-2)(m+1)}{(m+2)(m-1)}\times\frac{(m-3)(m+2)}{(m+3)(m-2)}\times\cdots\times\frac{(2)(2m-3)}{(2m-2)(3)}\times\frac{(1)(2m-2)}{(2m-1)(2)}\\
+        &=\frac{1}{(2m-1)}\\
+        Q_m&=\frac{(2)(2m+1)}{(2m+2)(1)}\times\frac{(3)(2m+2)}{(2m+3)(2)}\times\frac{(4)(2m+3)}{(2m+4)(3)}\times\cdots\times\frac{(n-m-1)(n+m-2)}{(n+m-1)(n-m-2)}\times\frac{(n-m)(n+m-1)}{(m+n)(n-m-1)}\\
+        &=\frac{(2m+1)(n-m)}{(m+n)}
+    \end{align*}
+    and with these we have the result:
+    \begin{align*}
+        \frac{a^{(n)}_{m+1}}{a^{(n)}_m}=\frac{-(2m-1)^2}{(2m+1)^2}\frac{1}{(2m-1)}\frac{-(m-n)}{(m+n)}=\frac{2m-1}{2m+1}\frac{m-n}{m+n}.\tag*{$\qed$}
+    \end{align*}
+    {\bf Problem 3} Recall that $a_m=\tfrac{(-1)^m}{(2m-1)}\tfrac{4}{\pi}$, $m\geq 1$ is the solution found by Fourier to the problem
+    \begin{align*}
+        1=\sum_{m=1}^\infty a_m\cos((2m-1)x),\quad x\in(-\tfrac{\pi}{2},\tfrac{\pi}{2}).
+    \end{align*}
+    Let $f_m(x)=\tfrac{4}{\pi}\tfrac{(-1)^m}{(2m-1)}\cos((2m-1)x)$ for $x\in(-\tfrac{\pi}{2},\tfrac{\pi}{2})$. Explain why the term-by-term differentiation
+    \begin{align*}
+        \frac{d}{dx}\sum_{m=1}^\infty f_m(x)=\sum_{m=1}^\infty\frac{d}{dx}f_m(x)
+    \end{align*}
+    does not follow the Weierstrass M-test.\\[5pt]
+    {\bf Solution}. Using the method hinted at in the question, one hopes to apply theorem 6.11 found in the MATH 281 reader to establish the validity of this interchange.
+    Since the $f_m\in C^1((-\tfrac{\pi}{2},\tfrac{\pi}{2}))$ for $m\geq 1$, this requires one to certify that
+    \begin{align*}
+        \sum_{m=1}^n\frac{d}{dx}f_m(x)\overset{?}{\rightarrow} g(x)\quad\text{uniformly on $(-\tfrac{\pi}{2},\tfrac{\pi}{2})$, as}\quad n\rightarrow\infty.
+    \end{align*}
+    However, this is not possible using the Weierstrass M-test. To see this, note that
+    \[\frac{d}{dx}f_m(x)=\frac{4}{\pi}\frac{(-1)^{m+1}}{(2m-1)}\sin((2m-1)x)(2m-1)=\frac{4}{\pi}(-1)^{m+1}\sin((2m-1)x)\]
+    and fix the point $x^\ast=\tfrac{\pi}{4}\in(-\tfrac{\pi}{2},\tfrac{\pi}{2})$. Then for $m\geq 1$, $\sin((2m-1)x^\ast)=\pm\tfrac{\sqrt{2}}{2}$ (and is in fact $4$-periodic in $m$). At this point
+    \begin{align*}
+        \left|\frac{d}{dx}f_m(x)\big|_{x=x^\ast}\right|=\frac{2\sqrt{2}}{\pi}
+    \end{align*}
+    and so the sequence $\{\tfrac{d}{dx}f_m\}_{m\geq 1}$ cannot even be pointwise bounded by the terms of a converging series, let alone uniformly as
+    the Weierstrass M-test requires. Driving this point home, we have
+    \begin{align*}
+        \infty=\sum_{m=1}^\infty\frac{1}{\pi}\leq \sum_{m=1}^\infty\frac{d}{dx}f_m(x)\big|_{x=x^\ast}
+    \end{align*}
+    so there is not sequence $\{M_m\}_{m\geq 1}$ satisfying $|f_m(x)|\leq M_m$ for $x\in(-\tfrac{\pi}{2},\tfrac{\pi}{2})$ such that $\sum_{m=1}^\infty M_m<\infty$.\hfill{$\qed$}\\[5pt]
+    {\bf Problem 4} Solve the following two subproblems, and suppose $\mbb{K}$ is a field.\\[5pt]
+    {\bf a)} Let $X=\{a:\mbb{N}\rightarrow\mbb{K}|a=(a_m)_{m\geq 1}\}$ and $E=\{x\in X:x=(x_1,0,x_3,x_4,\dots)\}$. Compute $\dim(X)$, $\dim(E)$ and $\dim(X/E)$.\\[5pt]
+    {\bf Solution}. For $n\geq 1$, define $e^n=(e^n_m)_{M\geq 1}\in X$ so that $e^n_n=1$ and $e^n_m=0$ if $n\neq m$. Then, fix $N\in\mbb{N}$, and scalars $\{\alpha_m\}_{m=1}^N$. Suppose that
+    \[\sum_{m=1}^N\alpha_me^m=0.\] 
+    With this, we obtain
+    \begin{align*}
+        0=\sum_{m=1}^N\alpha_me^m=(\alpha_1e^1_1,\alpha_2e^2_2,\dots,\alpha_Ne^N_N,0,0,\dots)=(\alpha_1,\alpha_2,\dots,\alpha_N,0,0,\dots)
+    \end{align*}
+    so indeed $a_m=0$ for $1\leq m\leq N$, and $\{e^m\}_{m=1}^N$ are therefore linearly independent. Since this holds for arbitrary $N\in\mbb{N}$, we conclude that $\dim(X)=\infty$.
+    Now for $N\in\mbb{N}$, define $B^N=\{u_j\}_{j=1}^N=\{e^m\}_{\substack{m=1 \\ m\neq 2}}^{N+1}\subset E$. In precisely the same manner,
+    \begin{align*}
+        0=\sum_{j=1}^N\alpha_ju_j=\sum_{m\neq 2}^{N+1}\alpha_me^m=(\alpha_1e^1_1,0,\alpha_2e^3_3,\alpha_3e^4_4,\dots,\alpha_Ne^{N+1}_{N+1},0,0,\dots)=(\alpha_1,0,\alpha_2,\alpha_3,\dots,\alpha_N,0,0,\dots)
+    \end{align*}
+    and again, it must be that $\alpha_m=0$ for $1\leq m\leq N$, whereby the arbitrariness of $N$, $\dim(E)=\infty$. Lastly, define $u=(0,1,0,0,\dots)\in X$. Take $\lambda\in\mbb{K}$, and suppose that $\lambda u\in E$. Then
+    $\lambda u=(0,\lambda,0,0,\dots)\in E\Rightarrow \lambda=0$, so $\{u\}$ is linearly independent relative to $E$. Now, fix some $v=(v_1,v_2,\dots)\in X$, and note that $v$ admits the decomposition
+    $v=v_2u+w$, where $w:=(v_1,0,v_3,v_4,\dots)\in E$. To see that the pair $(v_2,w)$ is unique for this decomposition, suppose we have another $(v_2^\prime,w^\prime)$. Then
+    \begin{align*}
+        v_2u+w=v_2^\prime u+w^\prime\quad\Rightarrow\quad u(v_2-v_2^\prime)+(w-w^\prime)=0.
+    \end{align*}
+    which implies $u(v_2-v_2^\prime)$ is the additive inverse of $(w-w^\prime)\in E$, so $u(v_2-v_2^\prime)\in E\Rightarrow (v_2-v_2^\prime)=0$, and subsequently $w=w^\prime$. Thus, $\{u\}$ is a basis of $X/E$, so $\dim(X/E)=1$.\hfill{$\qed$}\\[5pt]
+    {\bf b)} Let $X$ be the space of all bi-infinite, $\mbb{K}$-valued sequences $x=(x_n)_{n=-\infty}^{\infty}$ such that each of the limits
+    \begin{align*}
+        \lim_{k\rightarrow\infty}x_{2k},\quad\lim_{k\rightarrow\infty}x_{2k+1},\quad\text{and}\quad\lim_{k\rightarrow-\infty}x_k
+    \end{align*}
+    exist. Let $E$ be the space of all bi-infinite $\mbb{K}$-valued sequences such that $\lim_{k\rightarrow-\infty}x_k=\lim_{k\rightarrow\infty}x_k=0$. Prove that $E$ is a subspace of $X$
+    and find both a basis and the dimension of $X/E$.\\[5pt]
+    {\bf Solution}. First, notice that $E\subseteq X$, since $\lim_{k\rightarrow\infty}x_k=0$ implies both $\lim_{k\rightarrow\infty}x_{2k}=0$ and $\lim_{k\rightarrow\infty}x_{2k+1}=0$. Further, the set $E$ is closed under the usual
+    elementwise addition and scalar multiplication operations. Taking $\alpha\in\mbb{K}$ and $v,w\in E$,
+    \begin{align*}
+        \lim_{k\rightarrow\pm\infty}(\alpha v+w)=\alpha\lim_{k\rightarrow\infty}v_k+\lim_{k\rightarrow\infty}w_k=\alpha\cdot0+0=0
+    \end{align*}
+    so $\alpha v+w\in E$. Thus, $E$ is a subspace of $X$. For the second objective, define the bi-infinite sequences $b^1=(b^1_m)_{m=-\infty}^\infty$, $b^2=(b^2_m)_{m=-\infty}^\infty$, and $b^3=(b^3_m)_{m=-\infty}^\infty$ with
+    \begin{align*}
+        b^1_m=\begin{cases}
+            1,\quad&\text{if $m<0$}\\
+            0,\quad&\text{o.w.}
+        \end{cases},\quad
+        b^2_m=\begin{cases}
+            1,\quad&\text{if $2|m$, $m\geq 0$}\\
+            0,\quad&\text{o.w.}
+        \end{cases},\quad\text{and}\quad
+        b^3_m=\begin{cases}
+            1,\quad&\text{if $2\nmid m$, $m\geq 0$}\\
+            0,\quad&\text{o.w.}
+        \end{cases}.
+    \end{align*}
+    All of these are clearly in $X$, as they reduce to a sequence of either $1$'s or $0$'s in each of the qualifying limits. Now, to show linear independence relative to $E$, take scalars $\lambda_1,\lambda_2,\lambda_3\in\mbb{K}$, and suppose that $\sum_{k=1}^3\lambda_kb^k\in E$. Then we have
+    \begin{align*}
+        \lim_{k\rightarrow-\infty}(\lambda_1b^1_k+\lambda_2b^2_k+\lambda_3b^3_k)=0\quad&\Rightarrow\quad\lambda_1(\lim_{k\rightarrow-\infty}b^1_k)+\lambda_2(\lim_{k\rightarrow -\infty}b^2_k)+\lambda_3(\lim_{k\rightarrow -\infty}b^3_k)=0\\
+        &\Rightarrow\quad\lambda_1+0+0=0\\
+        &\Rightarrow\quad\lambda_1=0.
+    \end{align*}
+    and similarly,
+    \begin{align*}
+        \lim_{k\rightarrow\infty}(\lambda_1b^1_k+\lambda_2b^2_k+\lambda_3b^3_k)=0\quad&\Rightarrow\quad\lambda_2(\lim_{k\rightarrow \infty}b^2_k)+\lambda_3(\lim_{k\rightarrow \infty}b^3_k)=0
+    \end{align*}
+    but this time, neither $\lim_{k\rightarrow\infty}b^2_k$ nor $\lim_{k\rightarrow\infty}b^3_k$ exist, necessitating $\lambda_2=\lambda_3=0$ for the combination to even reside in $E$ in the first place.
+    Since it must be that $\lambda_1=\lambda_2=\lambda_3=0$, $\{b^1,b^2,b^3\}$ is found linearly independent relative to $E$. Now, take $x=\{x_m\}_{m=-\infty}^\infty\in X$ and define the scalars
+    \begin{align*}
+        \lim_{k\rightarrow-\infty}x_k=C^-,\quad\lim_{k\rightarrow\infty}x_{2k}=C^e,\quad\text{and}\quad\lim_{k\rightarrow\infty}x_{2k+1}=C^o.
+    \end{align*}
+    Then, observe that $x$ admits the decomposition
+    \begin{align*}
+        x=(C^-b^1+C^eb^2+C^ob^3)+(x-C^-b^1-C^eb^2-C^ob^3).
+    \end{align*}
+    Taking some limits of the second term, we have
+    \begin{align*}
+        \lim_{k\rightarrow-\infty}(x_k-C^-b^1_k-C^eb^2_k-C^ob^3_k)&=C^--C^-+0+0=0\\
+        \lim_{k\rightarrow\infty}(x_{2k}-C^-b^1_{2k}-C^eb^2_{2k}-C^ob^3_{2k})&=C^e-0-C^e-0=0\\
+        \lim_{k\rightarrow\infty}(x_{2k+1}-C^-b^1_{2k+1}-C^eb^2_{2k+1}-C^ob^3_{2k+1})&=C^o-0-0-C^o=0
+    \end{align*}
+    where since the latter two limits agree, we have $\lim_{k\rightarrow\infty}(x-C^-b^1-C^eb^2-C^ob^3)=0$, so $(x-C^-b^1-C^eb^2-C^ob^3)\in E$. 
+    The uniqueness of the above decomposition for $x$ follows precisely the same reasoning as was demonstrated in part (a) of this problem.
+    Since such a unique decomposition exists $\forall x\in X$, we conclude the set $\{b^1,b^2,b^3\}$ is a basis of $X/E$, and moreover $\dim(X/E)=3$.\hfill{$\qed$}
+\end{document}

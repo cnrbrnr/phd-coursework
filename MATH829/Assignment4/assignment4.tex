@@ -1,0 +1,329 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} \graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}} \newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}} \newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\makeatletter
+\def\Ddots{\mathinner{\mkern1mu\raise\p@
+\vbox{\kern7\p@\hbox{.}}\mkern2mu
+\raise4\p@\hbox{.}\mkern2mu\raise7\p@\hbox{.}\mkern1mu}}
+\makeatother
+
+\def\powertower#1#2{#1\ifnum#2>1 ^{\powertower{#1}{\numexpr#2-1\relax}}\fi}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 4\hfill {\bf Connor Braun} \hfill {\bf 2024-10-03}
+    \end{center}
+    \vspace{5pt}
+    \begin{center}
+        \begin{minipage}{\dimexpr\paperwidth-10cm}
+            I did not work with anybody in completing this assignment.
+        \end{minipage}
+    \end{center}
+    \noindent{\bf Problem 1} Prove that if a real vector space $(X,\|\cdot\|)$
+    has a Schauder basis, then it is separable by following the steps
+    below.\\[5pt]
+    {\bf a)} Suppose there is a Schauder basis $(e_n)_{n\geq 1}\subset X$, and
+    without loss of generality that $\|e_n\|=1$ for $n\geq 1$. Explain why for
+    every $x\in X$ and $\varepsilon>0$ $\exists N\geq 1$ such that
+    \[\left\|x-\sum_{n=1}^N\alpha_n e_n\right\|<\varepsilon\] for some
+    $(\alpha_n)_{n\geq 1}\subset\mbb{R}$.\\[5pt]
+    {\bf Solution}. Since $(e_n)_{n\geq 1}$ is a Schauder basis, fixing $x\in X$
+    there exists some $(\alpha_n)_{n\geq 1}$ such that
+    $x=\sum_{n=1}^\infty\alpha_n e_n$. Fixing also some $\varepsilon>0$, we have
+    $x=\sum_{n=1}^\infty\alpha_n
+    e_n=\lim_{N\rightarrow\infty}\sum_{n=1}^N\alpha_ne_n$, and so the definition
+    of a limit applied to the sequence of partial sums yields an $N^\prime\geq
+    1$ so that $N\geq N^\prime$ implies
+    \begin{align*}
+        \left\|x-\sum_{n=1}^N\alpha_n e_n\right\|<\varepsilon.\tag*{$\qed$}
+    \end{align*}
+    {\bf b)} Let $N\geq 1$ and $\alpha_1,\dots, \alpha_N$ be as in (a). Show
+    that for $1\leq n\leq N$, $\exists r_n\in\mbb{Q}$ such that
+    $|\alpha_n-r_n|<\tfrac{\varepsilon}{N}$.\\[5pt]
+    {\bf Solution}. Since $\mbb{Q}$ is dense in $\mbb{R}$, for $1\leq n\leq N$
+    we can find $(r_n^j)_{j\geq 1}\subseteq\mbb{Q}$ so that $r^j_n\rightarrow
+    \alpha_n$ as $j\rightarrow\infty$. In particular, $\exists J_n\geq 1$ so
+    that $j\geq J_n$ $\Rightarrow$ $|r_n^j-\alpha_n|<\tfrac{\varepsilon}{N}$.
+    With $J:=\max\{J_i\}_{i=1}^N$, and $j\geq J$, set $r_n:=r_n^j$ for $1\leq
+    n\leq N$. Then $(r_n)_{n=1}^N$ satisfies
+    $|r_n-\alpha_n|<\tfrac{\varepsilon}{N}$ by
+    construction.\hfill{$\qed$}\\[5pt]
+    {\bf c)} Let $r_1,\dots, r_N$ be as in (b) and consider $y=\sum_{n=1}^N
+    r_ne_n$. Show that $\|x-y\|<2\varepsilon$. Explain why this concludes the
+    proof.\\[5pt]
+    {\bf Solution} For better clarity, let us suppose that $N$ in (a) was
+    instead chosen large enough so that
+    $\|x-\sum_{n=1}^N\alpha_ne_n\|<\tfrac{\varepsilon}{2}$, and subsequently
+    each $r_n$ so that $|r_n-\alpha_n|<\tfrac{\varepsilon}{2N}$ for $1\leq n\leq
+    N$. Then,
+    \begin{align*}
+        \|x-y\|=\left\|x-\sum_{n=1}^N\alpha_ne_n+\sum_{n=1}^N\alpha_ne_n-\sum_{n=1}^Nr_ne_n\right\|&\leq \left\|x-\sum_{n=1}^N\alpha_ne_n\right\|+\left\|\sum_{n=1}^N(\alpha_n-r_n)e_n\right\|\\
+        &\leq \tfrac{\varepsilon}{2}+\sum_{n=1}^N|\alpha_n-r_n|\|e_n\|\\
+        &\leq\tfrac{\varepsilon}{2}+N\tfrac{\varepsilon}{2N}\\
+        &=\varepsilon.
+    \end{align*}
+    We have shown that $\forall x\in X$, $\exists y\in Y\subset X$ so that
+    $\|x-y\|<\varepsilon$, where $Y:=\{y\in X:\exists N\geq
+    1,\;(r_n)_{n=1}^N\subset\mbb{Q}\;\text{with}\;y=\sum_{n=1}^Nr_ne_n\}$. That
+    is, $Y$ is dense in $X$. For separability we need only for $Y$ to be
+    countable.\\[5pt]
+    To show this, define an injection $g$ so that $\forall y\in Y$,
+    $y\overset{g}{\mapsto} (N,r)\in\mbb{N}\times R$, where $r=(r_n)_{n=1}^N$ and
+    $R$ is the set of finite subsets of $\mbb{Q}$. Next, we show the set
+    $R\subset 2^\mbb{Q}$ is countable. Define $R_n\subset R$ the set of subsets
+    of cardinality $n$ for $n\geq 1$. Then, an obvious bijection can be
+    established between $R_n$ and $\mbb{Q}^n$ for $n\geq 1$ (by imposing a
+    partial order on the elements of each set in $R_n$) and subsequently,
+    \[|R|=\left|\bigcup_{n\in\mbb{N}}R_n\right|=\sum_{n\geq\mbb{N}}|R_n|=\sum_{n\in\mbb{N}}|\mbb{Q}^n|\]
+    which is a countable infinity, since $\mbb{Q}^n$ is countable for $n\geq 1$
+    (the last equality above holds since $R_n\cap R_m=\emptyset$ for $n\neq m$).
+    Of course, the product $\mbb{N}\times R$ is then also countable, so with the
+    restricted inverse $g_Y^{-1}:g(Y)\rightarrow Y$, defined as
+    $g_Y^{-1}(N,r):=g^{-1}(N,r)$ for all $(N,r)\in g(Y)$, the pair $(g,g_Y)$
+    defines a bijection between $Y$ and $g(Y)$. Finally, $g(Y)\subset
+    \mbb{N}\times R$ implies $g(Y)$ is at most countable, so $Y$ is at most
+    countable too.\hfill{$\qed$}
+    {\bf Problem 2} Prove the theorem stated on the
+    assignment by following the steps below.\\[5pt]
+    {\bf a)} Explain why $\lim_{k\rightarrow \infty} x_{n_k+1}=T(z)$.\\[5pt]
+    {\bf Solution}. With $(x_{n_k})_{k\geq 1}$ the subsequence from condition
+    (iii) in the statement of the theorem, $\lim_{k\rightarrow\infty}x_{n_k}= z$
+    by hypothesis. Then, by (ii) (i.e., the continuity of $T$ at $z$) we have 
+    \[\lim_{k\rightarrow\infty}x_{n_k+1}=\lim_{k\rightarrow\infty}T(x_{n_k})=T(\lim_{k\rightarrow\infty}x_{n_k})=T(z).\tag*{$\qed$}\]
+    {\bf b)} Assume for the purpose of deriving a contradiction that $z\neq
+    T(z)$. Fix $0<\eta<\tfrac{1}{3}d(z,T(z))$. Let $B_1=B_\eta(z)$, and
+    $B_2=B_\eta(T(z))$. Explain why $\exists K\geq 1$ such that $k\geq K$
+    implies that $x_{n_k}\in B_1$ and $x_{n_k+1}\in B_2$. Deduce that, for
+    $k\geq K$, 
+    \[d(x_{n_k},x_{n_k}+1)>\eta.\] {\bf Solution}. Since $x_{n_k}\rightarrow z$
+    as $k\rightarrow\infty$, $\exists K_1\geq 1$ so that $k\geq K_1$
+    $\Rightarrow$ $d(z,x_{n_k})<\eta$. But from part (a), $\exists K_2\geq 1$ so
+    that $k\geq K_2$ $\Rightarrow$ $d(x_{n_k+1},T(z))<\eta$. Setting
+    $K=\max\{K_1,K_2\}$, both $d(x_{n_k},z)<\eta$ and $d(x_{n_k+1},T(z))<\eta$
+    hold. Then, with $k\geq K$:
+    \begin{align*}
+        d(x_{n_k},x_{n_k+1})&\geq |d(x_{n_k},z)-d(z,x_{n_k+1})|\tag{1}\\
+        &=d(z,x_{n_k+1})-d(x_{n_k},z)\tag{2}\\
+        &>d(z,x_{n_k+1})-\eta\\
+        &\geq|d(z,T(z))-d(x_{n_k+1},T(z))|-\eta\tag{3}\\
+        &=d(z,T(z))-d(x_{n_k+1},T(z))-\eta\tag{4}\\
+        &>3\eta-\eta-\eta\tag{5}\\
+        &=\eta
+    \end{align*}
+    as desired. Steps (1) and (3) are obtained from the reverse triangle
+    inequality, (2) by observing that $d(x_{n_k+1},z)\geq d(z,x_{n_k})$ (since
+    $x_{n_k}\in B_1$, but $x_{n_k+1}\notin B_1$) and (4) from the similar
+    observation that $d(z,T(z))\geq d(x_{n_k+1},T(z))$ (since $x_{n_k+1}\in B_2$
+    but $z\notin B_2$). The appearance of $3\eta$ in (5) follows the definition
+    of $\eta$, namely that $3\eta<d(z,T(z))$.\hfill{$\qed$}\\[5pt]
+    {\bf c)} Using the hypothesis that $\exists\lambda\in(0,\tfrac{1}{2})$ so
+    that $\forall x\in X$:
+    \[d(T(x),T(y))\leq \lambda\left[d(x,T(x))+d(y,T(y))\right],\] deduce that
+    \[d(x_{n_k+1},x_{n_k+2})\leq\frac{\lambda}{1-\lambda}d(x_{n_k},x_{n_k+1}).\]
+    {\bf Solution}. This bound is obtained directly from the hypothesis:
+    \begin{align*}
+        d(x_{n_k+1},x_{n_k+2})=d(T(x_{n_k}),T(x_{n_k+1}))&\leq\lambda\left[d(x_{n_k},T(x_{n_k}))+d(x_{n_k+1},T(x_{n_k+1}))\right]\\
+        &=\lambda\left[d(x_{n_k},x_{n_k+1})+d(x_{n_k+1},x_{n_k+2})\right]\\
+        \Rightarrow\qquad\qquad d(x_{n_k+1},x_{n_k+2})(1-\lambda)&\leq d(x_{n_k},x_{n_k+1})\leq \lambda d(x_{n_k},x_{n_k+1})\\
+        \Rightarrow\qquad\qquad d(x_{n_k+1},x_{n_k+2})&\leq \frac{\lambda}{1-\lambda}d(x_{n_k},x_{n_k+1})\tag*{$\qed$}
+    \end{align*}
+    {\bf d)} Deduce that for $\ell>k\geq K$, we have
+    \begin{align*}
+        d(x_{n_\ell},x_{n_\ell+1})\leq\left(\frac{\lambda}{1-\lambda}\right)^{n_\ell-n_k}d(x_{n_k},x_{n_k+1}).
+    \end{align*}
+    {\bf Solution}. This is a direct consequence of the bound found in (c).
+    Specifically, with $\ell>k\geq K$ as prescribed (and $K$ as in (b)):
+    \begin{align*}
+        d(x_{n_\ell},x_{n_\ell+1})\leq \left(\frac{\lambda}{1-\lambda}\right)d(x_{n_\ell-1},x_{n_\ell})&\leq \left(\frac{\lambda}{1-\lambda}\right)^2d(x_{n_\ell-2},x_{n_\ell-1})\leq\dots\leq \left(\frac{\lambda}{1-\lambda}\right)^{n_\ell-n_k}d(x_{n_k},x_{n_k+1})\tag{$\qed$}
+    \end{align*}
+    {\bf e)} Explain why taking the limit as $\ell\rightarrow\infty$ in (d)
+    yields a contradiction to the lower bound in (b), thus showing that
+    $z=T(z)$.\\[5pt]
+    {\bf Solution}. Since $\lambda\in(0,\tfrac{1}{2})$,
+    $\tfrac{\lambda}{1-\lambda}<1$, so
+    $\lim_{\ell\rightarrow\infty}(\tfrac{\lambda}{1-\lambda})^{n_\ell-n_k}=0$.
+    Applying this,
+    \begin{align*}
+        0\leq\lim_{\ell\rightarrow\infty}d(x_{n_\ell},x_{n_\ell+1})\leq\lim_{\ell\rightarrow\infty}\left(\frac{\lambda}{1-\lambda}\right)^{n_\ell-n_k}d(x_{n_k},x_{n_k+1})=0
+    \end{align*}
+    so $\lim_{\ell\rightarrow\infty}d(x_{n_\ell},x_{n_\ell+1})=0$, and we can
+    find $L\geq 1$ so that $\ell\geq L$ $\Rightarrow$
+    $d(x_{n_\ell},x_{n_\ell+1})<\eta$. But this contradicts $\ell\geq K$
+    $\Rightarrow$ $d(x_{n_\ell},x_{n_\ell+1})>\eta$ from (b). To resolve this,
+    we conclude $z=T(z)$.\\[5pt]
+    {\bf f)} Prove that the fixed point $z$ is unique.\\[5pt]
+    {\bf Solution} Suppose $z^\prime$ is another fixed point of $T$. Then,
+    \begin{align*}
+        0\leq d(z,z^\prime)=d(T(z),T(z^\prime))\leq\lambda\left[d(z,T(z))+d(z^\prime,T(z^\prime))\right]=\lambda\left[d(T(z),T(z))+d(T(z^\prime),T(z^\prime))\right]=0
+    \end{align*}
+    where since $d$ is a metric, we conclude $z=z^\prime$, and thus the fixed
+    point $z$ is unique. Note that, in the above chain, the penultimate
+    inequality follows the assumption that $z^\prime$ is a fixed point of
+    $T$.\hfill{$\qed$}\\[5pt]
+    {\bf Problem 3} The goal is to find an approximation to the number
+    \begin{align*}
+        x^\ast=\left(\tfrac{1}{2}\right)^{\left(\frac{1}{2}\right)^{\left(\frac{1}{2}\right)^{\Ddots}}}
+    \end{align*}
+    that is, with $x^\ast$ the fixed point of map
+    $F(x)=(\tfrac{1}{2})^x$.\\[5pt]
+    {\bf a)} Find $a\leq 1$ such that $F:[a,1]\rightarrow[a,1]$ and $F$ is a
+    contraction on $[a,1]$.\\[5pt]
+    {\bf Solution}. Let $a=\tfrac{1}{2}$. Then $X:=[\tfrac{1}{2},1]$ is a
+    connected subset of $\mbb{R}$, and $F$ is continuous and decreasing on $X$
+    so 
+    \begin{align*}
+        F\left(\left[\tfrac{1}{2},1\right]\right)=\left[F(1),F(\tfrac{1}{2})\right]=\left[\tfrac{1}{2},\tfrac{1}{\sqrt{2}}\right]\subset \left[\tfrac{1}{2},1\right]
+    \end{align*}
+    which follows the fact that continuous mappings of connected sets are
+    connected (see \cite[theorem 4.22]{Rudin_1976}). Since $F$ is differentiable
+    and $F(x)>0$ $\forall x\in X$, we compute
+    \begin{align*}
+        \frac{d}{dx}\log(F(x))=\frac{d}{dx}x\log\left(\frac{1}{2}\right)\quad\Rightarrow\quad \frac{1}{F(x)}F^\prime(x)=\log\left(\frac{1}{2}\right)\quad\Rightarrow\quad F^\prime(x)=-F(x)\log\left(2\right).
+    \end{align*} 
+    Further, $|F^\prime|=\log(2)F$ is continuous and decreasing on $X$, so
+    \[\sup_{x\in
+    X}|F^\prime(x)|=\log(2)F\left(\frac{1}{2}\right)<\frac{1}{\sqrt{2}}<1\tag{6}\]
+    which we will now use to demonstrate that $F$ is a contraction. Take $x,y\in
+    X$, and without loss of generality suppose that $x<y$. Then, by the mean
+    value theorem, $\exists\xi\in(x,y)$ satisfying
+    \begin{align*}
+        |F(x)-F(y)|=|F^\prime(\xi)||x-y|<\frac{1}{\sqrt{2}}|x-y|
+    \end{align*}
+    where the inequality follows (6). We conclude that $F$ is a contraction on
+    $X$ with contraction coefficient $\tfrac{1}{\sqrt{2}}$.\\[5pt]
+    {\bf b)} Use the Banach fixed point theorem to find a real number $y$ so
+    that $|x^\ast-y|<10^{-2}$.\\[5pt]
+    {\bf Solution}. Let $x_0=\frac{1}{2}$ and $x_{n+1}=F(x_n)$ for $n\geq 0$.
+    Then, via the {\it a priori} estimate:
+    \begin{align*}
+        |x_n-x^\ast|\leq\left(\frac{1}{\sqrt{2}}\right)^n\left(\frac{\sqrt{2}}{\sqrt{2}-1}\right)|x_1-x_0|&=\left(\frac{1}{2}\right)^{n/2}\frac{2^{1/2}}{2^{1/2}-1}\left|\frac{1}{2^{1/2}}-\frac{1}{2}\right|\\
+        &=\left(\frac{1}{2}\right)^{n/2}\frac{2^{1/2}}{2^{1/2}-1}\left|\frac{2-2^{1/2}}{2\cdot 2^{1/2}}\right|\\
+        &=\left(\frac{1}{2}\right)^{n/2}\frac{1-2^{-1/2}}{2^{1/2}-1}\\
+        &=\left(\frac{1}{2}\right)^{n/2}\frac{\frac{2^{1/2}-1}{2^{1/2}}}{2^{1/2}-1}\\
+        &=\left(\frac{1}{2}\right)^{\tfrac{n+1}{2}}.
+    \end{align*}
+    Further, $2^{\tfrac{n+1}{2}}\geq 100$ when $n\geq 13$, so the number
+    \begin{align*}
+        y:= F^{[13]}\left(\frac{1}{2}\right)=\powertower{\tfrac{1}{2}}{14}\approx0.6411895978
+    \end{align*}
+    satisfies $|y-x^\ast|\leq 10^{-2}$, where $F^{[n]}$ denotes the function $F$
+    composed with itself $n\geq 1$ times.\\[5pt]
+    {\bf c)} Find a rational number $z$ such that $|x^\ast-z|<10^{-2}$.\\[5pt]
+    {\bf Solution}. First, let $y^\prime=F^{[15]}(\tfrac{1}{2})$, which
+    satisfies $|y^\prime-x^\ast|\leq \tfrac{1}{2}10^{-2}$ using the same {\it a
+    priori} estimate as above. Then, let us define a sequence $(z_n)_{n\geq 0}$
+    by
+    \[z_n:=\frac{\floor{10^n y^\prime}}{10^n},\quad n\geq 0\tag{7}\] where
+    $\floor{\cdot}$ is the floor function, so that $z_n$ has the same base $10$
+    decimal expansion as $y^\prime$, but truncated to $n$ digits. In particular,
+    $(z_n)_{n\geq 0}\subset\mbb{Q}$, since both the numerator and denominator in
+    (7) are integers. Then, estimating
+    \begin{align*}
+        |y^\prime-z_n|=\left|y^\prime-\frac{\floor{10^ny^\prime}}{10^n}\right|=\left|\frac{10^ny^\prime-\floor{10^ny^\prime}}{10^n}\right|=\frac{1}{10^n}|10^ny^\prime-\floor{10^ny^\prime}|\leq \frac{1}{10^n}
+    \end{align*}
+    since $\alpha-\floor{\alpha}\leq 1$ for $\alpha\in\mbb{R}$. Thus, with
+    $z:=z_3=\tfrac{\floor{10^3y^\prime}}{10^3}$, we get
+    \begin{align*}
+        |x^\ast-z|\leq|x^\ast-y^\prime|+|x^\ast-z|\leq \frac{1}{2}10^{-2}+10^{-3}\leq \frac{1}{2}10^{-2}+\frac{1}{2}10^{-2}=10^{-2}.
+    \end{align*}
+    Thus, we have identified $z\in\mbb{Q}$ approximating $x^\ast$ to the desired
+    degree of accuracy. In particular, $z\approx0.641$.\hfill{$\qed$}\\[5pt]
+    {\bf Problem 4} Consider the spaces $(\ell_1,\|\cdot\|_1)$,
+    $(\ell_2,\|\cdot\|_2)$ and $(\ell_\infty,\|\cdot\|_\infty)$. For which of
+    $\xi\in\{1,2,\infty\}$ is it the case that
+    \begin{align*}
+        \|x+y\|_\xi=\|x\|_\xi+\|y\|_\xi\quad\Rightarrow\quad\exists\alpha\in\mbb{K}\;\text{s.t.}\;x=\alpha y?
+    \end{align*}
+    {\bf Solution}. First, this does not hold in $(\ell_1,\|\cdot\|_1)$ or
+    $(\ell_\infty,\|\cdot\|_\infty)$, which we will show in turn. For these,
+    take $\mbb{K}=\mbb{R}$, and set $x=(x_n)_{n\geq 1}=(1,0,0,\dots)$ and
+    $y=(y_n)_{n\geq 1}=(0,1,0,\dots)$. Clearly, both $\|x\|_1=1$ and
+    $\|y\|_1=1$, so $x,y\in\ell_1$, while
+    \begin{align*}
+        \|x+y\|_1=\sum_{n\geq 1}|x_n+y_n|=1+1=\|x\|_1+\|y\|_1,\quad\text{and yet}\quad \alpha y=(0,\alpha,0,\dots)\neq (1,0,0,\dots)=x
+    \end{align*}
+    $\forall \alpha\in\mbb{R}$. Now for $(\ell_\infty,\|\cdot\|_\infty)$, set
+    $x=(x_n)_{n\geq 1}=(1,\tfrac{1}{2},0,0,\dots)$ and $y=(y_n)_{n\geq
+    1}=(1,\tfrac{1}{4},0,0,\dots)$, so that $\alpha
+    y=(\alpha,\tfrac{\alpha}{4},0,0,\dots)\neq(1,\tfrac{1}{2},0,0,\dots)$ no
+    matter the choice of $\alpha\in\mbb{R}$. Then $\|x\|_\infty=\sup_{n\geq
+    1}|x_n|=1$ and $\|y\|_\infty=\sup_{n\geq 1}|y_n|=1$, verifying
+    $x,y\in\ell_\infty$, but
+    \begin{align*}
+        \|x+y\|_\infty=\sup_{n\geq 1}|x_n+y_n|=2=\|x\|_\infty+\|y\|_\infty
+    \end{align*}
+    thus proving the claim does not hold in general for either of these spaces.
+    It does, however, hold in $(\ell_2,\|\cdot\|_2)$. To show this, we first
+    re-anonymize the field $\mbb{K}$, and then fix some nonzero $x,y\in\ell_2$.
+    Supposing that $\|x+y\|_2=\|x\|_2+\|y\|_2$, observe
+    \begin{align*}
+        \sum_{n\geq 1}|x_n|^2+2\sum_{n\geq 1}x_ny_n+\sum_{n\geq 1}|y_n|^2=\sum_{n\geq 1}|x_n+y_n|^2=\|x+y\|^2_2=(\|x\|_2+\|y\|_2)^2&=\|x\|^2_2+2\|x\|_2\|y\|_2+\|y\|_2^2
+    \end{align*}
+    and thus
+    \begin{align*}
+        \Rightarrow\qquad\sum_{n\geq 1}|x_n|^2+2\sum_{n\geq 1}x_ny_n+\sum_{n\geq 1}|y_n|^2&=\sum_{n\geq 1}|x_n|^2+2\left(\sum_{n\geq 1}|x_n|^2\right)^{1/2}\left(\sum_{n\geq 1}|y_n|^2\right)^{1/2}+\sum_{n\geq 1}|y_n|^2\\
+        \Rightarrow\qquad\sum_{n\geq 1}x_ny_n&=\left(\sum_{n\geq 1}|x_n|^2\right)^{1/2}\left(\sum_{n\geq 1}|y_n|^2\right)^{1/2}.\tag{8}
+    \end{align*}
+    Now, let us assume for the purpose of deriving a contradiction that $x,y$
+    are not parallel. That is, for any $\lambda\in\mbb{K}$, $x\neq \lambda y$
+    and so
+    \begin{align*}
+        0<\|x-\lambda y\|_2^2=\sum_{n\geq 1}|x_n-\lambda y_n|^2=\sum_{n\geq 1}|x_n|^2+\lambda^2\sum_{n\geq 1}|y_n|^2-2\lambda\sum_{n\geq 1}x_ny_n
+    \end{align*}
+    and in particular,
+    \begin{align*}
+        2\lambda\sum_{n\geq 1}x_ny_n<\|x\|^2_2+\lambda^2\|y\|_2^2.
+    \end{align*}
+    Setting $\lambda=\frac{\sum_{n\geq 1}x_ny_n}{\|y\|_2^2}$ (which is
+    admissable since $y\neq 0$), we have
+    \begin{align*}
+        2\frac{\left(\sum_{n\geq 1}x_ny_n\right)^2}{\|y\|^2_2}<\|x\|^2_2+\left(\frac{\sum_{n\geq 1}x_ny_n}{\|y\|^2_2}\right)^2\|y\|^2_2\quad&\Rightarrow\quad2\frac{\left(\sum_{n\geq 1}x_ny_n\right)^2}{\|y\|^2_2}<\|x\|^2_2+\frac{\left(\sum_{n\geq 1}x_ny_n\right)^2}{\|y\|^2_2}\\
+        &\Rightarrow\quad\left(\sum_{n\geq 1}x_ny_n\right)^2<\|x\|^2_2\|y\|^2_2
+    \end{align*}
+    which is the same as $\sum_{n\geq 1}x_ny_n<(\sum_{n\geq
+    1}|x_n|^2)^{1/2}(\sum_{n\geq 1}|y_n|^2)^{1/2}$, contradicting (8). To
+    resolve this, we conclude that $\exists\lambda\in\mbb{K}$ satisfying
+    $x=\lambda y$ -- i.e. that $x$ and $y$ are parallel.\hfill{$\qed$}
+    \newpage
+    \bibliography{assignment4}
+    \bibliographystyle{abbrv}
+\end{document}

@@ -1,0 +1,117 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+\graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)}
+\newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}}
+\newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 2\hfill {\bf Connor Braun} \hfill {\bf 2024-09-19}
+    \end{center}
+    \vspace{5pt}
+    \noindent{\bf Problem 2} Recall the space
+    $\ell_\infty=\{x:\mbb{N}\rightarrow\mbb{K}|\|x\|_\infty<\infty\}$, where
+    $\|x\|_\infty:=\sup_{j\geq 1}|x_j|$. Recall also the spaces
+    \begin{align}
+        &s^\ast:=\{\alpha:\mbb{N}\rightarrow\mbb{K}\,|\,\exists N\geq 1 \text{ s.t. }\alpha_j=0\forall j\geq N\},\quad\text{and}\\
+        &c_0:=\{\alpha:\mbb{N}\rightarrow\mbb{K}\,|\,\lim_{j\rightarrow\infty}\alpha_j=0\},
+    \end{align}
+    of finitely-supported and converging-to-zero sequences,
+    respectively. Take for granted that $s^\ast\subset c_0\subset\ell_\infty$.\\[5pt]
+    {\bf a)} Prove that $s^\ast$ is not a closed subspace of $\ell_\infty$.\\[5pt]
+    {\bf Proof}. Consider the sequence $x^\ast=(x^\ast_j)_{j\geq 1}$ with $x^\ast_j=1/j$ for $j\geq 1$. Then $x^\ast\in\ell_\infty$, since $\|x^\ast\|_\infty=\sup_{j\geq 1}|x^\ast_j|=|x^\ast_1|=1<\infty$ (since $x^\ast_j$ is decreasing in $j$).
+    Next, for $n\geq 1$, define the sequence $x^n=(x^n_j)_{j\geq 1}$ satisfying $x^n_j=x^\ast_j$ when $j<n$, and $x^n_j=0$ otherwise. Then $(x^n)\subset s^\ast$, and yet
+    \begin{align*}
+        \|x^n-x^\ast\|_\infty=\sup_{j\geq 1}|x^n_j-x^\ast_j|=\sup_{j\geq n}|x^n_j-x^\ast_j|=\sup_{j\geq n}|x^\ast_j|=\frac{1}{n}
+    \end{align*}
+    where the first inequality follows from $|x^n_j-x^\ast_j|=0$ for $1\leq j\leq n-1$, and the second from $x^n_j=0$ for $j\geq n$. The final inequality follows from
+    once again from the fact that $x^\ast_j$ is strictly decreasing in $j$, with $x^\ast_n=\tfrac{1}{n}$. Of course, $x^\ast_j>0$ for $j\geq 1$, so $x^\ast\notin s^\ast$, and we have identified a
+    limit point of $s^\ast$ not contained in $s^\ast$, so $s^\ast$ cannot be closed.\hfill{$\qed$}\\[5pt]
+    {\bf b)} Prove that $s^\ast$ is not dense in $\ell_\infty$.\\[5pt]
+    {\bf Proof}. Assume for the purpose of deriving a contradiction that it is. Then $\overline{s^\ast}=\ell_\infty$, and every sequence $x\in\ell_\infty$ is either in $s^\ast$ or a limit point of it.
+    Take $\mathbbm{1}:=(1,1,1,\dots)\in\ell_\infty$, since $\|\mathbbm{1}\|_\infty=1<\infty$. Then $\exists(x^n)_{n\geq 1}\subset s^\ast$ with $x^n\rightarrow\mathbbm{1}$ as $n\rightarrow\infty$. But for each $n\geq 1$,
+    we can find $N(n)\in\mbb{N}$ so that $x^n_j=0$ for $j\geq N(n)$. That is,
+    \begin{align*}
+        \|\mathbbm{1}-x^n\|_\infty=\sup_{j\geq 1}|1-x^n_j|\geq \sup_{j\geq N(n)}|1-x^n_j|=1>0
+    \end{align*}
+    where since this lower bound is independent of $n$, it cannot be that $\lim_{n\rightarrow\infty}\|\mathbbm{1}-x^n\|_\infty=0$, a contradiction. We conclude that $\overline{s^\ast}\subsetneq\ell_\infty$, so $s^\ast$ is not dense in $\ell_\infty$.\hfill{$\qed$}\\[5pt]
+    {\bf c)} Prove that $c_0$ is a closed subspace of $\ell_\infty$.\\[5pt]
+    {\bf Proof}. Consider a sequence $(x^n)_{n\geq1}\subset c_0$ with $x^n\rightarrow x^\ast$ as $n\rightarrow\infty$. Our goal is to demonstrate that
+    $x^\ast\in c_0$. By assumption, fixing $\varepsilon>0$, $\exists N\geq 1$ so that $n\geq N$ implies $\|x^n-x^\ast\|_\infty<\tfrac{\varepsilon}{2}$. But $x^n\in c_0$ for $n\geq 1$
+    means that $\exists J\geq 1$ with $|x^n_j|<\tfrac{\varepsilon}{2}$ for $j\geq J$. Thus, with $n\geq N$, $j\geq J$:
+    \begin{align*}
+        |x_j^\ast|=|x^\ast_j-x^n_j+x^n_j|&\leq |x^\ast_j-x^n_j|+|x^n_j|\\
+        &\leq\sup_{j\geq 1}|x^\ast_j-x^n_j|+|x^n_j|\\
+        &<\|x^\ast-x^n\|_{\infty}+\frac{\varepsilon}{2}\\
+        &<\frac{\varepsilon}{2}+\frac{\varepsilon}{2}\\
+        &=\varepsilon
+    \end{align*}
+    so, indeed, $x^\ast_j\rightarrow 0$ as $j\rightarrow\infty$. Thus, $x^\ast\in c_0$, so $c_0$ contains all of its own limit points and is thus closed. Since $c_0\subset\ell_\infty$, $c_0$ is then a closed
+    subspace provided it is closed under elementwise addition and scalar multiplication. But this is immediate; taking $x^1,x^2\in c_0$, $\alpha\in\mbb{K}$ we have
+    \begin{align*}
+        \lim_{j\rightarrow\infty}(x^1_j+\alpha x^2_j)=\lim_{j\rightarrow\infty}x^1_j+\alpha(\lim_{j\rightarrow\infty}x^2_j)=0
+    \end{align*}
+    so $x^1+\alpha x^2\in c_0$, and $c_0$ is a closed subspace of $\ell_\infty$.\hfill{$\qed$}\\[5pt]
+    {\bf d)} Prove $c_0$ is the closure of $s^\ast$.\\[5pt]
+    {\bf Proof}. Two facts before we begin: first, we know $s^\ast\subset c_0$ and $\overline{s^\ast}=s^\ast\cup s^\ast_\ell$, where
+    \[s^\ast_\ell:=\{\beta\in\ell_\infty:\exists(\alpha^n)_{n\geq 1}\subset s^\ast\text{ s.t. }\alpha^n\rightarrow\beta\text{ as } n\rightarrow\infty\}\]
+    is the set of limit points of $s^\ast$. Thus, we claim that both $s^\ast_\ell\subseteq c_0$, and $c_0\subseteq\overline{s^\ast}$.\\[5pt]
+    For the first claim, take $\beta\in s^\ast_\ell$, and $(\alpha^n)_{n\geq 1}\subset s^\ast$ so that $\lim_{n\rightarrow\infty}\alpha^n=\beta$. That is, with $\varepsilon>0$ fixed, $\exists N\geq 1$ so that
+    $n\geq N$ implies $\|\alpha^n-\beta\|_\infty=\sup_{j\geq 1}|\alpha^n_j-\beta_j|<\tfrac{\varepsilon}{2}$. In particular, $|\alpha^n_j-\beta_j|<\tfrac{\varepsilon}{2}$ $\forall j\geq 1$ whenever $n\geq N$. For such an $n$, we further have $\exists J\geq 1$ so that $j\geq J$
+    implies $|\alpha^n_j|<\tfrac{\varepsilon}{2}$, since $\alpha^n\in s^\ast\subset c_0$. With these facts:
+    \begin{align*}
+        |\beta_j|\leq |\beta_j-\alpha^n_j|+|\alpha^n_j|\leq \frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon
+    \end{align*}
+    provided $n\geq N$ and $j\geq J$. That is, $\beta_j\rightarrow 0$ as $j\rightarrow\infty$, so $\beta\in c_0$.\\[5pt]
+    For the second claim, take $\beta\in c_0$. Define the sequence $(\alpha^n)_{n\geq 1}\subset\ell_\infty$ so that $\alpha^1=(0,0,0,\dots)$, and for $n>1$, $\alpha^n=(\beta_1,\beta_2,\dots,\beta_{n-1},0,0,\dots)$.
+    Then clearly $(\alpha^n)_{n\geq 1}\subset s^\ast$. Fixing $\varepsilon>0$, $\exists N\geq 1$ so that $|\beta_j|<\varepsilon$ $\forall j\geq N$. Then, taking $n\geq N$ as well, we have
+    \begin{align*}
+        \|\alpha^n-\beta\|_\infty=\sup_{j\geq 1}|\alpha^n_j-\beta_j|&=\sup_{j\geq n}|\alpha^n_j-\beta_j|\\
+        &=\sup_{j\geq n}|\beta_j|\\
+        &<\varepsilon
+    \end{align*}
+    where the second equality follows the fact that $\alpha^n_j-\beta_j=\beta_j-\beta_j$ for $j\leq n-1$, the third from $\alpha^n_j=0$ for $j\geq n$ and the inequality follows from $j\geq N$. Since $\beta$ is the limit point of 
+    a sequence in $s^\ast$, it is an element of $s^\ast_\ell$, and with both claims proven, we conclude that $\overline{s^\ast}=c_0$; that $c_0$ is the closure of $s^\ast$\hfill{$\qed$}\\[5pt]
+\end{document}

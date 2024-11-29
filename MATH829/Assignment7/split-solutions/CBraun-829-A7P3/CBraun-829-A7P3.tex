@@ -1,0 +1,108 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} \graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}} \newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}} \newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\ip}[2]{\left\langle#1,#2\right\rangle }
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\ran}{range}
+
+\makeatletter
+\def\Ddots{\mathinner{\mkern1mu\raise\p@
+\vbox{\kern7\p@\hbox{.}}\mkern2mu
+\raise4\p@\hbox{.}\mkern2mu\raise7\p@\hbox{.}\mkern1mu}}
+\makeatother
+
+\def\powertower#1#2{#1\ifnum#2>1 ^{\powertower{#1}{\numexpr#2-1\relax}}\fi}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 7\hfill {\bf Connor Braun} \hfill {\bf 2024-10-30}
+    \end{center}
+    \noindent{\bf Problem 3}. Let $A:\mc{D}(A)\subset \ell_2\rightarrow \ell_2$ be the operator so that $Ax=(nx_n)_{n\geq 1}$ for any $x=(x_n)_{n\geq 1}\in\mc{D}(A)$. We define
+    \begin{align*}
+        \mc{D}(A):=\left\{x\in\ell_2:\sum_{n=1}^\infty|nx_n|^2<\infty\right\}.
+    \end{align*} 
+    Prove that $A$ is self-adjoint.\\[5pt]
+    {\bf Proof}. We first show that $A$ is densely defined. Let $z=(z_n)_{n\geq 1}\in\ell_2$, and define $x^k=(x^k_n)_{n\geq 1}$ so that $x_n^k=z_n$ for $1\leq n\leq k$ and $x^k_n=0$ when $n>k$. Clearly $\{x^k\}_{N\geq 1}\subseteq\mc{D}(A)$, since
+    \begin{align*}
+        \sum_{n=1}^\infty|nx^k_n|^2=\sum_{n=1}^k|nx^k_n|^2<\infty
+    \end{align*}
+    since this is a finite sum of finite terms. However:
+    \begin{align*}
+        \|z-x^k\|^2=\sum_{n=1}^\infty|z_n-x^k_n|^2=\sum_{n>k}|z_n|^2=\sum_{n=1}^\infty|z_n|^2-\sum_{n=1}^k|z_n|^2,\quad k\geq 1
+    \end{align*}
+    so $\lim_{k\rightarrow\infty}\|z-x^k\|^2=\|z\|^2-\|z\|^2=0$, so $x^k\rightarrow z$ as $k\rightarrow\infty$, and we conclude that $\mc{D}(A)$ is dense in $\ell_2$.
+    Now take $x,y\in\mc{D}(A)$ arbitrary. We find
+    \begin{align*}
+        |\ip{Ax}{y}|=\left|\sum_{n=1}^\infty nx_n\overline{y_n}\right|\leq\sum_{n=1}^\infty |x_n n\overline{y_n}|\leq\left(\sum_{n=1}^\infty|x_n|^2\right)^{1/2}\left(\sum_{n=1}^\infty|ny_n|^2\right)^{1/2}=:C_y\|x\|
+    \end{align*}
+    where $0<C_y<\infty$ since $y\in\mc{D}(A)$. But this says that $y\in\mc{D}(A^\ast)$, so $\mc{D}(A)\subseteq\mc{D}(A^\ast)$. Now, take $y\in\mc{D}(A^\ast)$ and consider the sequence $x^k=(x^k_n)_{n\geq 1}$ with
+    \begin{align*}
+        x^k_n=\begin{cases}
+            \frac{ny_n}{\left(\sum_{n=1}^k|ny_n|^2\right)^{1/2}},\quad&\text{for $1\leq n\leq k$}\\
+            0,\quad&\text{when $n>k$.}
+        \end{cases}
+    \end{align*}
+    In particular, it is easy to see that
+    \[\|x^k\|^2=\frac{1}{\left(\sum_{n=1}^k|ny_n|^2\right)}\sum_{n=1}^\infty |x^k_n|^2=\frac{1}{\left(\sum_{n=1}^k|ny_n|^2\right)}\sum_{n=1}^k |ny_n|^2=1,\quad k\geq 1.\]
+    Furthermore, $x^k\in\mc{D}(A)$ for any $k\geq 1$ since 
+    \begin{align*}
+        \sum_{n=1}^\infty |nx^k_n|^2=\frac{1}{\left(\sum_{n=1}^k|ny_n|^2\right)}\sum_{n=1}^kn^4|y_n|^2<\infty
+    \end{align*}
+    once again because the sum is finite. Now, we find
+    \begin{align*}
+        \frac{1}{\left(\sum_{n=1}^k|ny_n|^2\right)^{1/2}}\sum_{n=1}^k|ny_n|^2&=\frac{1}{\left(\sum_{n=1}^k|ny_n|^2\right)^{1/2}}\left|\sum_{n=1}^kn(ny_n)(\overline{y_n})\right|\\
+        &=\left|\sum_{n=1}^knx^k_n(\overline{y_n})\right|\tag{5}\\
+        &=\left|\sum_{n=1}^\infty nx^k_n\overline{y_n}\right|\tag{6}\\
+        &=\left|\ip{Ax^k}{y}\right|\\
+        &\leq C_y\|x^k\|\tag{7}\\
+        &=C_y.\tag{8}
+    \end{align*}
+    To elaborate: (5) holds by moving the fraction into the sum, (6) since $x^k_n=0$ for $n>k$ and (7) since $y\in\mc{D}(A^\ast)$ and $x^k\in\mc{D}(A)$. The constant $0<C_y<\infty$ is furnished by the definition of $y\in\mc{D}(A^\ast)$, and (8)
+    follows since $\|x^k\|=1$ for $k\geq 1$. Taking limits,
+    \begin{align*}
+        \lim_{k\rightarrow\infty}\frac{1}{\left(\sum_{n=1}^k|ny_n|^2\right)^{1/2}}\sum_{n=1}^k|ny_n|^2\leq C_y\quad\Rightarrow\quad\frac{1}{\left(\sum_{n=1}^\infty|ny_n|^2\right)^{1/2}}\sum_{n=1}^\infty|ny_n|^2\leq C_y\quad\Rightarrow\quad \left(\sum_{n=1}^\infty|ny_n|^2\right)^{1/2}<C_y<\infty
+    \end{align*}
+    so $y\in\mc{D}(A)$, and $\mc{D}(A)\subseteq\mc{D}(A^\ast)$, and we conclude $\mc{D}(A)=\mc{D}(A^\ast)$. Finally, we observe that for any $x,y\in\mc{D}(A)=\mc{D}(A^\ast)$,
+    \begin{align*}
+        \ip{Ax}{y}=\sum_{n=1}^\infty nx_n\overline{y_n}=\sum_{n=1}^\infty x_n\overline{ny_n}=\ip{x}{Ay}
+    \end{align*}
+    which says that $A^\ast\big|_{\mc{D}(A)}=A$, and $A\big|_{\mc{D}(A^\ast)}=A^\ast$, so $A^\ast\subset A$ and $A\subset A^\ast$, so $A=A^\ast$ -- i.e., $A$ is self-adjoint.\hfill{$\qed$}
+    \end{document}
+\end{document}

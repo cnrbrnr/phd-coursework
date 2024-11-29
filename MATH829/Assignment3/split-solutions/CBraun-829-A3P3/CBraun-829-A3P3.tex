@@ -1,0 +1,131 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+\usepackage{stmaryrd}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+\graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)}
+\newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}}
+\newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\sgn}{sgn}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\newenvironment{indented}[1][2cm]{\setlength{\leftskip}{#1}}{\setlength{\leftskip}{0pt}}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 1\hfill {\bf Connor Braun} \hfill {\bf 2024-09-10}
+    \end{center}
+    \vspace{5pt}
+    \noindent{\bf Problem 3}. Recall the space $(\ell_2,\|\cdot\|_2)$, where
+    $\ell_2=\{x=(x_n)_{n\geq 1}:\|x\|_2<\infty\}$ and $\|x\|_2=\left(\sum_{n\geq
+    1}|x_n|^2\right)^{1/2}$. Consider the set $V$ given by
+    \begin{align*}
+        V:=\left\{x=(x_n)_{n\geq 1}:\sum_{n=1}^\infty n^2|x_n|^2\leq 1\right\}.
+    \end{align*}
+    {\bf a)} Prove $V$ is a convex subset of $\ell_2$.\\[5pt]
+    {\bf Proof}. For any $x\in V$, we have $\|x\|_2=\left(\sum_{n\geq
+    1}|x_n|^2\right)^{1/2}<\left(\sum_{n\geq 1}n^2|x_n|^2\right)^{1/2}=1$, so
+    indeed, $x\in\ell_2$ and thus $V\subseteq\ell_2$. To demonstrate convexity,
+    take $\lambda\in[0,1]$ and some $x,y\in V$. Then the convex combination
+    $\lambda x+(1-\lambda)y\in V$ too, as the following shows:
+    \begin{align*}
+        \sum_{n\geq 1}n^2|\lambda x_n+(1-\lambda)y_n|^2&\leq \sum_{n\geq 1}n^2(|\lambda x_n|+|(1-\lambda)y_n|)^2\tag{3}\\
+        &=\lambda^2\left[\sum_{n\geq 1}n^2|x_n|^2\right]+(1-\lambda)^2\left[\sum_{n\geq 1}n^2|y_n|^2\right]+2\lambda(1-\lambda)\left[\sum_{n\geq 1}n^2|x_ny_n|\right]\\
+        &\leq\lambda^2+(1-\lambda)^2+2\lambda(1-\lambda)\left[\sum_{n\geq 1}|nx_nny_n|\right]\tag{4}\\ 
+        &\leq \lambda^2+(1-\lambda)^2+2\lambda(1-\lambda)\left(\sum_{n\geq 1}n^2|x_n|^2\right)^{1/2}\left(\sum_{n\geq 1}n^2|y_n|^2\right)^{1/2}\tag{5}\\
+        &\leq \lambda^2+(1-\lambda)^2+2\lambda(1-\lambda)\\
+        &=(\lambda+(1-\lambda))^2\\
+        &=1.
+    \end{align*}
+    Elaborating, (3) follows the triangle inequality, (4) the assumption that
+    $x,y\in V$, and (5) by H\"older's inequality with conjugate pair
+    $(2,2)$.\hfill{$\qed$}\\[5pt]
+    {\bf b)} Show that $V$ is centrally symmetric.\\[5pt]
+    {\bf Solution}. Take $x\in V$. Then $\sum_{n\geq 1}n^2|-x_n|^2=\sum_{n\geq
+    1}n^2|x_n|^2\leq 1$. Thus, $x\in V$ $\Rightarrow$ $-x\in
+    V$.\hfill{$\qed$}\\[5pt]
+    {\bf c)} Show that $V$ has an empty interior by solving the next three
+    subproblems.\\[5pt]
+    {\bf c.i)} Suppose, for the purposes of deriving a contradiction, that
+    $S^\prime=B_r(x_0)\subset V$ for some $x_0\in V$, $r>0$. Show this implies
+    $S^{\prime\prime}=B_r(-x_0)$, and that these facts further imply
+    $B_r(0)\subset V$.\\[5pt]
+    {\bf Proof}. Let us suppose by way of deriving a contradition that
+    $B_r(x_0)\subset V$ for some $x_0\in V$, $r>0$, as prescribed. Then $-x_0\in
+    V$ by the central symmetry of $V$, and for any $x\in B_r(-x_0)$ we get
+    \begin{align*}
+        \|x-(-x_0)\|_2<r\quad\Rightarrow\quad|-1|\|(-x)-x_0\|_2<r\quad\Rightarrow\quad (-x)\in B_r(x_0)\subset V
+    \end{align*}
+    whereby the central symmetry of $V$, $-x\in V$ $\Rightarrow$  $x\in V$, so
+    $B_r(-x_0)\subset V$ as well. To show $B_r(0)\subset V$, observe first that
+    $0\in V$ (since $\sum_{n\geq 1}n^2|0|=0\leq 1$) and consider a point $x\in
+    B_r(0)$ so that $\|x\|_2<r$. Then $x+x_0\in B_r(x_0)$ and $x-x_0\in
+    B_r(-x_0)$, since $\|x+x_0-x_0\|<r$ and $\|x-x_0-(-x_0)\|<r$ (respectively).
+    But $V$ is convex, so the convex combination
+    \begin{align*}
+        \frac{1}{2}(x+x_0)+\frac{1}{2}(x-x_0)=x
+    \end{align*}
+    is also in $V$. That is, $B_r(0)\subset V$, as desired.\hfill{$\qed$}\\[5pt]
+    {\bf c.ii)} Use (c.i) to claim that on every ray emanating from $0\in V$
+    there must lie a segment belonging entirely to $V$.\\[5pt]
+    {\bf Proof}. Let $x\in\ell_2$, $x\neq 0$ (for otherwise the ray is trivially
+    a subset of $B_r(0)$) and $\Lambda:=\{\lambda x:\lambda\geq 0\}$. Provided
+    $0\leq \lambda<\tfrac{r}{\|x\|_2}$, we get
+    \begin{align*}
+        \|\lambda x\|_2<\frac{r}{\|x\|_2}\|x\|_2=r,\quad\Rightarrow\quad \lambda x\in B_r(0)\subset V
+    \end{align*}
+    so that $\Lambda^\prime:=\{\lambda
+    x:\lambda\in[0,\tfrac{r}{\|x\|_2})\}\subset\Lambda$ defining a segment of
+    the ray emanating from $0$ in the direction of $x$ is satisfies
+    $\Lambda^\prime\subset B_r(0)\subset V$.\hfill{$\qed$}\\[5pt]
+    {\bf c.iii)} Use the ray connecting $0$ and $x=(n^{-1})_{n\geq 1}$ to derive
+    a contradition.\\[5pt]
+    {\bf Solution}. First, observe that $x\in\ell_2$, since
+    $\|x\|_2^2=\sum_{n\geq 1}\tfrac{1}{n^2}<\infty$. Then by (c.ii), $\exists
+    \lambda\geq 0$ so that $\lambda x\in B_r(0)\subset V$. In particular, we may
+    take $\lambda>0$ since $\tfrac{r}{\|x\|_2}>0$. From this we obtain
+    \begin{align*}
+        \sum_{n\geq 1}n^2\|\lambda\frac{1}{n}|^2\leq 1\quad\Rightarrow\quad\lambda\sum_{n\geq 1}\frac{n^2}{n^2}\leq 1\quad\Rightarrow\quad\lambda\cdot\infty\leq 1\quad\lightning
+    \end{align*}
+    which is a clear contradiction. To resolve this, it must be the case that
+    $B_r(x_0)\nsubseteq V$ for any choice of $x_0\in\ell_2$, $r>0$. That is, $V$
+    has empty interior.\hfill{$\qed$}
+\end{document}

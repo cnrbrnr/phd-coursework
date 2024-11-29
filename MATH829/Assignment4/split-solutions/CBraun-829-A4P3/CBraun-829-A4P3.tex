@@ -1,0 +1,126 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} \graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}} \newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}} \newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\makeatletter
+\def\Ddots{\mathinner{\mkern1mu\raise\p@
+\vbox{\kern7\p@\hbox{.}}\mkern2mu
+\raise4\p@\hbox{.}\mkern2mu\raise7\p@\hbox{.}\mkern1mu}}
+\makeatother
+
+\def\powertower#1#2{#1\ifnum#2>1 ^{\powertower{#1}{\numexpr#2-1\relax}}\fi}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 4\hfill {\bf Connor Braun} \hfill {\bf 2024-10-03}
+    \end{center}
+    \vspace{5pt}
+    \noindent{\bf Problem 3} The goal is to find an approximation to the number
+    \begin{align*}
+        x^\ast=\left(\tfrac{1}{2}\right)^{\left(\frac{1}{2}\right)^{\left(\frac{1}{2}\right)^{\Ddots}}}
+    \end{align*}
+    that is, with $x^\ast$ the fixed point of map
+    $F(x)=(\tfrac{1}{2})^x$.\\[5pt]
+    {\bf a)} Find $a\leq 1$ such that $F:[a,1]\rightarrow[a,1]$ and $F$ is a
+    contraction on $[a,1]$.\\[5pt]
+    {\bf Solution}. Let $a=\tfrac{1}{2}$. Then $X:=[\tfrac{1}{2},1]$ is a
+    connected subset of $\mbb{R}$, and $F$ is continuous and decreasing on $X$
+    so 
+    \begin{align*}
+        F\left(\left[\tfrac{1}{2},1\right]\right)=\left[F(1),F(\tfrac{1}{2})\right]=\left[\tfrac{1}{2},\tfrac{1}{\sqrt{2}}\right]\subset \left[\tfrac{1}{2},1\right]
+    \end{align*}
+    which follows the fact that continuous mappings of connected sets are
+    connected (see \cite[theorem 4.22]{Rudin_1976}). Since $F$ is differentiable
+    and $F(x)>0$ $\forall x\in X$, we compute
+    \begin{align*}
+        \frac{d}{dx}\log(F(x))=\frac{d}{dx}x\log\left(\frac{1}{2}\right)\quad\Rightarrow\quad \frac{1}{F(x)}F^\prime(x)=\log\left(\frac{1}{2}\right)\quad\Rightarrow\quad F^\prime(x)=-F(x)\log\left(2\right).
+    \end{align*} 
+    Further, $|F^\prime|=\log(2)F$ is continuous and decreasing on $X$, so
+    \[\sup_{x\in
+    X}|F^\prime(x)|=\log(2)F\left(\frac{1}{2}\right)<\frac{1}{\sqrt{2}}<1\tag{6}\]
+    which we will now use to demonstrate that $F$ is a contraction. Take $x,y\in
+    X$, and without loss of generality suppose that $x<y$. Then, by the mean
+    value theorem, $\exists\xi\in(x,y)$ satisfying
+    \begin{align*}
+        |F(x)-F(y)|=|F^\prime(\xi)||x-y|<\frac{1}{\sqrt{2}}|x-y|
+    \end{align*}
+    where the inequality follows (6). We conclude that $F$ is a contraction on
+    $X$ with contraction coefficient $\tfrac{1}{\sqrt{2}}$.\\[5pt]
+    {\bf b)} Use the Banach fixed point theorem to find a real number $y$ so
+    that $|x^\ast-y|<10^{-2}$.\\[5pt]
+    {\bf Solution}. Let $x_0=\frac{1}{2}$ and $x_{n+1}=F(x_n)$ for $n\geq 0$.
+    Then, via the {\it a priori} estimate:
+    \begin{align*}
+        |x_n-x^\ast|\leq\left(\frac{1}{\sqrt{2}}\right)^n\left(\frac{\sqrt{2}}{\sqrt{2}-1}\right)|x_1-x_0|&=\left(\frac{1}{2}\right)^{n/2}\frac{2^{1/2}}{2^{1/2}-1}\left|\frac{1}{2^{1/2}}-\frac{1}{2}\right|\\
+        &=\left(\frac{1}{2}\right)^{n/2}\frac{2^{1/2}}{2^{1/2}-1}\left|\frac{2-2^{1/2}}{2\cdot 2^{1/2}}\right|\\
+        &=\left(\frac{1}{2}\right)^{n/2}\frac{1-2^{-1/2}}{2^{1/2}-1}\\
+        &=\left(\frac{1}{2}\right)^{n/2}\frac{\frac{2^{1/2}-1}{2^{1/2}}}{2^{1/2}-1}\\
+        &=\left(\frac{1}{2}\right)^{\tfrac{n+1}{2}}.
+    \end{align*}
+    Further, $2^{\tfrac{n+1}{2}}\geq 100$ when $n\geq 13$, so the number
+    \begin{align*}
+        y:= F^{[13]}\left(\frac{1}{2}\right)=\powertower{\tfrac{1}{2}}{14}\approx0.6411895978
+    \end{align*}
+    satisfies $|y-x^\ast|\leq 10^{-2}$, where $F^{[n]}$ denotes the function $F$
+    composed with itself $n\geq 1$ times.\\[5pt]
+    {\bf c)} Find a rational number $z$ such that $|x^\ast-z|<10^{-2}$.\\[5pt]
+    {\bf Solution}. First, let $y^\prime=F^{[15]}(\tfrac{1}{2})$, which
+    satisfies $|y^\prime-x^\ast|\leq \tfrac{1}{2}10^{-2}$ using the same {\it a
+    priori} estimate as above. Then, let us define a sequence $(z_n)_{n\geq 0}$
+    by
+    \[z_n:=\frac{\floor{10^n y^\prime}}{10^n},\quad n\geq 0\tag{7}\] where
+    $\floor{\cdot}$ is the floor function, so that $z_n$ has the same base $10$
+    decimal expansion as $y^\prime$, but truncated to $n$ digits. In particular,
+    $(z_n)_{n\geq 0}\subset\mbb{Q}$, since both the numerator and denominator in
+    (7) are integers. Then, estimating
+    \begin{align*}
+        |y^\prime-z_n|=\left|y^\prime-\frac{\floor{10^ny^\prime}}{10^n}\right|=\left|\frac{10^ny^\prime-\floor{10^ny^\prime}}{10^n}\right|=\frac{1}{10^n}|10^ny^\prime-\floor{10^ny^\prime}|\leq \frac{1}{10^n}
+    \end{align*}
+    since $\alpha-\floor{\alpha}\leq 1$ for $\alpha\in\mbb{R}$. Thus, with
+    $z:=z_3=\tfrac{\floor{10^3y^\prime}}{10^3}$, we get
+    \begin{align*}
+        |x^\ast-z|\leq|x^\ast-y^\prime|+|x^\ast-z|\leq \frac{1}{2}10^{-2}+10^{-3}\leq \frac{1}{2}10^{-2}+\frac{1}{2}10^{-2}=10^{-2}.
+    \end{align*}
+    Thus, we have identified $z\in\mbb{Q}$ approximating $x^\ast$ to the desired
+    degree of accuracy. In particular, $z\approx0.641$.\hfill{$\qed$}\\[5pt]
+    \bibliography{assignment4}
+    \bibliographystyle{abbrv}
+\end{document}

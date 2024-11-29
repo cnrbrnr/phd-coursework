@@ -1,0 +1,133 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} \graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}} \newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}} \newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\makeatletter
+\def\Ddots{\mathinner{\mkern1mu\raise\p@
+\vbox{\kern7\p@\hbox{.}}\mkern2mu
+\raise4\p@\hbox{.}\mkern2mu\raise7\p@\hbox{.}\mkern1mu}}
+\makeatother
+
+\def\powertower#1#2{#1\ifnum#2>1 ^{\powertower{#1}{\numexpr#2-1\relax}}\fi}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 4\hfill {\bf Connor Braun} \hfill {\bf 2024-10-03}
+    \end{center}
+    \vspace{5pt}
+    \noindent{\bf Problem 2} Prove the theorem stated on the
+    assignment by following the steps below.\\[5pt]
+    {\bf a)} Explain why $\lim_{k\rightarrow \infty} x_{n_k+1}=T(z)$.\\[5pt]
+    {\bf Solution}. With $(x_{n_k})_{k\geq 1}$ the subsequence from condition
+    (iii) in the statement of the theorem, $\lim_{k\rightarrow\infty}x_{n_k}= z$
+    by hypothesis. Then, by (ii) (i.e., the continuity of $T$ at $z$) we have 
+    \[\lim_{k\rightarrow\infty}x_{n_k+1}=\lim_{k\rightarrow\infty}T(x_{n_k})=T(\lim_{k\rightarrow\infty}x_{n_k})=T(z).\tag*{$\qed$}\]
+    {\bf b)} Assume for the purpose of deriving a contradiction that $z\neq
+    T(z)$. Fix $0<\eta<\tfrac{1}{3}d(z,T(z))$. Let $B_1=B_\eta(z)$, and
+    $B_2=B_\eta(T(z))$. Explain why $\exists K\geq 1$ such that $k\geq K$
+    implies that $x_{n_k}\in B_1$ and $x_{n_k+1}\in B_2$. Deduce that, for
+    $k\geq K$, 
+    \[d(x_{n_k},x_{n_k}+1)>\eta.\] {\bf Solution}. Since $x_{n_k}\rightarrow z$
+    as $k\rightarrow\infty$, $\exists K_1\geq 1$ so that $k\geq K_1$
+    $\Rightarrow$ $d(z,x_{n_k})<\eta$. But from part (a), $\exists K_2\geq 1$ so
+    that $k\geq K_2$ $\Rightarrow$ $d(x_{n_k+1},T(z))<\eta$. Setting
+    $K=\max\{K_1,K_2\}$, both $d(x_{n_k},z)<\eta$ and $d(x_{n_k+1},T(z))<\eta$
+    hold. Then, with $k\geq K$:
+    \begin{align*}
+        d(x_{n_k},x_{n_k+1})&\geq |d(x_{n_k},z)-d(z,x_{n_k+1})|\tag{1}\\
+        &=d(z,x_{n_k+1})-d(x_{n_k},z)\tag{2}\\
+        &>d(z,x_{n_k+1})-\eta\\
+        &\geq|d(z,T(z))-d(x_{n_k+1},T(z))|-\eta\tag{3}\\
+        &=d(z,T(z))-d(x_{n_k+1},T(z))-\eta\tag{4}\\
+        &>3\eta-\eta-\eta\tag{5}\\
+        &=\eta
+    \end{align*}
+    as desired. Steps (1) and (3) are obtained from the reverse triangle
+    inequality, (2) by observing that $d(x_{n_k+1},z)\geq d(z,x_{n_k})$ (since
+    $x_{n_k}\in B_1$, but $x_{n_k+1}\notin B_1$) and (4) from the similar
+    observation that $d(z,T(z))\geq d(x_{n_k+1},T(z))$ (since $x_{n_k+1}\in B_2$
+    but $z\notin B_2$). The appearance of $3\eta$ in (5) follows the definition
+    of $\eta$, namely that $3\eta<d(z,T(z))$.\hfill{$\qed$}\\[5pt]
+    {\bf c)} Using the hypothesis that $\exists\lambda\in(0,\tfrac{1}{2})$ so
+    that $\forall x\in X$:
+    \[d(T(x),T(y))\leq \lambda\left[d(x,T(x))+d(y,T(y))\right],\] deduce that
+    \[d(x_{n_k+1},x_{n_k+2})\leq\frac{\lambda}{1-\lambda}d(x_{n_k},x_{n_k+1}).\]
+    {\bf Solution}. This bound is obtained directly from the hypothesis:
+    \begin{align*}
+        d(x_{n_k+1},x_{n_k+2})=d(T(x_{n_k}),T(x_{n_k+1}))&\leq\lambda\left[d(x_{n_k},T(x_{n_k}))+d(x_{n_k+1},T(x_{n_k+1}))\right]\\
+        &=\lambda\left[d(x_{n_k},x_{n_k+1})+d(x_{n_k+1},x_{n_k+2})\right]\\
+        \Rightarrow\qquad\qquad d(x_{n_k+1},x_{n_k+2})(1-\lambda)&\leq d(x_{n_k},x_{n_k+1})\leq \lambda d(x_{n_k},x_{n_k+1})\\
+        \Rightarrow\qquad\qquad d(x_{n_k+1},x_{n_k+2})&\leq \frac{\lambda}{1-\lambda}d(x_{n_k},x_{n_k+1})\tag*{$\qed$}
+    \end{align*}
+    {\bf d)} Deduce that for $\ell>k\geq K$, we have
+    \begin{align*}
+        d(x_{n_\ell},x_{n_\ell+1})\leq\left(\frac{\lambda}{1-\lambda}\right)^{n_\ell-n_k}d(x_{n_k},x_{n_k+1}).
+    \end{align*}
+    {\bf Solution}. This is a direct consequence of the bound found in (c).
+    Specifically, with $\ell>k\geq K$ as prescribed (and $K$ as in (b)):
+    \begin{align*}
+        d(x_{n_\ell},x_{n_\ell+1})\leq \left(\frac{\lambda}{1-\lambda}\right)d(x_{n_\ell-1},x_{n_\ell})&\leq \left(\frac{\lambda}{1-\lambda}\right)^2d(x_{n_\ell-2},x_{n_\ell-1})\leq\dots\leq \left(\frac{\lambda}{1-\lambda}\right)^{n_\ell-n_k}d(x_{n_k},x_{n_k+1})\tag{$\qed$}
+    \end{align*}
+    {\bf e)} Explain why taking the limit as $\ell\rightarrow\infty$ in (d)
+    yields a contradiction to the lower bound in (b), thus showing that
+    $z=T(z)$.\\[5pt]
+    {\bf Solution}. Since $\lambda\in(0,\tfrac{1}{2})$,
+    $\tfrac{\lambda}{1-\lambda}<1$, so
+    $\lim_{\ell\rightarrow\infty}(\tfrac{\lambda}{1-\lambda})^{n_\ell-n_k}=0$.
+    Applying this,
+    \begin{align*}
+        0\leq\lim_{\ell\rightarrow\infty}d(x_{n_\ell},x_{n_\ell+1})\leq\lim_{\ell\rightarrow\infty}\left(\frac{\lambda}{1-\lambda}\right)^{n_\ell-n_k}d(x_{n_k},x_{n_k+1})=0
+    \end{align*}
+    so $\lim_{\ell\rightarrow\infty}d(x_{n_\ell},x_{n_\ell+1})=0$, and we can
+    find $L\geq 1$ so that $\ell\geq L$ $\Rightarrow$
+    $d(x_{n_\ell},x_{n_\ell+1})<\eta$. But this contradicts $\ell\geq K$
+    $\Rightarrow$ $d(x_{n_\ell},x_{n_\ell+1})>\eta$ from (b). To resolve this,
+    we conclude $z=T(z)$.\\[5pt]
+    {\bf f)} Prove that the fixed point $z$ is unique.\\[5pt]
+    {\bf Solution} Suppose $z^\prime$ is another fixed point of $T$. Then,
+    \begin{align*}
+        0\leq d(z,z^\prime)=d(T(z),T(z^\prime))\leq\lambda\left[d(z,T(z))+d(z^\prime,T(z^\prime))\right]=\lambda\left[d(T(z),T(z))+d(T(z^\prime),T(z^\prime))\right]=0
+    \end{align*}
+    where since $d$ is a metric, we conclude $z=z^\prime$, and thus the fixed
+    point $z$ is unique. Note that, in the above chain, the penultimate
+    inequality follows the assumption that $z^\prime$ is a fixed point of
+    $T$.\hfill{$\qed$}\\[5pt]
+\end{document}

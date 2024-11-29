@@ -1,0 +1,113 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} \graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}} \newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}} \newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\makeatletter
+\def\Ddots{\mathinner{\mkern1mu\raise\p@
+\vbox{\kern7\p@\hbox{.}}\mkern2mu
+\raise4\p@\hbox{.}\mkern2mu\raise7\p@\hbox{.}\mkern1mu}}
+\makeatother
+
+\def\powertower#1#2{#1\ifnum#2>1 ^{\powertower{#1}{\numexpr#2-1\relax}}\fi}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 4\hfill {\bf Connor Braun} \hfill {\bf 2024-10-03}
+    \end{center}
+    \vspace{5pt}
+    \noindent{\bf Problem 4} Consider the spaces $(\ell_1,\|\cdot\|_1)$,
+    $(\ell_2,\|\cdot\|_2)$ and $(\ell_\infty,\|\cdot\|_\infty)$. For which of
+    $\xi\in\{1,2,\infty\}$ is it the case that
+    \begin{align*}
+        \|x+y\|_\xi=\|x\|_\xi+\|y\|_\xi\quad\Rightarrow\quad\exists\alpha\in\mbb{K}\;\text{s.t.}\;x=\alpha y?
+    \end{align*}
+    {\bf Solution}. First, this does not hold in $(\ell_1,\|\cdot\|_1)$ or
+    $(\ell_\infty,\|\cdot\|_\infty)$, which we will show in turn. For these,
+    take $\mbb{K}=\mbb{R}$, and set $x=(x_n)_{n\geq 1}=(1,0,0,\dots)$ and
+    $y=(y_n)_{n\geq 1}=(0,1,0,\dots)$. Clearly, both $\|x\|_1=1$ and
+    $\|y\|_1=1$, so $x,y\in\ell_1$, while
+    \begin{align*}
+        \|x+y\|_1=\sum_{n\geq 1}|x_n+y_n|=1+1=\|x\|_1+\|y\|_1,\quad\text{and yet}\quad \alpha y=(0,\alpha,0,\dots)\neq (1,0,0,\dots)=x
+    \end{align*}
+    $\forall \alpha\in\mbb{R}$. Now for $(\ell_\infty,\|\cdot\|_\infty)$, set
+    $x=(x_n)_{n\geq 1}=(1,\tfrac{1}{2},0,0,\dots)$ and $y=(y_n)_{n\geq
+    1}=(1,\tfrac{1}{4},0,0,\dots)$, so that $\alpha
+    y=(\alpha,\tfrac{\alpha}{4},0,0,\dots)\neq(1,\tfrac{1}{2},0,0,\dots)$ no
+    matter the choice of $\alpha\in\mbb{R}$. Then $\|x\|_\infty=\sup_{n\geq
+    1}|x_n|=1$ and $\|y\|_\infty=\sup_{n\geq 1}|y_n|=1$, verifying
+    $x,y\in\ell_\infty$, but
+    \begin{align*}
+        \|x+y\|_\infty=\sup_{n\geq 1}|x_n+y_n|=2=\|x\|_\infty+\|y\|_\infty
+    \end{align*}
+    thus proving the claim does not hold in general for either of these spaces.
+    It does, however, hold in $(\ell_2,\|\cdot\|_2)$. To show this, we first
+    re-anonymize the field $\mbb{K}$, and then fix some nonzero $x,y\in\ell_2$.
+    Supposing that $\|x+y\|_2=\|x\|_2+\|y\|_2$, observe
+    \begin{align*}
+        \sum_{n\geq 1}|x_n|^2+2\sum_{n\geq 1}x_ny_n+\sum_{n\geq 1}|y_n|^2=\sum_{n\geq 1}|x_n+y_n|^2=\|x+y\|^2_2=(\|x\|_2+\|y\|_2)^2&=\|x\|^2_2+2\|x\|_2\|y\|_2+\|y\|_2^2
+    \end{align*}
+    and thus
+    \begin{align*}
+        \Rightarrow\qquad\sum_{n\geq 1}|x_n|^2+2\sum_{n\geq 1}x_ny_n+\sum_{n\geq 1}|y_n|^2&=\sum_{n\geq 1}|x_n|^2+2\left(\sum_{n\geq 1}|x_n|^2\right)^{1/2}\left(\sum_{n\geq 1}|y_n|^2\right)^{1/2}+\sum_{n\geq 1}|y_n|^2\\
+        \Rightarrow\qquad\sum_{n\geq 1}x_ny_n&=\left(\sum_{n\geq 1}|x_n|^2\right)^{1/2}\left(\sum_{n\geq 1}|y_n|^2\right)^{1/2}.\tag{8}
+    \end{align*}
+    Now, let us assume for the purpose of deriving a contradiction that $x,y$
+    are not parallel. That is, for any $\lambda\in\mbb{K}$, $x\neq \lambda y$
+    and so
+    \begin{align*}
+        0<\|x-\lambda y\|_2^2=\sum_{n\geq 1}|x_n-\lambda y_n|^2=\sum_{n\geq 1}|x_n|^2+\lambda^2\sum_{n\geq 1}|y_n|^2-2\lambda\sum_{n\geq 1}x_ny_n
+    \end{align*}
+    and in particular,
+    \begin{align*}
+        2\lambda\sum_{n\geq 1}x_ny_n<\|x\|^2_2+\lambda^2\|y\|_2^2.
+    \end{align*}
+    Setting $\lambda=\frac{\sum_{n\geq 1}x_ny_n}{\|y\|_2^2}$ (which is
+    admissable since $y\neq 0$), we have
+    \begin{align*}
+        2\frac{\left(\sum_{n\geq 1}x_ny_n\right)^2}{\|y\|^2_2}<\|x\|^2_2+\left(\frac{\sum_{n\geq 1}x_ny_n}{\|y\|^2_2}\right)^2\|y\|^2_2\quad&\Rightarrow\quad2\frac{\left(\sum_{n\geq 1}x_ny_n\right)^2}{\|y\|^2_2}<\|x\|^2_2+\frac{\left(\sum_{n\geq 1}x_ny_n\right)^2}{\|y\|^2_2}\\
+        &\Rightarrow\quad\left(\sum_{n\geq 1}x_ny_n\right)^2<\|x\|^2_2\|y\|^2_2
+    \end{align*}
+    which is the same as $\sum_{n\geq 1}x_ny_n<(\sum_{n\geq
+    1}|x_n|^2)^{1/2}(\sum_{n\geq 1}|y_n|^2)^{1/2}$, contradicting (8). To
+    resolve this, we conclude that $\exists\lambda\in\mbb{K}$ satisfying
+    $x=\lambda y$ -- i.e. that $x$ and $y$ are parallel.\hfill{$\qed$}
+\end{document}
+\end{document}

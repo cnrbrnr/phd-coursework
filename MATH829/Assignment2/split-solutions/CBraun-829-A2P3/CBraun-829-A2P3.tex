@@ -1,0 +1,88 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+\graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)}
+\newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}}
+\newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 2\hfill {\bf Connor Braun} \hfill {\bf 2024-09-19}
+    \end{center}
+    \vspace{5pt}
+    \noindent{\bf Problem 3} Prove that $(\ell_\infty,\|\cdot\|_\infty)$ is not separable by following the steps below.\\[5pt]
+    {\bf a)} Let $A\subset\mbb{N}$ and define $x^A=(x^A_n)_{n\geq 1}\in\ell_\infty$ with $x^A_j=1$ if $j\in A$ and $x^A_j=0$ otherwise. Show that $\mc{I}=\{x^A:A\subset \mbb{N}\}$ is uncountable.\\[5pt]
+    {\bf Proof}. Assume for the purpose of deriving a contradiction that $\mc{I}$ is at most countable. Then, we may index the entries so that $\mc{I}=(x^m)_{m\geq 1}$ where $x^m=x^A$ for some $A\subset\mbb{N}$.
+    Suppose for $m\geq 1$ that $x^m=(x^m_1,x^m_2,\dots)$, and define $\zeta\in\ell_\infty$
+    \[\zeta=(|x^1_1-1|,|x^2_2-1|,|x^3_3-1|,\dots)=:(\zeta_1,\zeta_2,\zeta_3,\dots).\]
+    This new sequence has the property that $\zeta_j\in\{0,1\}$ and $\zeta_j\neq x^j_j$ for $j\geq 1$. Further, one can define $Z=\{k\in\mbb{N}:\zeta_k=1\}$
+    to see that $\zeta\equiv x^Z\in\mc{I}$. That is, $\zeta$ identifies a sequence in $\mc{I}$ which differs from each $x^m$, $m\geq 1$ in at least one place, contradicting
+    the assumption that $(x^m)_{m\geq 1}$ contained all elements of $\mc{I}$. We conclude that $\mc{I}$ is uncountable.\hfill{$\qed$}\\[5pt]
+    {\bf b)} Given any two sets $A_1,A_n\subset\mbb{N}$, compute $\|x^{A_1}-x^{A_1}\|_{\infty}$ and find $r>0$ so that $\mc{B}:=\{B_r(x^A):A\subset\mbb{N}\}$
+    is an uncountable collection of pairwise disjoint open balls in $\ell_\infty$.\\[5pt]
+    {\bf Solution}. With $x^{A_1}=(x^{A_1}_j)_{j\geq 1}$, $x^{A_2}=(x^{A_2}_j)_{j\geq 1}$, note that for each $j\geq 1$, $|x^{A_1}_j-x^{A_2}_j|\in\{0,1\}$ by simply enumerating all
+    possible cases. In particular, $|x^{A_1}_j-x^{A_2}_j|=1$ when $x^{A_1}_j\neq x^{A_2}_j$, implying that $A_1\neq A_2$ (either $j\notin A_1$ or $j\notin A_2$, but not both).
+    From this we conclude that
+    \[\|x^{A_1}-x^{A_2}\|_\infty=\sup_{j\geq1}|x^{A_1}_j-x^{A_2}_j|=\begin{cases}
+        1,\quad&\text{if $A_1\neq A_2$}\\
+        0,\quad&\text{otherwise.}
+    \end{cases}\]
+    Thus, assuming $A_1\neq A_2$ (to skip over the case where $B_r(x^{A_1})=B_r(x^{A_2})$ trivially), fix $r=1/2$, and take $y\in B_r(x^{A_2})$. Then we can show that $y\notin B_r(x^{A_1})$ using
+    the reverse triangle inequality:
+    \begin{align*}
+        \|x^{A_1}-y\|_\infty=\|x^{A_1}-x^{A_2}-(y-x^{A_2})\|_\infty&\geq\left|\|x^{A_1}-x^{A_2}\|_\infty-\|y-x^{A_2}\|_\infty\right|\\
+        &=\left|1-\|y-x^{A_2}\|_\infty\right|\tag{8}\\
+        &>|1-r|\tag{9}\\
+        &=\frac{1}{2}.
+    \end{align*}
+    The equality (8) follows from $A_1\neq A_2$ and the preceding arguments, while the strict inequality (9) follows $0\leq\|y-x^{A_2}\|_\infty<r<1$.
+    But this says that $y\notin B_r(x^{A_1})$ by virtue of the fact that $y\in B_r(x^{A_2})$. That is, $B_r(x^{A_1})\cap B_r(x^{A_2})=\emptyset$ whenever $A_1\neq A_2$, 
+    and so the set of open balls $\mc{B}$ is uncountable.\hfill{$\qed$}\\[5pt]
+    {\bf c)} Suppose, by contradiction that $\Upsilon$ is a countable dense subset of $\ell_\infty$. Explain why each ball in $\mc{B}$
+    must contain at least one element of $\Upsilon$ and use this fact to reach a contradiction.\\[5pt]
+    {\bf Solution} Since $\Upsilon$ is dense in $\ell_\infty$, for each $A\subset\mbb{N}$, $\exists(\upsilon^n_A)_{n\geq 1}\subset\Upsilon$ s.t. $\upsilon^n_A\rightarrow x^A$ as $n\rightarrow\infty$.
+    In particular, $\exists N(A)\geq 1$ so that $\|\upsilon^n_A-x^A\|_\infty<\tfrac{1}{2}$ provided $n\geq N(A)$. So, at least $\upsilon^n_A\in B_r(x^A)$. Thus, each of these uncountably many
+    disjoint open balls shares at least one element with $\Upsilon$, contradicting the assumption that $\Upsilon$ was countable. We conclude that no subset of $\ell_\infty$ can be both dense
+    and countable, so $\ell_\infty$ is not separable.\hfill{$\qed$}\\[5pt]
+\end{document}

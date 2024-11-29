@@ -1,0 +1,276 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+\graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)}
+\newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}}
+\newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 1\hfill {\bf Connor Braun} \hfill {\bf 2024-09-10}
+    \end{center}
+    \vspace{5pt}
+    \begin{center}
+        \begin{minipage}{\dimexpr\paperwidth-10cm}
+            I did not work with anybody in completing this assignment.
+        \end{minipage}
+    \end{center}
+    \noindent{\bf Problem 1} Prove the following:
+    \begin{theorem}
+        For $1\leq p<\infty$, the normed vector space $(\ell_p,\|\cdot\|_p)$ is
+        Banach.
+    \end{theorem} 
+    \noindent{\bf a)} Assume that the sequence $(x^n)_{n\geq 1}\subset\ell_p$ is
+    Cauchy. State what this means with the $\varepsilon-N$ definition.\\[5pt]
+    {\bf Solution}. For any $\varepsilon>0$, $\exists N\geq 1$ s.t.
+    \[n,m\geq N\quad\Rightarrow\quad \|x^n-x^m\|_p<\varepsilon\] so, in
+    particular, with $x^n=(x^n_j)_{j\geq 1}$ for $n\geq 1$ (a convention I will
+    use throughout this assignment) we have
+    \begin{align}
+        \left(\sum_{j\geq 1}|x^n_j-x^m_j|^p\right)^{1/p}<\varepsilon.\label{eq1}
+    \end{align}
+    \hfill{$\qed$}\\[5pt]
+    {\bf b)} Fix $\varepsilon>0$. Explain why $\exists N\geq 1$ such that for
+    each $j\geq 1$ we have $|x^m_j-x^n_j|<\varepsilon$, provided $n,m\geq
+    N$.\\[5pt]
+    {\bf Solution}. From the Cauchy condition in (a) (and inequality
+    (\ref{eq1}), in particular), we have
+    \begin{align}
+        |x^n_j-x^m_j|^p\leq\sum_{k\geq1}|x^n_k-x^m_k|^p<(\varepsilon^\prime)^p\label{eq2}
+    \end{align}
+    for any $j\geq 1$, $\varepsilon^\prime>0$, provided $n,m\geq
+    N(\varepsilon^\prime)$. This is because $|\cdot|$ is nonnegative on
+    $\mbb{K}$. Simply taking $\varepsilon^\prime=\varepsilon$, $n,m\geq
+    N(\varepsilon^\prime)=N$, the above certifies that
+    $|x^n_j-x^m_j|<\varepsilon$ for $n,m\geq N$, $j\geq 1$.\hfill{$\qed$}\\[5pt]
+    {\bf c)} Deduce that, for each $j\geq 1$, the $\mbb{K}$-valued sequence
+    $(x^n_j)_{n\geq 1}$ must be convergent. For each $j\geq 1$, define
+    $x_j:=\lim_{n\rightarrow\infty}x^n_j$, a limit in
+    $(\mbb{K},|\cdot|)$.\\[5pt]
+    {\bf Solution}. Part (b) certifies that for any $j\geq 1$, $(x^n_j)_{n\geq
+    1}$ is Cauchy. That is, for any $\varepsilon>0$ one can find $N\geq 1$ so
+    that $n,m\geq N$ implies $|x^n_j-x^m_j|<\varepsilon$. Assuming $\mbb{K}$ is
+    complete, we deduce that $x^n_j\rightarrow x_j$ as
+    $n\rightarrow\infty$.\hfill{$\qed$}\\[5pt]
+    {\bf d)} Let $J\geq 1$ and explain why, with $N$ as in (b), we have
+    $\sum_{j=1}^J|x^m_j-x^n_j|^p<\varepsilon^p$ provided $n,m\geq N$.\\[5pt]
+    {\bf Solution}. As previously, $|\cdot|$ is nonnegative on $\mbb{K}$, so
+    with $J\geq 1$:
+    \begin{align}
+        \sum_{j=1}^J|x^m_j-x^n_j|^p\leq\sum_{j=1}^\infty|x^n_j-x^m_j|^p<\varepsilon^p\label{eq4}
+    \end{align}
+    with the second inequality following (\ref{eq2}). \hfill{$\qed$}\\[5pt]
+    {\bf e)} With $x_j$ as in (c), let $n\rightarrow\infty$ to obtain
+    $\sum_{j=1}^J|x^m_j-x_j|^p<\varepsilon^p$, provided $m\geq N$. Deduce that,
+    for $m\geq N$, we have
+    \begin{align}
+        \left(\sum_{j=1}^J|x_j|^p\right)^{1/p}<\varepsilon+\left(\sum_{j=1}^J|x^m_j|^p\right)^{1/p}.\label{eq3}
+    \end{align}
+    \noindent{\bf Solution}. Take $J\geq 1$, $N$ as in (b), and $n,m\geq N$.
+    Then we compute the limit of (\ref{eq4}):
+    \begin{align*}
+        \lim_{n\rightarrow\infty}\sum_{j=1}^J|x^m_j-x^n_j|^p\leq\varepsilon^p\quad\Rightarrow\quad\sum_{j=1}^J\lim_{n\rightarrow\infty}|x^m_j-x^n_j|^p\leq\varepsilon^p\quad\Rightarrow\quad\sum_{j=1}^J|x^m_j-x_j|^p\leq\varepsilon^p
+    \end{align*}
+    where the last implication follows the continuity of $|\cdot|$. But then we
+    have
+    \begin{align*}
+        \left(\sum_{j=1}^J|x_j|^p\right)^{1/p}=\left(\sum_{j=1}^J|x^m_j-x_j-x^m_j|^p\right)^{1/p}&\leq\left(\sum_{j=1}^J|x^m_j|^p\right)^{1/p}+\left(\sum_{j=1}^J|x^m_j-x_j|^p\right)^{1/p}<\varepsilon+\left(\sum_{j=1}^J|x^m_j|^p\right)^{1/p}
+    \end{align*}
+    where the first inequality follows the triangle inequality for the $p$-norm
+    on $\mbb{K}^J$, and the second relies upon $m\geq N$. \hfill{$\qed$}\\[5pt]
+    {\bf f)} Let $J\rightarrow\infty$ in the second inequality of (e) to deduce
+    that the sequence $x=(x_j)_{j\geq 1}$ belongs to $\ell_p$.\\[5pt]
+    {\bf Solution}. For any $m\geq 1$, $x^m\in\ell_p$, so $\|x^m\|_p<\infty$.
+    Following the suggestion with $m\geq N$:
+    \begin{align*}
+        \lim_{J\rightarrow\infty}\left(\sum_{j=1}^J|x_j|^p\right)^{1/p}\leq\varepsilon+\lim_{J\rightarrow\infty}\left(\sum_{j=1}^J|x^m_j|^p\right)^{1/p}\quad\Rightarrow\quad \left(\sum_{j=1}^\infty|x_j|^p\right)^{1/p}\leq\varepsilon+\left(\sum_{j=1}^\infty|x_j^m|^p\right)^{1/p}<\infty
+    \end{align*}
+    which says that $\|x\|_p<\infty$. Since $x_j\in\mbb{K}$ for $j\geq 1$, this
+    means $x\in\ell_p$.\hfill{$\qed$}\\[5pt]
+    {\bf g)} Let $J\rightarrow\infty$ in the first inequality of (e) to deduce
+    that $\lim_{m\rightarrow\infty}x^m=x$. Explain why this concludes the proof
+    of the theorem.\\[5pt]
+    {\bf Solution}. Just as prescribed, when $m\geq N$:
+    \begin{align}
+        \lim_{J\rightarrow\infty}\sum_{j=1}^J|x^m_j-x_j|^p\leq\lim_{J\rightarrow\infty}\varepsilon^p\quad\Rightarrow\quad\sum_{j=1}^\infty|x^m_j-x_j|^p\leq\varepsilon^p\Rightarrow\|x^m-x\|_p\leq\varepsilon.\label{eq5}
+    \end{align}
+    Now, since $\varepsilon$ was arbitrary, this says that $x^m\rightarrow
+    x\in(\ell_p,\|\cdot\|_p)$. Since we accept that $(\ell_p,\|\cdot\|_p)$ is a
+    normed vector space {\it a priori}, to show it is Banach requires only that
+    it is complete -- that all Cauchy sequences are convergent. But (\ref{eq5})
+    was derived only under the assumption that $(x^m)_{m\geq 1}$ is Cauchy, so
+    we are indeed done.\hfill{$\qed$}\\[5pt]
+    {\bf Problem 2} Recall the space
+    $\ell_\infty=\{x:\mbb{N}\rightarrow\mbb{K}|\|x\|_\infty<\infty\}$, where
+    $\|x\|_\infty:=\sup_{j\geq 1}|x_j|$. Recall also the spaces
+    \begin{align}
+        &s^\ast:=\{\alpha:\mbb{N}\rightarrow\mbb{K}\,|\,\exists N\geq 1 \text{ s.t. }\alpha_j=0\forall j\geq N\},\quad\text{and}\\
+        &c_0:=\{\alpha:\mbb{N}\rightarrow\mbb{K}\,|\,\lim_{j\rightarrow\infty}\alpha_j=0\},
+    \end{align}
+    of finitely-supported and converging-to-zero sequences,
+    respectively. Take for granted that $s^\ast\subset c_0\subset\ell_\infty$.\\[5pt]
+    {\bf a)} Prove that $s^\ast$ is not a closed subspace of $\ell_\infty$.\\[5pt]
+    {\bf Proof}. Consider the sequence $x^\ast=(x^\ast_j)_{j\geq 1}$ with $x^\ast_j=1/j$ for $j\geq 1$. Then $x^\ast\in\ell_\infty$, since $\|x^\ast\|_\infty=\sup_{j\geq 1}|x^\ast_j|=|x^\ast_1|=1<\infty$ (since $x^\ast_j$ is decreasing in $j$).
+    Next, for $n\geq 1$, define the sequence $x^n=(x^n_j)_{j\geq 1}$ satisfying $x^n_j=x^\ast_j$ when $j<n$, and $x^n_j=0$ otherwise. Then $(x^n)\subset s^\ast$, and yet
+    \begin{align*}
+        \|x^n-x^\ast\|_\infty=\sup_{j\geq 1}|x^n_j-x^\ast_j|=\sup_{j\geq n}|x^n_j-x^\ast_j|=\sup_{j\geq n}|x^\ast_j|=\frac{1}{n}
+    \end{align*}
+    where the first inequality follows from $|x^n_j-x^\ast_j|=0$ for $1\leq j\leq n-1$, and the second from $x^n_j=0$ for $j\geq n$. The final inequality follows from
+    once again from the fact that $x^\ast_j$ is strictly decreasing in $j$, with $x^\ast_n=\tfrac{1}{n}$. Of course, $x^\ast_j>0$ for $j\geq 1$, so $x^\ast\notin s^\ast$, and we have identified a
+    limit point of $s^\ast$ not contained in $s^\ast$, so $s^\ast$ cannot be closed.\hfill{$\qed$}\\[5pt]
+    {\bf b)} Prove that $s^\ast$ is not dense in $\ell_\infty$.\\[5pt]
+    {\bf Proof}. Assume for the purpose of deriving a contradiction that it is. Then $\overline{s^\ast}=\ell_\infty$, and every sequence $x\in\ell_\infty$ is either in $s^\ast$ or a limit point of it.
+    Take $\mathbbm{1}:=(1,1,1,\dots)\in\ell_\infty$, since $\|\mathbbm{1}\|_\infty=1<\infty$. Then $\exists(x^n)_{n\geq 1}\subset s^\ast$ with $x^n\rightarrow\mathbbm{1}$ as $n\rightarrow\infty$. But for each $n\geq 1$,
+    we can find $N(n)\in\mbb{N}$ so that $x^n_j=0$ for $j\geq N(n)$. That is,
+    \begin{align*}
+        \|\mathbbm{1}-x^n\|_\infty=\sup_{j\geq 1}|1-x^n_j|\geq \sup_{j\geq N(n)}|1-x^n_j|=1>0
+    \end{align*}
+    where since this lower bound is independent of $n$, it cannot be that $\lim_{n\rightarrow\infty}\|\mathbbm{1}-x^n\|_\infty=0$, a contradiction. We conclude that $\overline{s^\ast}\subsetneq\ell_\infty$, so $s^\ast$ is not dense in $\ell_\infty$.\hfill{$\qed$}\\[5pt]
+    {\bf c)} Prove that $c_0$ is a closed subspace of $\ell_\infty$.\\[5pt]
+    {\bf Proof}. Consider a sequence $(x^n)_{n\geq1}\subset c_0$ with $x^n\rightarrow x^\ast$ as $n\rightarrow\infty$. Our goal is to demonstrate that
+    $x^\ast\in c_0$. By assumption, fixing $\varepsilon>0$, $\exists N\geq 1$ so that $n\geq N$ implies $\|x^n-x^\ast\|_\infty<\tfrac{\varepsilon}{2}$. But $x^n\in c_0$ for $n\geq 1$
+    means that $\exists J\geq 1$ with $|x^n_j|<\tfrac{\varepsilon}{2}$ for $j\geq J$. Thus, with $n\geq N$, $j\geq J$:
+    \begin{align*}
+        |x_j^\ast|=|x^\ast_j-x^n_j+x^n_j|&\leq |x^\ast_j-x^n_j|+|x^n_j|\\
+        &\leq\sup_{j\geq 1}|x^\ast_j-x^n_j|+|x^n_j|\\
+        &<\|x^\ast-x^n\|_{\infty}+\frac{\varepsilon}{2}\\
+        &<\frac{\varepsilon}{2}+\frac{\varepsilon}{2}\\
+        &=\varepsilon
+    \end{align*}
+    so, indeed, $x^\ast_j\rightarrow 0$ as $j\rightarrow\infty$. Thus, $x^\ast\in c_0$, so $c_0$ contains all of its own limit points and is thus closed. Since $c_0\subset\ell_\infty$, $c_0$ is then a closed
+    subspace provided it is closed under elementwise addition and scalar multiplication. But this is immediate; taking $x^1,x^2\in c_0$, $\alpha\in\mbb{K}$ we have
+    \begin{align*}
+        \lim_{j\rightarrow\infty}(x^1_j+\alpha x^2_j)=\lim_{j\rightarrow\infty}x^1_j+\alpha(\lim_{j\rightarrow\infty}x^2_j)=0
+    \end{align*}
+    so $x^1+\alpha x^2\in c_0$, and $c_0$ is a closed subspace of $\ell_\infty$.\hfill{$\qed$}\\[5pt]
+    {\bf d)} Prove $c_0$ is the closure of $s^\ast$.\\[5pt]
+    {\bf Proof}. Two facts before we begin: first, we know $s^\ast\subset c_0$ and $\overline{s^\ast}=s^\ast\cup s^\ast_\ell$, where
+    \[s^\ast_\ell:=\{\beta\in\ell_\infty:\exists(\alpha^n)_{n\geq 1}\subset s^\ast\text{ s.t. }\alpha^n\rightarrow\beta\text{ as } n\rightarrow\infty\}\]
+    is the set of limit points of $s^\ast$. Thus, we claim that both $s^\ast_\ell\subseteq c_0$, and $c_0\subseteq\overline{s^\ast}$.\\[5pt]
+    For the first claim, take $\beta\in s^\ast_\ell$, and $(\alpha^n)_{n\geq 1}\subset s^\ast$ so that $\lim_{n\rightarrow\infty}\alpha^n=\beta$. That is, with $\varepsilon>0$ fixed, $\exists N\geq 1$ so that
+    $n\geq N$ implies $\|\alpha^n-\beta\|_\infty=\sup_{j\geq 1}|\alpha^n_j-\beta_j|<\tfrac{\varepsilon}{2}$. In particular, $|\alpha^n_j-\beta_j|<\tfrac{\varepsilon}{2}$ $\forall j\geq 1$ whenever $n\geq N$. For such an $n$, we further have $\exists J\geq 1$ so that $j\geq J$
+    implies $|\alpha^n_j|<\tfrac{\varepsilon}{2}$, since $\alpha^n\in s^\ast\subset c_0$. With these facts:
+    \begin{align*}
+        |\beta_j|\leq |\beta_j-\alpha^n_j|+|\alpha^n_j|\leq \frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon
+    \end{align*}
+    provided $n\geq N$ and $j\geq J$. That is, $\beta_j\rightarrow 0$ as $j\rightarrow\infty$, so $\beta\in c_0$.\\[5pt]
+    For the second claim, take $\beta\in c_0$. Define the sequence $(\alpha^n)_{n\geq 1}\subset\ell_\infty$ so that $\alpha^1=(0,0,0,\dots)$, and for $n>1$, $\alpha^n=(\beta_1,\beta_2,\dots,\beta_{n-1},0,0,\dots)$.
+    Then clearly $(\alpha^n)_{n\geq 1}\subset s^\ast$. Fixing $\varepsilon>0$, $\exists N\geq 1$ so that $|\beta_j|<\varepsilon$ $\forall j\geq N$. Then, taking $n\geq N$ as well, we have
+    \begin{align*}
+        \|\alpha^n-\beta\|_\infty=\sup_{j\geq 1}|\alpha^n_j-\beta_j|&=\sup_{j\geq n}|\alpha^n_j-\beta_j|\\
+        &=\sup_{j\geq n}|\beta_j|\\
+        &<\varepsilon
+    \end{align*}
+    where the second equality follows the fact that $\alpha^n_j-\beta_j=\beta_j-\beta_j$ for $j\leq n-1$, the third from $\alpha^n_j=0$ for $j\geq n$ and the inequality follows from $j\geq N$. Since $\beta$ is the limit point of 
+    a sequence in $s^\ast$, it is an element of $s^\ast_\ell$, and with both claims proven, we conclude that $\overline{s^\ast}=c_0$; that $c_0$ is the closure of $s^\ast$\hfill{$\qed$}\\[5pt]
+    {\bf Problem 3} Prove that $(\ell_\infty,\|\cdot\|_\infty)$ is not separable by following the steps below.\\[5pt]
+    {\bf a)} Let $A\subset\mbb{N}$ and define $x^A=(x^A_n)_{n\geq 1}\in\ell_\infty$ with $x^A_j=1$ if $j\in A$ and $x^A_j=0$ otherwise. Show that $\mc{I}=\{x^A:A\subset \mbb{N}\}$ is uncountable.\\[5pt]
+    {\bf Proof}. Assume for the purpose of deriving a contradiction that $\mc{I}$ is at most countable. Then, we may index the entries so that $\mc{I}=(x^m)_{m\geq 1}$ where $x^m=x^A$ for some $A\subset\mbb{N}$.
+    Suppose for $m\geq 1$ that $x^m=(x^m_1,x^m_2,\dots)$, and define $\zeta\in\ell_\infty$
+    \[\zeta=(|x^1_1-1|,|x^2_2-1|,|x^3_3-1|,\dots)=:(\zeta_1,\zeta_2,\zeta_3,\dots).\]
+    This new sequence has the property that $\zeta_j\in\{0,1\}$ and $\zeta_j\neq x^j_j$ for $j\geq 1$. Further, one can define $Z=\{k\in\mbb{N}:\zeta_k=1\}$
+    to see that $\zeta\equiv x^Z\in\mc{I}$. That is, $\zeta$ identifies a sequence in $\mc{I}$ which differs from each $x^m$, $m\geq 1$ in at least one place, contradicting
+    the assumption that $(x^m)_{m\geq 1}$ contained all elements of $\mc{I}$. We conclude that $\mc{I}$ is uncountable.\hfill{$\qed$}\\[5pt]
+    {\bf b)} Given any two sets $A_1,A_n\subset\mbb{N}$, compute $\|x^{A_1}-x^{A_1}\|_{\infty}$ and find $r>0$ so that $\mc{B}:=\{B_r(x^A):A\subset\mbb{N}\}$
+    is an uncountable collection of pairwise disjoint open balls in $\ell_\infty$.\\[5pt]
+    {\bf Solution}. With $x^{A_1}=(x^{A_1}_j)_{j\geq 1}$, $x^{A_2}=(x^{A_2}_j)_{j\geq 1}$, note that for each $j\geq 1$, $|x^{A_1}_j-x^{A_2}_j|\in\{0,1\}$ by simply enumerating all
+    possible cases. In particular, $|x^{A_1}_j-x^{A_2}_j|=1$ when $x^{A_1}_j\neq x^{A_2}_j$, implying that $A_1\neq A_2$ (either $j\notin A_1$ or $j\notin A_2$, but not both).
+    From this we conclude that
+    \[\|x^{A_1}-x^{A_2}\|_\infty=\sup_{j\geq1}|x^{A_1}_j-x^{A_2}_j|=\begin{cases}
+        1,\quad&\text{if $A_1\neq A_2$}\\
+        0,\quad&\text{otherwise.}
+    \end{cases}\]
+    Thus, assuming $A_1\neq A_2$ (to skip over the case where $B_r(x^{A_1})=B_r(x^{A_2})$ trivially), fix $r=1/2$, and take $y\in B_r(x^{A_2})$. Then we can show that $y\notin B_r(x^{A_1})$ using
+    the reverse triangle inequality:
+    \begin{align*}
+        \|x^{A_1}-y\|_\infty=\|x^{A_1}-x^{A_2}-(y-x^{A_2})\|_\infty&\geq\left|\|x^{A_1}-x^{A_2}\|_\infty-\|y-x^{A_2}\|_\infty\right|\\
+        &=\left|1-\|y-x^{A_2}\|_\infty\right|\tag{8}\\
+        &>|1-r|\tag{9}\\
+        &=\frac{1}{2}.
+    \end{align*}
+    The equality (8) follows from $A_1\neq A_2$ and the preceding arguments, while the strict inequality (9) follows $0\leq\|y-x^{A_2}\|_\infty<r<1$.
+    But this says that $y\notin B_r(x^{A_1})$ by virtue of the fact that $y\in B_r(x^{A_2})$. That is, $B_r(x^{A_1})\cap B_r(x^{A_2})=\emptyset$ whenever $A_1\neq A_2$, 
+    and so the set of open balls $\mc{B}$ is uncountable.\hfill{$\qed$}\\[5pt]
+    {\bf c)} Suppose, by contradiction that $\Upsilon$ is a countable dense subset of $\ell_\infty$. Explain why each ball in $\mc{B}$
+    must contain at least one element of $\Upsilon$ and use this fact to reach a contradiction.\\[5pt]
+    {\bf Solution} Since $\Upsilon$ is dense in $\ell_\infty$, for each $A\subset\mbb{N}$, $\exists(\upsilon^n_A)_{n\geq 1}\subset\Upsilon$ s.t. $\upsilon^n_A\rightarrow x^A$ as $n\rightarrow\infty$.
+    In particular, $\exists N(A)\geq 1$ so that $\|\upsilon^n_A-x^A\|_\infty<\tfrac{1}{2}$ provided $n\geq N(A)$. So, at least $\upsilon^n_A\in B_r(x^A)$. Thus, each of these uncountably many
+    disjoint open balls shares at least one element with $\Upsilon$, contradicting the assumption that $\Upsilon$ was countable. We conclude that no subset of $\ell_\infty$ can be both dense
+    and countable, so $\ell_\infty$ is not separable.\hfill{$\qed$}\\[5pt]
+    {\bf Problem 4} Prove that $(\ell_p,\|\cdot\|_p)$ with $1\leq p<\infty$ is separable.\\[5pt]
+    {\bf Proof}. For this, we further assume $\mbb{K}\in\{\mbb{R},\mbb{C}\}$, or at least that $\mbb{K}$ is itself separable, and take $\widetilde{\mbb{K}}\subset\mbb{K}$ to be a countable dense subset.
+    For $m\geq 1$, define $s^\ast_m:=\{\alpha:\mbb{N}\rightarrow\widetilde{\mbb{K}}:\alpha_j=0$ for $j>m\}$, the $\widetilde{\mbb{K}}$-valued sequences with support on $\{1,2,\dots,m-1\}$, and with $s^\ast_0=\{(0,0,0,\dots)\}$.
+    Then each $s^\ast_m$ for $m\geq 0$ is at most countable, since every element can be associated with an entry of $\widetilde{\mbb{K}}^{m}$. Furthermore, $\cup_{m\geq 0}s^\ast_m=:\widetilde{s}^\ast$ is a countable union of countable sets, and is thus itself
+    countable. I claim that $\widetilde{s}^\ast$ is dense in $(\ell_p,\|\cdot\|_p)$.\\[5pt]
+    First, show that $\widetilde{s}^\ast\subseteq\ell_p$. But for any $\alpha\in\widetilde{s}^\ast$, $\exists N\geq 1$ so that $\alpha_j=0$ whenever $j\geq N$, so
+    \[\|\alpha\|_p=(\sum_{j=1}^\infty|\alpha_j|^p)^{1/p}=(\sum_{j=1}^{N-1}|\alpha_j|^p)^{1/p}<\infty\]
+    and $\widetilde{s}^\ast\subseteq\ell_p$ follows. Now, fix $\beta=(\beta_j)_{j\geq 1}\in\ell_p$, and define $(\hat{\beta}^n)_{n\geq 1}\subset\ell_p$ with $\hat{\beta}^n=(\beta_1,\beta_2,\dots,\beta_{n-1},0,0,\dots)$ for $n\geq 2$ and $\hat{\beta}^1=(0,0,0,\dots)$.
+    Note that since $\|\beta\|_p<\infty$, we have for $\varepsilon>0$, $\exists N\geq 1$ so that
+    \begin{align*}
+        \left|\sum_{j=1}^\infty|\beta_j|^p-\sum_{j=1}^{N-1}|\beta_j|^p\right|=\sum_{j\geq N}|\beta_j|^p<\left(\frac{\varepsilon}{2}\right)^{p}\tag{10}
+    \end{align*}
+    that is, the partial sums can be made arbitrarily close to the series. This difference can be expressed using the approximant $\hat{\beta}^N$ as follows:
+    \begin{align*}
+        \|\beta-\hat{\beta}^N\|_p^p=\sum_{j=1}^{N-1}|\beta_j-\hat{\beta}_j^N|^p+\sum_{j\geq N}|\beta_j-\hat{\beta}_j^N|^p=\sum_{j\geq N}|\beta_j|^p\tag{11}
+    \end{align*}
+    where the last equality follows the definition of $\hat{\beta}^N$ (that $\hat{\beta}^N_j=\beta_j$ for $j\leq N-1$ and is $0$ otherwise). Next, we shall approximate $\hat{\beta}^N$ with elements of $\widetilde{s}^\ast$.
+    For this, define $(\alpha^n)_{n\geq 1}\subset\widetilde{s}^\ast$, where $\alpha^n_j\rightarrow\hat{\beta}^N_j$ as $n\rightarrow\infty$, but $\alpha^n_j=0$ for $j\geq N$. Such a sequence exists for each
+    $1\leq j<N$ since $\widetilde{\mbb{K}}$ is dense in $\mbb{K}$. Then, for $j\in\{1,2,\dots,N-1\}$, $\exists N_j\geq 1$ so that $n\geq N_j$ implies
+    \[|\alpha^n_j-\hat{\beta}^N_j|<\frac{\varepsilon}{2(N-1)^{1/p}}.\tag{12}\]
+    Thus, setting $N^\ast=\max\{N_j\}_{j=1}^{N-1}$ and $n\geq N^\ast$, we obtain
+    \begin{align*}
+        \|\hat{\beta}^N-\alpha^n\|_p^p=\sum_{j=1}^\infty|\hat{\beta}^N_j-\alpha^n_j|^p&=\sum_{j=1}^{N-1}|\hat{\beta}^N_j-\alpha^n_j|^p\\
+        &<(N-1)\left(\frac{\varepsilon}{2(N-1)^{1/p}}\right)^p\\
+        &=\left(\frac{\varepsilon}{2}\right)^p\tag{13}
+    \end{align*}
+    where the inequality follows (12). Finally, we get, for $n\geq N^\ast$,
+    \begin{align*}
+        \|\beta-\alpha^n\|_p&\leq\|\beta-\hat{\beta}^N\|_p+\|\hat{\beta}^N-\alpha^n\|_p\\
+        &<\frac{\varepsilon}{2}+\|\hat{\beta}^N-\alpha^n\|_p\tag{14}\\
+        &<\varepsilon\tag{15}
+    \end{align*}
+    where (14) follows the sequential application of (11) and (10), and (15) follows (13). But then any element $\beta\in\ell_p$ can be
+    approximated by a sequence on $\widetilde{s}^\ast$, which is countable. Thus, $\widetilde{s}^\ast$ is a countable dense subset of $(\ell_p,\|\cdot\|_p)$, and $(\ell_p,\|\cdot\|_p)$ is
+    separable for $1\leq p<\infty$.\hfill{$\qed$}
+    \end{document}

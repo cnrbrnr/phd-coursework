@@ -1,0 +1,119 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} \graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}} \newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}} \newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\ip}[2]{\left\langle#1,#2\right\rangle }
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\makeatletter
+\def\Ddots{\mathinner{\mkern1mu\raise\p@
+\vbox{\kern7\p@\hbox{.}}\mkern2mu
+\raise4\p@\hbox{.}\mkern2mu\raise7\p@\hbox{.}\mkern1mu}}
+\makeatother
+
+\def\powertower#1#2{#1\ifnum#2>1 ^{\powertower{#1}{\numexpr#2-1\relax}}\fi}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 6\hfill {\bf Connor Braun} \hfill {\bf 2024-10-25}
+    \end{center}
+    \vspace{5pt}
+    \noindent{\bf Problem 3}. For each of the following complex-valued functions on a Hilbert space, verify that they are linear and continuous. Then find the vector in the space representing them (in the sense of Riesz representation).\\[5pt]
+    {\bf a)} $\Phi:\ell_2\rightarrow\mbb{C}$, $\Phi(x)=\sum_{k=2}^\infty\frac{x_{k+1}-x_{k-1}}{k}$.\\[5pt]
+    {\bf Solution}. We follow a similar program as in problem 1.e. First, note that $\alpha=(1/k)_{k\geq 1}\in\ell^2$, since
+    \begin{align*}
+        \|\alpha\|_2^2=\sum_{k=1}^\infty\frac{1}{k^2}=\frac{\pi^2}{6}
+    \end{align*}
+    as we have shown in problem 2.c of assignment 5. Then, via H\"older's inequality, fow any $x\in\ell_2$ with $\|x\|_2=1$,
+    \begin{align*}
+        \sum_{n=2}^\infty\left|\frac{x_{n-1}}{n}\right|=\sum_{n=1}^\infty\left|\frac{x_n}{(n+1)}\right|&\leq\left(\sum_{n=1}^\infty|x_n|^2\right)^{1/2}\left(\sum_{n=1}^\infty\left|\frac{1}{n+1}\right|^2\right)^{1/2}\\
+        &\leq\|x\|_2\left(\sum_{n=1}^\infty\frac{1}{n^2}\right)^{1/2}\\
+        &=\frac{\pi}{\sqrt{6}}\tag{4}
+    \end{align*}
+    where in the second last line we simply added $1$ inside the (increasing) square root to convert the factor to $\|\alpha\|_2$. In an extremely similar manner:
+    \begin{align*}
+        \sum_{n=2}^\infty\left|\frac{x_{n+1}}{n}\right|=\sum_{n=3}^\infty\left|\frac{x_n}{n-1}\right|&\leq\left(\sum_{n=3}^\infty|x_n|^2\right)^{1/2}\left(\sum_{n=3}^\infty\frac{1}{(n-1)^2}\right)^{1/2}\\
+        &\leq \left(\sum_{n=1}^\infty|x_n|^2\right)^{1/2}\left(\sum_{n=1}^\infty\frac{1}{n^2}\right)^{1/2}\\
+        &=\frac{\pi}{\sqrt{6}}\tag{5}
+    \end{align*}
+    where in the second line we have added $|x_1|^2+|x_2|^2$ to the first factor and $1$ to the second to obtain the norms of $x$ and $\alpha$, respectively. We may now compute a bound on $\|\Phi\|_\ast$:
+    \begin{align*}
+        |\Phi(x)|=\left|\sum_{n=2}^\infty\frac{x_{n+1}-x_{n-1}}{n}\right|&\leq\sum_{n=2}^\infty\left|\frac{x_{n+1}}{n}\right|+\left|\frac{x_{n-1}}{n}\right|\\
+        &=\sum_{n=2}^\infty\left|\frac{x_{n+1}}{n}\right|+\sum_{n=2}^\infty\left|\frac{x_{n-1}}{n}\right|\tag{6}\\
+        &\leq\frac{2\pi}{\sqrt{6}}\\
+        &=\frac{\sqrt{2}\pi}{\sqrt{3}}
+    \end{align*}
+    and so $\Phi$ is bounded. To establish linearity $\alpha,\beta\in\mbb{C}$, and $z,y\in\ell_2$. Then:
+    \begin{align*}
+        \Phi(\alpha y+\beta z)=\sum_{n=2}^\infty\frac{(\alpha y_{n+1}+\beta z_{n+1})-(\alpha y_{n-1}-\beta z_{n-1})}{n}&=\sum_{n=2}^\infty\alpha\frac{y_{n+1}-y_{n-1}}{n}+\beta\frac{z_{n+1}-z_{n-1}}{n}\\
+        &=\alpha\sum_{n=1}^\infty\frac{y_{n+1}-y_{n-1}}{n}+\beta\sum_{n=2}^\infty\frac{z_{n+1}-z_{n-1}}{n}\\
+        &=\alpha\Phi(y)+\beta\Phi(z)
+    \end{align*}
+    which holds since all series involved here are absolutely convergent. That is, $\Phi$ is linear, which along with its boundedness implies it is also continuous. To find the representing vector, call it $\xi=(\xi_n)_{n\geq 1}$, we note that for any $z\in\ell_2$, $\Phi(z)$ is stable under rearrangements
+    since it is absolutely convergent (see for example, \cite[p.78, theorem 3.55]{Rudin_1976}). Then we compute
+    \begin{align*}
+        \Phi(z)=\sum_{n=2}^\infty\frac{z_{n+1}-z_{n-1}}{n}&=-\frac{1}{2}z_1-\frac{1}{3}z_2+\left(\frac{1}{2}-\frac{1}{4}\right)z_3+\left(\frac{1}{3}-\frac{1}{5}\right)z_4+\left(\frac{1}{4}-\frac{1}{6}\right)z_5+\dots\\
+        &=\sum_{n=1}^\infty z_1\overline{\xi_n}\\
+        &=\ip{z}{\xi}
+    \end{align*}
+    provided $\xi_1=-\frac{1}{2}$, $\xi_2=-\frac{1}{3}$, and for $n\geq 3$, $\xi_n=\frac{2}{n^2-1}$. To verify that this makes sense, we need to confirm that $\xi\in\ell_2$ under this choice. But this is easily seen, since
+    \begin{align*}
+        \|\xi\|_2^2=\frac{1}{4}+\frac{1}{9}+\sum_{n=3}^\infty\left(\frac{2}{n^2-1}\right)^2\leq 1+\sum_{n=3}^\infty\left(\frac{2}{n^2}\right)^2&\leq4\sum_{n=1}^\infty\frac{1}{n^4}=\frac{2\pi^4}{45}<\infty
+    \end{align*}
+    where $\sum_{n=1}^\infty\frac{1}{n^4}=\frac{\pi^4}{90}$ is as per problem 3.c of assignment 5. Thus, $\xi\in\ell_2$, and we are able to conclude that $\Phi(\cdot)=\ip{\cdot}{\xi}$. \hfill{$\qed$}\\[5pt]
+    {\bf b)} $\Psi:L_2([0,1])\rightarrow\mbb{C}$, $\Psi(u)=\int_0^1 tu(t^3)dt$.\\[5pt]
+    {\bf Solution}. Take $u,v\in L_2([0,1])$ and $\alpha,\beta\in\mbb{C}$. Then
+    \begin{align*}
+        \Psi(\alpha u+\beta v)=\int_0^1t(\alpha u(t)+\beta v(t))dt=\alpha\int_0^1tu(t)dt+\beta\int_0^1tv(t)dt=\alpha\Psi(u)+\beta\Psi(v)
+    \end{align*}
+    so $\Psi$ is linear. As in 3.b, we will establish continuity of $\Psi$ by showing it is bounded. For this, let $f\in L_2([0,1])$ be such that $\|f\|_2=1$. Then
+    \begin{align*}
+        |\Psi(f)|=\left|\int_0^1tf(t^3)dt\right|\leq\int_0^1|tf(t^3)|dt&=\int_0^1|\mu^{1/3} f(\mu)|d\mu\tag{substituting $t=\mu^{1/3}$.}\\
+        &\leq\left(\int_0^1\mu^{2/3}d\mu\right)^{1/2}\left(\int_0^1|f(\mu)|^2d\mu\right)^{1/2}\tag{7}\\
+        &=\|f\|_2\left(\frac{3}{5}\mu^{5/3}\bigg|^1_0\right)^{1/2}\\
+        &=\sqrt{3/5}
+    \end{align*}
+    so $\|\Psi\|_\ast<\infty$. Since $\Psi$ is a linear and bounded functional on $L_2([0,1])$, it is continuous. Further, for any $g\in L_2([0,1])$, using the same substitution as above we get
+    \begin{align*}
+        \Psi(g)=\int_0^1g(\mu)\mu^{1/3}d\mu=\int_{0}^{1}g(t)\overline{t^{1/3}}dt=\ip{g}{\xi}
+    \end{align*}
+    provided we set $\xi(t)=t^{1/3}$ for $t\in[0,1]$. The computation in (7) verifies that $\xi\in L_2([0,1])$, and since $g\in L_2([0,1])$ was arbitrary, we conclude that $\Psi(\cdot)=\ip{\cdot}{\xi}$.\hfill{$\qed$}\\[5pt]
+    \bibliography{assignment6}
+    \bibliographystyle{ieeetr}
+\end{document}

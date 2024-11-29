@@ -1,0 +1,80 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+\graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)}
+\newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}}
+\newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 1\hfill {\bf Connor Braun} \hfill {\bf 2024-09-10}
+    \end{center}
+    \vspace{5pt}
+    \noindent {\bf Problem 3} Recall that $a_m=\tfrac{(-1)^m}{(2m-1)}\tfrac{4}{\pi}$, $m\geq 1$ is the solution found by Fourier to the problem
+    \begin{align*}
+        1=\sum_{m=1}^\infty a_m\cos((2m-1)x),\quad x\in(-\tfrac{\pi}{2},\tfrac{\pi}{2}).
+    \end{align*}
+    Let $f_m(x)=\tfrac{4}{\pi}\tfrac{(-1)^m}{(2m-1)}\cos((2m-1)x)$ for $x\in(-\tfrac{\pi}{2},\tfrac{\pi}{2})$. Explain why the term-by-term differentiation
+    \begin{align*}
+        \frac{d}{dx}\sum_{m=1}^\infty f_m(x)=\sum_{m=1}^\infty\frac{d}{dx}f_m(x)
+    \end{align*}
+    does not follow the Weierstrass M-test.\\[5pt]
+    {\bf Solution}. Using the method hinted at in the question, one hopes to apply theorem 6.11 found in the MATH 281 reader to establish the validity of this interchange.
+    Since the $f_m\in C^1((-\tfrac{\pi}{2},\tfrac{\pi}{2}))$ for $m\geq 1$, this requires one to certify that
+    \begin{align*}
+        \sum_{m=1}^n\frac{d}{dx}f_m(x)\overset{?}{\rightarrow} g(x)\quad\text{uniformly on $(-\tfrac{\pi}{2},\tfrac{\pi}{2})$, as}\quad n\rightarrow\infty.
+    \end{align*}
+    However, this is not possible using the Weierstrass M-test. To see this, note that
+    \[\frac{d}{dx}f_m(x)=\frac{4}{\pi}\frac{(-1)^{m+1}}{(2m-1)}\sin((2m-1)x)(2m-1)=\frac{4}{\pi}(-1)^{m+1}\sin((2m-1)x)\]
+    and fix the point $x^\ast=\tfrac{\pi}{4}\in(-\tfrac{\pi}{2},\tfrac{\pi}{2})$. Then for $m\geq 1$, $\sin((2m-1)x^\ast)=\pm\tfrac{\sqrt{2}}{2}$ (and is in fact $4$-periodic in $m$). At this point
+    \begin{align*}
+        \left|\frac{d}{dx}f_m(x)\big|_{x=x^\ast}\right|=\frac{2\sqrt{2}}{\pi}
+    \end{align*}
+    and so the sequence $\{\tfrac{d}{dx}f_m\}_{m\geq 1}$ cannot even be pointwise bounded by the terms of a converging series, let alone uniformly as
+    the Weierstrass M-test requires. Driving this point home, we have
+    \begin{align*}
+        \infty=\sum_{m=1}^\infty\frac{1}{\pi}\leq \sum_{m=1}^\infty\frac{d}{dx}f_m(x)\big|_{x=x^\ast}
+    \end{align*}
+    so there is not sequence $\{M_m\}_{m\geq 1}$ satisfying $|f_m(x)|\leq M_m$ for $x\in(-\tfrac{\pi}{2},\tfrac{\pi}{2})$ such that $\sum_{m=1}^\infty M_m<\infty$.\hfill{$\qed$}\\[5pt]
+\end{document}

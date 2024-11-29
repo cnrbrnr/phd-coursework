@@ -1,0 +1,145 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+\usepackage{stmaryrd}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+\graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)}
+\newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}}
+\newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\sgn}{sgn}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\newenvironment{indented}[1][2cm]{\setlength{\leftskip}{#1}}{\setlength{\leftskip}{0pt}}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 1\hfill {\bf Connor Braun} \hfill {\bf 2024-09-10}
+    \end{center}
+    \vspace{5pt}
+    \noindent{\bf Problem 4}. Let $X$ be a vector space over $\mbb{R}$. A set
+    $\Upsilon\subset X$ is called {\it balanced} if and only if
+    $\lambda\Upsilon\subset\Upsilon$ for every $\lambda\in[-1,1]$. A set is
+    called {\it absolutely convex} if and only if it is convex and balanced. A
+    set $\Upsilon \subset X$ is called {\it absorbing} if and only if $\forall
+    x\in X$, $\exists \lambda >0$ such that $x\in\lambda\Upsilon$. For $\Upsilon
+    \subset X$, let $q_\Upsilon:X\rightarrow \mbb{R}\cup\{\infty\}$ be defined
+    as $q_\Upsilon(x)=\inf\{\lambda>0:x\in\lambda\Upsilon\}$. \\[5pt]
+    {\bf a)} Suppose that $\Upsilon, Z\subset X$ are two convex absorbing sets
+    with $\Upsilon\subset Z$. Prove that $q_\Upsilon(x)\geq q_Z(x)$ $\forall
+    x\in X$.\\[5pt]
+    {\bf Proof}. Take $x\in X$. Since $\Upsilon$ is absorbing,
+    $\exists\lambda>0$ so that $x\in\lambda\Upsilon$, impliying that
+    $\exists\upsilon\in\Upsilon$ such that $x=\lambda\upsilon$. But
+    $\upsilon\in\Upsilon\subset Z$, so $\upsilon\in Z$, and therefore
+    $x\in\lambda Z$ too. That is,
+    \[\{\lambda>0:x\in\lambda\Upsilon\}\subseteq\{\lambda>0:x\in\lambda
+    Z\}\quad\Rightarrow\quad\inf\{\lambda>0:x\in\lambda\Upsilon\}\geq
+    \inf\{\lambda>0:x\in\lambda Z\}\quad\Rightarrow\quad q_\Upsilon(x)\geq
+    q_Z(x).\tag*{$\qed$}\] {\bf b)} Prove that if
+    $\Upsilon_1,\Upsilon_2,\dots,\Upsilon_n$ are convex and absorbing, then the
+    intersection $\bigcap_{j=1}^n\Upsilon_j$ is absorbing. Provide an example of
+    two non-convex absorbing subsets of $\mbb{R}$ whose intersection is not
+    absorbing.\\[5pt]
+    {\bf Soluiton}. Let us first prove a preliminary claim: $0<\lambda_1\leq
+    \lambda_2$ $\Rightarrow$ $\lambda_1\Xi\subseteq\lambda_2\Xi$ for any $\Xi$
+    convex, absorbing. To show this, first note $0\in\Xi$, since $\Xi$ is
+    absorbing (this is necessary since otherwise $\lambda\xi>0$ for any
+    $\lambda>0$, $\xi\in\Xi$). Now take $x\in\lambda_1\Xi$, so that
+    $x=\lambda_1\xi$ for some $\xi\in\Xi$. Then by convexity of $\Xi$, 
+    \begin{align*}
+        \frac{\lambda_1}{\lambda_2}\xi+(1-\frac{\lambda_1}{\lambda_2})0\in\Xi\quad\Rightarrow\quad\frac{\lambda_1}{\lambda_2}\xi\in\Xi,\quad\text{so}\quad\lambda_2(\frac{\lambda_1}{\lambda_2}\xi)=\lambda_1\xi=x
+    \end{align*}
+    implying that $x\in\lambda_2\Xi$, thus proving the initial claim. Now, since
+    each of $\Upsilon_j$, $1\leq j\leq n$ are absorbing, $\exists
+    (\lambda_j)_{j=1}^n$ so that $x\in\lambda_j\Upsilon_j$ $\forall j$, and
+    $\forall x\in X$. Then define
+    $\lambda^\ast:=\max\{\lambda_1,\lambda_2,\dots,\lambda_n\}$ so that
+    $x\in\lambda^\ast\Upsilon_j$ for $1\leq j\leq n$, which follows from the
+    initial claim. By definition, $\exists(\upsilon_j)_{j=1}^n$ where
+    $\upsilon_j\in\Upsilon_j$ satisfies $x=\lambda^\ast\upsilon_j$ for $1\leq
+    j\leq n$. However, from this we get $\upsilon_j=\tfrac{x}{\lambda^\ast}$ for
+    $1\leq j\leq n$, and so $\upsilon_1=\upsilon_2=\cdots=\upsilon_n$.
+    Proceeding with $\upsilon:=\upsilon_1$, we further get
+    $\upsilon\in\Upsilon_j$ for $1\leq j\leq n$, so
+    $\upsilon\in\bigcap_{j=1}^n\Upsilon_j$ and $\lambda^\ast\upsilon=x$, where
+    $x\in X$ was arbitrary. That is, $\bigcap_{j=1}^n\Upsilon_j$ is itself
+    absorbing, and we are done.\\[5pt]
+    For the desired counterexample, consider $\mc{A}:=[-2,-1)\cup\{0\}\cup(1,2]$
+    and $\mc{B}:=[-3,-2)\cup\{0\}\cup(2,3]$. Clearly, neither are convex since
+    $2,0\in\mc{A}$ but $\tfrac{1}{2}2+\tfrac{1}{2}0=1\notin\mc{A}$, and
+    $3,0\in\mc{B}$ but $\tfrac{2}{3}3+\tfrac{1}{3}0=2\notin\mc{B}$. Both are
+    absorbing, though. To see this, take $x\in\mbb{R}$. If $x=0$, then clearly
+    $x\in 1\mc{A},1\mc{B}$, so let us consider the cases where $x>0$ and $x<0$
+    separately. First, when $x>0$, $x=\tfrac{x}{2}2$ and $x=\tfrac{x}{3}3$, so
+    $x\in\tfrac{x}{2}\mc{A}$ and $x\in\tfrac{x}{3}\mc{B}$. Similarly, when
+    $x<0$, we have $x=\tfrac{|x|}{2}(-2)$ and $x=\tfrac{|x|}{3}(-3)$, so
+    $x\in\tfrac{|x|}{2}\mc{A}$ and $x\in\tfrac{|x|}{3}\mc{B}$. That is, no matter the $x\in\mbb{R}$, we
+    can find $\lambda_1,\lambda_2>0$ so that $x\in\lambda_1\mc{A}$ and $x\in\lambda_2\mc{B}$, so both sets are absorbing.
+    However, $\mc{A}\cap\mc{B}=\{0\}$, and $1\neq\lambda\cdot 0$ no matter the $\lambda>0$, so $\mc{A}\cap\mc{B}$ is not absorbing.
+    Thus, the convexity requirement is not dispensible.\hfill{$\qed$}\\[5pt]
+    {\bf c)} Let $\Upsilon\subset X$ be absolutely convex and absorbing. Prove that $q_\Upsilon:\mbb{X}\rightarrow\mbb{R}$ is a seminorm.\\[5pt]
+    {\bf Proof}. Fixing $x\in X$, we know $\Lambda_x:=\{\lambda>0:x\in\lambda\Upsilon\}\neq\emptyset$ since $\Upsilon$ is absorbing, so $0\leq q_\Upsilon(x)<\infty$ for any $x\in X$
+    (the nonnegativity follows from $\Lambda_x\subseteq(0,\infty)$). Also, $\Lambda_0=(0,\infty)$, so $q_\Upsilon(0)=0$.\\[5pt]
+    The function $q_\Upsilon$ is absolutely homogeneous if and only if $q_\Upsilon(\beta x)=|\beta|q_\Upsilon(x)$ for all $\beta\in\mbb{R}$, $\beta\neq 0$, $x\in X$, which we will show next. Note first that $(-1)\Upsilon\subseteq\Upsilon$ since $\Upsilon$ is balanced, and that the case where $\beta=0$ is trivial, since $q_\Upsilon(0x)=0=|0|q_\Upsilon(x)$. Then, define $\sgn:\mbb{R}\rightarrow\{-1,1\}$ with
+    \[\sgn(\beta)=\begin{cases}
+        1, \quad&\text{if $\beta\geq 0$}\\
+        -1,\quad&\text{if $\beta<0$}
+    \end{cases}\]
+    and note that $\beta=\sgn(\beta)|\beta|$ $\forall\beta\in\mbb{R}$. Fixing $\beta\in\mbb{R}\setminus\{0\}$, we will demonstrate that $\beta x\in\lambda\Upsilon$ $\Leftrightarrow$ $x\in\tfrac{\lambda}{|\beta|}\Upsilon$, where $\lambda>0$.
+    Suppose first that $\beta x\in\lambda\Upsilon$. Then $\exists\upsilon\in\Upsilon$ such that $\beta x=\lambda\upsilon$, so
+    \[x=\frac{\lambda}{\beta}\upsilon=\frac{\lambda}{|\beta|}\sgn(\beta)\upsilon\]
+    but $\sgn(\beta)\upsilon\in\Upsilon$ too, since $(-1)\Upsilon\subseteq\Upsilon$, and thus $x\in\tfrac{\lambda}{|\beta|}\Upsilon$. Conversely, beginning with $x\in\frac{\lambda}{|\beta|}$ for some $\beta\neq 0$ and $\lambda>0$, we get $x=\tfrac{\lambda}{|\beta|}\upsilon^\prime$ for some $\upsilon^\prime\in\Upsilon$,
+    and $\beta x=\beta\tfrac{\lambda}{|\beta|}\upsilon^\prime=\beta\tfrac{\lambda}{\sgn(\beta)|\beta|}\sgn(\beta)\upsilon^\prime=\lambda(\sgn(\beta)\upsilon^\prime)$. But $\upsilon:=\sgn(\beta)\upsilon^\prime\in\Upsilon$, so $\beta x=\lambda\upsilon$ and thus $\beta x\in\lambda\Upsilon$. Equipped with this characterization absolute homogeneity follows directly:
+    \begin{align*}
+        q_\Upsilon(\beta x)=\inf\{\lambda>0:\beta x\in\lambda\Upsilon\}=\inf\{\lambda>0:x\in(\lambda/|\beta|)\Upsilon\}=\inf\{|\beta|(\lambda/|\beta|)>0:x\in(\lambda/|\beta|)\Upsilon\}=|\beta|\inf\{\lambda^\prime>0:x\in\lambda^\prime\Upsilon\}=|\beta|q_{\Upsilon}(x).
+    \end{align*}
+    For the last step, we must show that $q_\Upsilon$ satisfies the triangle inequality. For this, fix $x,y\in X$, and let $q_\Upsilon(x)=\lambda_x$ and $q_\Upsilon(y)=\lambda_y$, such that $x=\lambda_x\upsilon_x$ and $y=\lambda_y\upsilon_y$ for some $\upsilon_x,\upsilon_y\in\Upsilon$.
+    But $\Upsilon$ is convex, so the convex combination
+    \begin{align*}
+        \frac{\lambda_x}{\lambda_x+\lambda_y}\upsilon_x+\frac{\lambda_y}{\lambda_x+\lambda_y}\upsilon_y\in\Upsilon\quad\Rightarrow\quad \frac{1}{\lambda_x+\lambda_y}(\lambda_x\upsilon_x+\lambda_y\upsilon_y)\in\Upsilon\quad\Rightarrow\quad (x+y)\in(\lambda_x+\lambda_y)\Upsilon
+    \end{align*}
+    where the last implication follows from $\beta z\in\lambda\Upsilon$ $\Leftrightarrow$ $z\in\tfrac{\lambda}{|\beta|}\Upsilon$ for $z\in X$, $\beta\in\mbb{R}\setminus\{0\}$. This tells us that $\lambda_x+\lambda_y\in\Lambda_{x+y}$, so we can obtain
+    \begin{align*}
+        q_\Upsilon(x+y)=\inf\{\lambda>0:x+y\in\lambda\Upsilon\}=\inf\Lambda_{x+y}\leq \lambda_x+\lambda_y=q_\Upsilon(x)+q_{\Upsilon}(y).
+    \end{align*}
+    Since $q_\Upsilon$ is nonegative, absolutely homogeneous and satisfies the triangle inequality, it is a seminorm.\hfill{$\qed$}  
+\end{document}
+\end{document}

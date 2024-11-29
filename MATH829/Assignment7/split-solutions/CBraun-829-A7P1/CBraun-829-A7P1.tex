@@ -1,0 +1,82 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} \graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}} \newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}} \newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\ip}[2]{\left\langle#1,#2\right\rangle }
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\ran}{range}
+
+\makeatletter
+\def\Ddots{\mathinner{\mkern1mu\raise\p@
+\vbox{\kern7\p@\hbox{.}}\mkern2mu
+\raise4\p@\hbox{.}\mkern2mu\raise7\p@\hbox{.}\mkern1mu}}
+\makeatother
+
+\def\powertower#1#2{#1\ifnum#2>1 ^{\powertower{#1}{\numexpr#2-1\relax}}\fi}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 7\hfill {\bf Connor Braun} \hfill {\bf 2024-10-30}
+    \end{center}
+    \vspace{5pt}
+    \begin{center}
+        \begin{minipage}{\dimexpr\paperwidth-10cm}
+            I would like to thank Ben van Eden for the discussion regarding problem 3. In particular, for the construction of $(x^k)_{k\geq 1}$ 
+            used to show that $\mc{D}(A^\ast)\subseteq\mc{D}(A)$. All other problems were completed independently.
+        \end{minipage}
+    \end{center}
+    \noindent{\bf Problem 1}. Let $(X,\ip{\cdot}{\cdot})$ be a Hilbert space, and
+    $A:\mc{D}(A)\subset X\rightarrow X$ be a densely defined linear operator.
+    Prove that $(\ran(A))^\perp=\ker(A^\ast)$.\\[5pt]
+    {\bf Proof}. Recalling that $\ker(A^\ast):=\{x\in\mc{D}(A^\ast):A^\ast
+    x=0\}$, take $y\in\ran(A)$. Then $y=Az$ for some $z\in\mc{D}(A)$, and
+    \[\ip{x}{y}=\ip{x}{Az}=\overline{\ip{Az}{x}}=\overline{\ip{z}{A^\ast x}}=0\]
+    where the penultimate equality holds since $x\in\ker(A^\ast)\subseteq
+    \mc{D}(A^\ast)$ and $z\in\mc{D}(A)$. Thus, $x\in(\ran(A))^\perp$, and
+    $\ker(A^\ast)\subseteq(\ran(A))^\perp$. For the reverse inclusion, take
+    $y\in(\ran(A))^\perp$. It is easy to see that $y\in\mc{D}(A^\ast)$, since
+    for any $x\in\mc{D}(A)$
+    \[|\ip{Ax}{y}|=0\leq 1\cdot\|x\|\] where the first equality
+    holds since $Ax\in\ran(A)$ and $y\perp\ran(A)$. But then, for all
+    $z\in\mc{D}(A)$:
+    \[0=\ip{Az}{x}=\ip{z}{A^\ast x}\] so $A^\ast x\perp\mc{D}(A)$. Since
+    $\mc{D}(A)$ is dense in $X$, we conclude that $A^\ast x=0$, so
+    $x\in\ker(A^\ast)$. Thus, $(\ran(A))^\perp\subseteq\ker(A^\ast)$, so
+    $(\ran(A))^\perp=\ker(A^\ast)$.\hfill{$\qed$}\\[5pt]
+\end{document}

@@ -1,0 +1,582 @@
+\documentclass[11pt]{report}
+\usepackage[margin=1.87cm]{geometry}
+
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage[shortlabels]{enumitem}
+\usepackage[makeroom]{cancel}
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{etoolbox}
+\usepackage{titlesec}
+\usepackage[bookmarks,hypertexnames=false,debug,linktocpage=true,hidelinks]{hyperref}
+
+\titleformat{\section}[runin]
+    {\normalfont\bfseries}{\thesection}{1em}{}
+\renewcommand{\thesection}{\arabic{section}}
+
+\renewcommand{\bibname}{\large\bfseries Bibliography} % For book/report class
+% ======= Fancy Header after the first page ======
+\pagestyle{fancy}
+\fancyhead{} % Clears the standard fancy style
+\fancyhead[L]{\normalfont\rightmark}%{\scshape\MakeLowercase{\rightmark}}
+\fancyhead[R]{Connor Braun}%{\scshape\MakeLowercase{\rightmark}}
+\fancyfoot[C]{\thepage}
+
+\makeatletter
+\renewcommand{\chaptermark}[1]{%
+\markboth{%
+    \ifnum\c@secnumdepth>\m@ne \@chapapp\ {\footnotesize\thechapter}. \ %
+    \fi
+#1%
+}{}%
+}
+% ================================================
+
+% ======= Hyperlinks for ToC and Bib ============= % Uses:
+% <\usepackage[bookmarks,hypertexnames=false,debug,linktocpage=true,hidelinks]{hyperref}>
+\hypersetup{colorlinks, linktoc=all, linkcolor={black}, citecolor={black},
+urlcolor={black} }
+% ================================================
+
+\patchcmd{\thebibliography}{\section*{\refname}}{}{}{}
+
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand{\ip}[2]{\left\langle#1,#2\right\rangle }
+
+\DeclareMathOperator{\fix}{fix}
+\DeclareMathOperator{\ran}{range}
+\DeclareMathOperator{\proj}{Proj} 
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+\begin{document}\thispagestyle{empty}
+    \begin{center}
+        {\bf\large{Mean Ergodicity and Harmonic Analysis of Weakly Stationary
+        Processes}}\\[5pt]
+        by\\[5pt]
+        Connor Braun\\[5pt]
+        November, 2024
+    \end{center}
+    \vspace{5pt}
+    \textbf{Acknowledgements} [[At least Prof. Cellarosi, for all of the discussion during office hours.]]\\[5pt]
+    \textbf{Abstract} [[Synopsis]]
+    \section{Introduction}\label{sec0} At a glance, the old adage: "physical systems tend to
+    equilibrium" (as codified by the laws of thermodynamics) appears quite banal
+    and unassuming. However, if one recognizes equilibrium as a
+    \textit{macroscopic} observation made of a system of very many interacting
+    \textit{microscopic} entities, then the nontriviality of the statement
+    begins to reveal itself; how can we understand the coexistence of a steady
+    macrostate with a rapidly fluctuating microstate? This question remained of
+    significant interest in early statistical mechanics from the late 19c. until
+    circa 1930 when von Neumann \cite{Neumann_1932} and Birkhoff
+    \cite{Birkhoff_1931} established the mean and pointwise ergodic theorems
+    (respectively). These landmark results characterized macrostates as
+    asymptotic averages over the temporal evolution of the microscopic system,
+    and marked the origin of ergodic theory as a mathematical discipline. Over
+    the intervening century, ergodic theory has been used to great effect across
+    diverse subdisciplines of mathematics, ranging from stochastic processes
+    \cite[theorem 17.0.1]{Meyn_Tweedie_1993} to number theory
+    \cite{Furstenberg_1977}, \cite{Gorodnik_Nevo_2015}, \cite{Green_Tao_2008}
+    and many more (see \cite{Eisner_Farkas_Haase_Nagel_2015} for a comprehensive
+    overview). This wide applicability is perhaps surprising given the physical
+    impetus for ergodic theory, and is the main motivation for this report. In
+    particular, our goal is to highlight the applicability of mean-type ergodic
+    theorems (such as von Neumann's) to diverse problems in mathematics by
+    introducing weakly stationary processes on Hilbert spaces. Taking this
+    space to be separable, we then showcase an early application to harmonic
+    analysis, owing to \cite{Fan_1946}, yielding a sort of Fourier transform for
+    a large class of dynamical systems.\\[5pt]
+    \indent The document is organized as follows: [[List of contents]]
+
+    \section{Conceptual Background}\label{sec1}
+    Following the expositions of \cite[ch.1]{Eisner_Farkas_Haase_Nagel_2015},
+    and \cite[ch.2, $\S$5]{Reed_Simon_1972} we first examine the conceptual
+    basis of ergodic theory, along with some relevant historical remarks. As a
+    concrete, guiding example, consider a closed system of ideal gas consisting
+    of $d\in\mbb{N}$ particles. From a classical mechanical perspective, this
+    system is completely characterized by a state $x\in\mbb{R}^{6\times d}$,
+    since each particle is bestowed with six degrees of freedom: position and
+    velocity in a three-dimensional medium. The state space
+    $\mbb{X}\subset\mbb{R}^{6\times d}$ are those configurations which are
+    deemed admissable (e.g. particles cannot exceed the speed of light) and we
+    take $x_0\in\mbb{X}$ to be some initial state, regarded as the configuration
+    at time $t=0$. The laws of motion then define an operator
+    $T:\mbb{X}\rightarrow\mbb{X}$ characterizing the flow of the system in
+    discrete time: for $n\geq 0$, $x_0\mapsto x_n=T^nx_0$, where $T^0:=\mbb{I}$
+    is the identity operator. The resulting process
+    $\{x_n\}_{n\geq0}\subset\mbb{X}$ is called the system \textit{trajectory},
+    and the pair $(\mbb{X},T)$ is referred to as a \textit{dynamical
+    system}.\\[5pt]
+    \indent At this point we face two practical limitations. First, it is not
+    possible to determine $x_n$ for any $n\geq 0$ precisely, ($N$ could be on
+    the order of $10^{23}$ for even a small quantity of gas) so we instead fix
+    an observable $f\in L_2(\mbb{X})$ so that $f:(\mbb{X},T)\rightarrow\mbb{R}$
+    (perhaps $f(x)$ returns a temperature reading associated to a state
+    $x\in\mbb{X}$) inducing a new trajectory $\{f(x_n)\}_{n\geq 0}$. Second, for
+    $n\geq 0$ we assume that $x_n\mapsto x_{n+1}$ spans an extremely short
+    duration $\Delta>0$, rendering the individual measurements $f(x_n)$
+    impossible to resolve. Instead, the probe observes an average over $N$
+    timesteps:
+    \begin{align}
+        \mu_N^T(f,x_0):=\frac{1}{N}\sum_{n=0}^{N-1}f(T^nx_0)\label{eq1}
+    \end{align}
+    and we might intuitively expect the \textit{time mean}
+    $\lim_{N\rightarrow\infty}\mu^T_N(f,x_0)$, assuming it exists, to furnish
+    some notion of equilibrium at the macroscale. Of course, (\ref{eq1}) is not
+    yet satisfactory since it still depends on an $f(x_0)$. This brings us to
+    1885, when Boltzmann proposed the the so-called \textit{Ergodenhypothese}
+    (ergodic hypothesis) \cite{Hasenöhrl_Boltzmann_2012} (see
+    \cite{Boltzmann_2019} for a translation). This was a sufficient condition on
+    the dynamical system $(\mbb{X},T)$ to deduce the existence of a functional
+    $\mu^T:L_2(\mbb{X})\rightarrow\mbb{R}$ such that
+    \begin{align}
+        \lim_{N\rightarrow\infty}\mu_N^T(f,x_0)=\mu^T(f)\label{eq2}
+    \end{align}
+    which is now independent of the initial state $x_0$. Informally, the number
+    $\mu^T(f)$ turns out to be a sort of weighted average of $f$ over $\mbb{X}$,
+    with the weights depending on the dynamics $T$ (i.e., accounting for how $T$
+    might bias $\{x_n\}_{n\geq 0}$ towards specific regions of $\mbb{X}$) which
+    justifies the catchphrase of ergodic theory: "the time mean equals the space
+    mean". Boltzmann's hypothesis later underwent a technical reformulation,
+    being redubbed the quasi-ergodic hypothesis, which explains the title of von
+    Neumann's publication \cite{Neumann_1932}. 
+
+    \section{The Hilbert Space Mean Ergodic Theorem}\label{sec2}
+    In this section, we transition to the domain of functional analysis and
+    prove the main result of \cite{Neumann_1932} as an immediate corollary of a
+    slightly more general result. For this we follow the elegant proof presented
+    in \cite[theorem 1.3.1]{Weber_2000} while blending the notation found there
+    with that of \cite[ch.8]{Eisner_Farkas_Haase_Nagel_2015}. The principle
+    structural difference between mean ergodic theorems and so-called
+    \textit{pointwise} ergodic theorems (such as that of Birkhoff,
+    \cite{Birkhoff_1931}) is that we study the asymptotic behavior of an
+    observation functional (combining $T$ and $f$ from the previous section) in
+    emancipation from the subjacent state space $\mbb{X}$ (as opposed to the
+    trajectory $\{f(x_n)\}_{n\geq 0}$ directly). In what follows, let $T$ be a
+    mapping defining a dynamical system. The main object permitting us to employ
+    Hilbert space methods is the so-called {\it Koopman operator} associated to
+    $T$.
+    \begin{definition}[Koopman Operator]\label{def1} Let $T$ be a discrete
+        dynamical flow, and $\mc{H}$ a Hilbert space. The linear operator
+        $U_T:\mc{H}\rightarrow \mc{H}$ defined by $U_Tf:=f\circ T$ for all $f\in
+        \mc{H}$ is called the \textit{Koopman operator} associated to $T$.
+    \end{definition}
+    This definition implicitly requires some regularity of $T$, which we shall
+    clarify in the sequel. For a Koopman operator $U_T$, its \textit{fixed
+    space} is defined
+    \[\fix(U_T):=\{f\in\mc{H}:U_Tf=f\}=\ker(\mbb{I}-U_T)\] which is closed since
+    $\ker(\mbb{I}-U_T)=(\ran(\mbb{I}-U_t^\ast))^{\perp}$. We shall denote
+    $\mc{H}_T:=\fix(U_T)$ for notational expediency. These objects are
+    sufficient to state the main result, which can be found in \cite[theorem
+    8.6]{Eisner_Farkas_Haase_Nagel_2015}.
+    \begin{theorem}[Mean Ergodic Theorem {\cite[theorem
+        8.6]{Eisner_Farkas_Haase_Nagel_2015}}, {\cite[theorem
+        1.3.1]{Weber_2000}}]\label{thm1} Let $\mc{H}$ be a Hilbert space, and
+        $U:\mc{H}\rightarrow\mc{H}$ a bounded linear operator, denoted by writing
+        $U\in(\mc{B}(\mc{H}),\|\cdot\|_{op})$. If $\|U\|_{op}\leq 1$, then
+        \begin{align*}
+            \overline{f}:=\lim_{N\rightarrow\infty}\frac{1}{N}\sum_{n=0}^{N-1}U^nf\quad\text{exists for all $f\in\mc{H}$.}
+        \end{align*}
+        Further, the map $P_{U}:f\rightarrow\overline{f}$ is the orthogonal
+        projection of $f$ onto $\fix(U)$, and
+        $\mc{H}=\fix(U)\oplus\overline{\ran}(\mbb{I}-U)$.
+    \end{theorem}
+    We say that $U$ is a \textit{contraction} if and only if $\|U\|_{op}\leq 1$.
+    In what follows we think of $U$ as the Koopman operator associated to $T$
+    and write $P_T:=P_{U}$ and $\mc{H}_T=\fix(U)$, but this need not be the case. The rest of the section is dedicated to the proof of
+    this theorem, following \cite[theorem 1.3.1]{Weber_2000} for which we induce
+    the \textit{Ces\`aro averages}:
+    \[C_N:=\frac{1}{N}\sum_{n=0}^{N-1}U^n,\quad N\geq 0.\]
+    \begin{lemma}\label{lem4}
+        Suppose $U$ is a contraction on a Hilbert space $\mc{H}$. Then
+        $\fix(U^\ast)=\fix(U)$. 
+    \end{lemma}
+    \noindent{\textbf{Proof.}} We first show that $U^\ast$ is also a
+    contraction. Let $\varphi:\mc{H}\rightarrow\mc{H}^\prime$ be the Riesz
+    isometry, and recall that $U^\ast=\varphi^{-1}\circ U^\prime\circ\varphi$,
+    where $(U^\prime\varphi(f))(g):=\ip{Ug}{f}$ for any $f,g\in\mc{H}$. Thus,
+    for $f\in\mc{H}$,
+    \begin{align*}
+        \|U^\ast f\|=\|\varphi^{-1}U^\prime\varphi(f)\|=\|U^\prime\varphi(f)\|_\ast=\sup_{\|g\|=1}|\ip{Ug}{f}|\leq\sup_{\|g\|=1}\|Ug\|\|f\|=\|U\|_{op}\|f\|
+    \end{align*}
+    and so $\|U^\ast\|_{op}=\sup_{\|f\|=1}\|U^\ast f\|\leq\|U\|_{op}\leq 1$.
+    Now, notice that if $f\in\fix(U)$, then $\ip{Uf}{f}=\ip{f}{Uf}=\|f\|^2$, and
+    $\ip{f}{U^\ast f}=\ip{U^\ast f}{f}=\|f\|^2$. Conversely, if $f\in\mc{H}$
+    satisfies $\ip{f}{Uf}=\ip{Uf}{f}=\|f\|^2$, we have
+    \begin{align*}
+        \|Uf-f\|^2=\ip{Uf-f}{Uf-f}=\|Uf\|^2+\|f\|^2-\ip{f}{Uf}-\ip{Uf}{f}=\|Uf\|^2+\|f\|^2-2\|f\|^2\leq \|f\|^2-\|f\|^2=0
+    \end{align*}
+    where the inequality is due to $U$ being a contraction. We conclude that
+    $Uf=f$, and therefore:
+    \begin{align*}
+        Uf=f\longleftrightarrow \ip{Uf}{f}=\ip{f}{Uf}=\|f\|^2\longleftrightarrow \ip{U^\ast f}{f}=\ip{f}{U^\ast f}{f}=\|f\|^2\longleftrightarrow U^\ast f=f.\tag*{$\qed$}
+    \end{align*}
+    \noindent\textbf{Proof} (Theorem \ref{thm1}, \cite[theorem 1.3.1]{Weber_2000})\textbf{.} With
+    $\mc{H}_T:=\fix(U)$ and $\mc{H}_0=\overline{\ran}(\mbb{I}-U)$, we claim that
+    $\mc{H}=\mc{H}_T\oplus\mc{H}_0$. First, if $f\in\mc{H}_T$ and $g\in\mc{H}$,
+    \begin{align*}
+        \ip{f}{g-Ug}=\ip{f}{g}-\ip{f}{Ug}=\ip{f}{g}-\ip{U^\ast f}{g}=0
+    \end{align*}
+    since $f\in\fix(U^\ast)$ by lemma \ref{lem4}, and so
+    $\mc{H}_T\subseteq(\ran(\mbb{I}-U))^\perp$. If instead
+    $f\in(\ran(\mbb{I}-U))^\perp$, then
+    \[0=\ip{f}{g-Ug}=\ip{f}{g}-\ip{f}{Ug}=\ip{f}{g}-\ip{U^\ast
+    f}{g}=\ip{f-U^\ast f}{g}\] which holds $\forall g\in\mc{H}$, so $U^\ast f=f$
+    and $f\in\mc{H}_T$. Thus, we have $\mc{H}_T=(\ran(\mbb{I}-U))^\perp$ and
+    further $\mc{H}=\mc{H}_T\oplus\mc{H}_0$, as claimed. Now consider
+    $h\in\mc{H}_T\oplus \ran(\mbb{I}-U)$, which we have just shown is dense in
+    $\mc{H}$. We can find $f\in\mc{H}_T$, $g\in\mc{H}$ so that $h=f+g-Ug$, from
+    which it is clear that $P_Th$ exists, since
+    \begin{align}
+        \frac{1}{N}\sum_{n=0}^{N-1}U^n(f+g-Ug)=\frac{1}{N}\sum_{n=0}^{N-1}U^nf+\frac{1}{N}\sum_{n=0}^{N-1}(U^ng-U^{n+1}g)=f+\frac{1}{N}(g-U^Ng)\overset{N\rightarrow\infty}{\longrightarrow} f.\label{eq3}
+    \end{align}
+    Further, $\proj_{\mc{H}_T}h=f=P_Th$. Note that in (\ref{eq3}) we have also
+    shown that $P_Tf=f$ for all $f\in\mc{H}_T$, and $C_N(g-Ug)\rightarrow 0$ for
+    all $g\in\mc{H}$. To complete the proof, fix $f\in\mc{H}$, $\varepsilon>0$,
+    and a sequence $\{f_n\}_{n\geq 1}\subseteq\mc{H}_T\oplus\ran(\mbb{I}-U)$ so
+    that $f_n\rightarrow f$. For $n\geq 1$, we can find $g_n\in\mc{H}_T$,
+    $h_n\in\ran(\mbb{I}-U)$ so that $f_n=g_n+h_n-Uh_n$, and 
+    \begin{align*}
+        f_n=g_n+h_n-Uh_n\longrightarrow g+h-Uh=f
+    \end{align*}
+    where $g\in\mc{H}_T$ (since $\mc{H}_T$ is closed) and
+    $h-Uh\in\overline{\ran}(\mbb{I}-U)=\mc{H}_0$. We can find $n\geq 1$
+    sufficiently large such that
+    $\|(h-Uh)-(h_n-Uh_n)\|\leq\frac{\varepsilon}{2}$, after which we take $N\geq
+    1$ large enough such that $\|C_N(h_n-Uh_n)\|\leq\frac{\varepsilon}{2}$.
+    Then,
+    \begin{align*}
+        \|C_N\proj_{\mc{H}_0}f\|\leq\|C_N[(h-Uh)-(h_n-Uh_n)]\|+\|C_N(h_n-Uh_n)\|\leq \varepsilon
+    \end{align*}
+    since $C_N$ is a contraction. This means that
+    $C_N\proj_{\mc{H}_0}f\rightarrow 0$, (i.e., $P_T\proj_{\mc{H}_0}f=0$) from
+    which we finally obtain that for all $f\in\mc{H}$:
+    \begin{align*}
+        P_Tf=P_T(\proj_{\mc{H}_T}f+\proj_{\mc{H}_0}f)=\proj_{\mc{H}_T}f.\tag*{$\qed$}
+    \end{align*}
+    \indent Perhaps the most natural question following this is on the nature of
+    $\mc{H}_T$; for which $f\in\mc{H}$ do we have $Uf=f$? Returning to the
+    physical case where $U_T$ is the Koopman operator and $\mc{H}=L_2(\mbb{X})$,
+    the answer is determined entirely by $T$. However, for any constant function
+    $f\in L_2(\mbb{X})$ and $x\in\mbb{X}$, we have $U_Tf(x)=(f\circ T)(x)=f(x)$
+    regardless of $T$. In light of theorem \ref{thm1}, one can therefore regard
+    constant functions as equilibrium observations in the sense that what one
+    "observes" via $\{f(x_n)\}_{n\geq 1}$ will converge over time, regardless of
+    where the system began. This discussion motivates the following definition.
+    \begin{definition}[Ergodicity]\label{def2} We call $T$ \textit{ergodic} if
+        and only if $\mc{H}_T=\{f\in\mc{H}:\;\text{$f$ is constant}\}$.
+    \end{definition}
+    It turns out that $T$ is ergodic if and only if any $A\subseteq\mbb{X}$
+    satisfying $T^{-1}A=A$ is either vanishingly small or nearly the entire
+    space -- both of which are formalized measure-theoretically \cite[$\S$II.5,
+    p.59]{Reed_Simon_1972}. Accepting this fact for its conceptual value, we
+    proceed to some applications of perhaps more esoteric mathematical intrigue.
+    \section{Weakly Stationary Sequences}\label{sec3} In  \S\ref{sec2} we
+    found that any contraction $U$ on a Hilbert space $\mc{H}$ is mean ergodic
+    in the sense that $P_U:f\mapsto \overline{f}$ exists for all $f\in\mc{H}$.
+    Unitary operators are a class of such contractions, since any unitary
+    $U:\mc{H}\rightarrow\mc{H}$ satisfies $\|U\|_{op}=1$. Recall that $U$ is
+    \textit{unitary} if it is invertible, linear, and satisfies
+    $\ip{Uf}{Ug}=\ip{f}{g}$ for all $f,g\in\mc{H}$, and that this latter
+    property means $U$ is an \textit{isometry}. It turns out these characterize
+    a large class of $\mc{H}$-valued processes, which are known as \textit{weakly
+    stationary} (or \textit{wide-sense stationary} in the context of stochastic
+    processes -- see \cite[ch.15]{Koralov_Sinai_2007}).
+    \begin{definition}[Weakly Stationary Process]\label{def3} Let $\mc{H}$ be a
+        Hilbert space. A sequence $\{f_n\}_{n\geq 1}\subset\mc{H}$ is called
+        \textit{weakly stationary} (WS), or \textit{second-order stationary} if for
+        any $n,m,k\in\mbb{N}$, $\ip{f_{n+k}}{f_{m+k}}=\ip{f_n}{f_m}$.
+    \end{definition}
+    It is readily apparent that for any unitary $U:\mc{H}\rightarrow\mc{H}$ and
+    $f_0\in\mc{H}$, the sequence $\{f_n\}_{n\geq 1}$ defined by $f_n:=U^nf_0$ is
+    WS, since
+    $\ip{f_{n+k}}{f_{m+k}}=\ip{U^kf_n}{U^kf_m}=\ip{(U^\ast)^kU^kf_n}{f_m}=\ip{f_n}{f_m}$.
+    It turns out that the converse is true as well, for which we require the
+    following lemma, the proof for which can be found in \cite[lemma 2.1.2]{Weber_2000}.
+    \begin{lemma}[Isometry Extension {\cite[lemma 2.1.2]{Weber_2000}}]\label{lem5}
+        Let $\mc{H}$ be a Hilbert space, $M\subseteq\mc{H}$, and
+        $U:M\rightarrow\mc{H}$ an isometry. Then $U$ can be extended to an
+        isometric mapping on the closed subspace $\mc{H}_M\subseteq\mc{H}$
+        spanned by $M$.  
+    \end{lemma}
+    \noindent\textbf{Proof.} Let $\mc{L}(M)$ be the set of linear combinations
+    from $M$, so that for any $f\in\mc{L}(M)$, $\exists m\geq 1$ and
+    $f_1,f_2,\dots,f_m\in M$ such that $f=\sum_{j=1}^m\alpha_j f_j$ for some
+    scalars $\alpha_j$, $1\leq j\leq m$. Define a new operator
+    $\hat{U}:\mc{L}(M)\rightarrow\mc{H}$ by
+    $\hat{U}f:=\sum_{j=1}^m\alpha_jUf_j$. This map is well-defined since if
+    $f=\sum_{j=1}^m\beta_jf_j$ for another set of scalars $\beta_j$, $1\leq
+    j\leq m$, we write $\gamma_j:=\alpha_j-\beta_j$ and find
+    \begin{align*}
+        \left\|\sum_{j=1}^m\gamma_jUf_j\right\|^2=\ip{\sum_{j=1}^m\gamma_jUf_j}{\sum_{j=1}^m\gamma_jUf_j}=\sum_{j=1}^m\sum_{k=1}^m\gamma_j\overline{\gamma_j}\ip{Uf_j}{Uf_k}=\sum_{j=1}^m\sum_{k=1}^m\gamma_j\overline{\gamma_j}\ip{f_j}{f_k}=\left\|\sum_{j=1}^m\gamma_jf_j\right\|^2=0.
+    \end{align*}
+    By precisely the same manipulations, we may take another linear combination
+    $g$ and find that $\ip{\hat{U}f}{\hat{U}g}=\ip{f}{g}$, so $\hat{U}$ is an
+    isometry. It is also clear that $\hat{U}$ is linear. Any element
+    $f\in\mc{H}_M$ can be written $f=\lim_{n\rightarrow\infty}f_n$, where $f_n$
+    are each linear combinations of $M$, and $\{f_n\}_{n\geq 1}$ is Cauchy. That
+    is,
+    \begin{align*}
+        0=\lim_{n,m\rightarrow\infty}\|f_n-f_m\|^2=\lim_{n,m\rightarrow\infty}\ip{f_n-f_m}{f_n-f_m}=\lim_{n,m\rightarrow\infty}\ip{\hat{U}f_n-\hat{U}f_m}{\hat{U}f_n-\hat{U}f_m}=\lim_{n,m\rightarrow\infty}\|\hat{U}f_n-\hat{U}f_m\|^2
+    \end{align*}
+    so $\{\hat{U}f_n\}_{n\geq 1}$ is Cauchy too, and we may define
+    $\widetilde{U}f:=\lim_{n\rightarrow\infty}\hat{U}f_n$ for any such
+    $f\in\mc{H}_M$. This new operator $\widetilde{U}:\mc{H}_M\rightarrow\mc{H}$
+    is also well-defined, and remains an isometry by continuity of the inner
+    product.\hfill{$\qed$}
+    \begin{theorem}[{\cite[theorem 2.1.3]{Weber_2000}}]\label{thm2} Let
+        $F=\{f_n\}_{n\geq 1}\subseteq\mc{H}$ be weakly stationary, and
+        $\mc{H}_F\subseteq\mc{H}$ the closed subspace spanned by $F$. Then there
+        exists a unitary $U:\mc{H}_F\rightarrow\mc{H}_F$ such that
+        $Uf_n=f_{n+1}$ for $n\geq 1$.
+    \end{theorem}
+    \noindent\textbf{Proof.} As suggested, define $Uf_n:=f_{n+1}$ for $n\geq 1$.
+    This is an isometry, since for $n,m\geq 1$,
+    $\ip{Uf_n}{Uf_m}=\ip{f_{n+1}}{f_{m+1}}=\ip{f_n}{f_m}$, by the weak
+    stationarity of $\{f_n\}_{n\geq 1}$. In light of lemma \ref{lem5}, $U$
+    extends to a linear isometry on $\mc{H}_F$, which we shall also denote with
+    $U$. Thus we need only show that $U$ is surjective. Fixing $g\in\mc{H}_F$,
+    $\exists \{g_n\}_{n\geq 1}\subseteq\mc{L}(F)$ so that
+    $\lim_{n\rightarrow\infty}g_n=g$. In particular,
+    \begin{align*}
+        g_n=\sum_{j=1}^{m_n}\alpha_{n,j}f_{k^n_j},\quad\text{so}\quad g_n=U\left(\sum_{j=1}^{m_n}\alpha_{n,j}f_{k^n_j-1}\right)=:Ug^\prime_n,\quad\text{with}\quad g^\prime_n\in\mc{L}(F),\quad n\geq 1,
+    \end{align*}
+    where $\{k^n_j\}_{j\geq 1}\subseteq\mbb{N}$ is a subsequence depending on
+    $n$. Using the same trick as for lemma \ref{lem5}, $\{g_n^\prime\}_{n\geq
+    1}$ is Cauchy, so taking $g^\prime:=\lim_{n\rightarrow\infty}g^\prime_n$ we
+    have
+    $Ug^\prime=\lim_{n\rightarrow\infty}Ug^\prime_n=\lim_{n\rightarrow\infty}g_n=g$.
+    \hfill{$\qed$}\\[5pt]
+    \indent Some technical remarks on theorem \ref{thm2} are germane to our
+    purposes. For a WS process $F=\{f_n\}_{n\geq 1}\subseteq\mc{H}$, we refer to
+    the associated unitary operator $U$ as its \textit{dynamics}, in analogy to
+    the application from \S \ref{sec0}. Further, assuming the dynamics
+    $U:\mc{H}\rightarrow\mc{H}$ to be unitary is without any loss of generality,
+    since otherwise we may regard $F$ as $\mc{H}_F$-valued, where $\mc{H}_F$ is
+    a Hilbert space in its own right and we are guaranteed
+    $U:\mc{H}_F\rightarrow\mc{H}_F$ is unitary. Lastly, we may recharacterize WS
+    processes as those satisfying $\ip{f_n}{f_m}=\Gamma(n-m)$ for $n\geq m\geq
+    0$ and some function $\Gamma$. Indeed, when this is the case we get
+    \begin{align*}
+        \ip{f_{n+k}}{f_{m+k}}=\Gamma(n+k-m-k)=\Gamma(n-m)=\ip{f_n}{f_m}.
+    \end{align*}
+    To handle the case where $n<m$, simply define
+    $\Gamma(n-m)=\overline{\Gamma(m-n)}$. Conversely, if we begin with a WS
+    sequence having dynamics $U$, then
+    $\ip{f_n}{f_m}=\ip{U^nf_0}{U^mf_0}=\ip{U^{n-m}f_0}{f_0}=:\Gamma(n-m)$ since
+    $U^\ast=U^{-1}$. For example, any orthonormal system
+    $\{e_n\}_{n\in\mbb{Z}}\subseteq\mc{H}$ is WS, since
+    $\ip{e_n}{e_m}=\delta_{n-m}$. A similarly trivial example is
+    $\{e^{-in\lambda}f_n\}_{n\geq 1}$ where we set
+    $\lambda\in\mbb{T}:=\{x\mod2\pi:x\in\mbb{R}\}$, provided $\{f_n\}_{n\geq 1}$
+    is WS to begin with. Indeed,
+    $\ip{e^{-in\lambda}f_n}{e^{-im\lambda}f_m}=e^{-i(n-m)\lambda}\ip{f_n}{f_m}$.
+    Simple though it may be, this observation, in conjunction with the mean
+    ergodic theorem, enables a sort of Fourier-type representation for any WS
+    process.
+    \section{Harmonic Decomposition of Weakly Stationary Processes}
+    Let $\mbb{T}:=\{x\mod2\pi:x\in\mbb{R}\}$ and $F=\{f_n\}_{n\geq
+    1}\subseteq\mc{H}$ be WS with unitary dynamics $U$, where $f\in\mc{H}$ is
+    such that for any $n\geq 1$, $f_n=U^nf$. Taking $\lambda\in\mbb{T}$, we
+    shall sometimes write $U_\lambda=e^{-i\lambda}U$ to denote the dynamics of
+    the \textit{twisting process} $\{e^{-in\lambda}f_n\}_{n\geq 1}$, which, as
+    we previously remarked, is also WS. Our objective is to represent each
+    element of $F$ in terms of the mean ergodic projections $P_{U_\lambda}f$,
+    which we denote with an alternative notation:
+    \begin{align}
+        \Lambda(f,U,\lambda):=\lim_{N\rightarrow\infty}\frac{1}{N}\sum_{n=1}^\infty e^{-in\lambda}U^nf,\quad\lambda\in\mbb{T}
+    \end{align}
+    which exists for all $\lambda\in\mbb{T}$, $f\in\mc{H}$ by theorem \ref{thm1}.
+    For this, we shall follow the steps found in\cite[\S6]{Fan_1946} closely. Our first observation is
+    that the inner product of WS $f_n$ with its mean ergodic projection is constant in $n\geq 1$.
+    \begin{lemma}[{\cite[corollary 4]{Fan_1946}}]\label{lem6}
+        Let $U:\mc{H}\rightarrow\mc{H}$, be unitary and $f\in\mc{H}$ so that
+        $\{U^nf\}_{n\geq 1}$ is WS. Then
+        $\ip{\Lambda(f,U,0)}{f_n}=\ip{\Lambda(f,U,0)}{f_m}$ for all $n,m\geq 1$. Further, $\ip{\Lambda(f,U,0)}{f_n}=\ip{f_n}{\Lambda(f,U,0)}=\|\Lambda(f,U,0)\|^2$ for any $n\geq 1$.
+    \end{lemma}
+    \noindent\textbf{Proof.} Observe that $\Lambda(f,U,0)=P_Uf\in\fix(U)$, so
+    $UP_Uf=P_Uf$. Of course, this means that
+    \begin{align*}
+        \left\|P_Uf-\frac{1}{N}\sum_{n=2}^{N+1}U^nf\right\|=\left\|UP_Uf-U\left(\frac{1}{N}\sum_{n=1}^{N}U^nf\right)\right\|=\left\|P_Uf-\frac{1}{N}\sum_{n=1}^NU^nf\right\|\overset{N\rightarrow\infty}{\longrightarrow} 0
+    \end{align*}
+    since $U$ is unitary. Repeating this, we obtain
+    $P_Uf=\lim_{N\rightarrow\infty}\frac{1}{N}\sum_{n=m}^{N+m-1}U^nf$ for $m\geq1$
+    by induction. For $n,m\geq 1$,
+    \begin{align*}
+        \ip{\Lambda(f,U,0)}{f_n}=\lim_{N\rightarrow\infty}\frac{1}{N}\sum_{k=n}^{N+n-1}\ip{f_k}{f_n}=\lim_{N\rightarrow\infty}\frac{1}{N}\sum_{k=m}^{N+m-1}\ip{f_k}{f_m}=\ip{\Lambda(f,U,0)}{f_m}
+    \end{align*}
+    which follows from the weak stationarity of $\{f_n\}_{n\geq
+    1}$. Using this fact, we can show the second claim:
+    \begin{align*}
+        \ip{\Lambda(f,U,0)}{f_n}=\frac{1}{N}\sum_{k=1}^N\ip{\Lambda(f,U,0)}{f_k}=\ip{\Lambda(f,U,0)}{C_Nf}
+    \end{align*}
+    such that
+    $\|\Lambda(f,U,0)\|^2=\lim_{N\rightarrow\infty}\ip{\Lambda(f,U,0)}{C_Nf}=\ip{\Lambda(f,U,0)}{f_n}$,
+    regardless of $n\geq 1$.\hfill{$\qed$}\\[5pt]
+    \indent For a twisting process, the mean ergodic projection satisfies
+    $\Lambda(f,U,\lambda)=\Lambda(f,U_\lambda,0)$ such that
+    $\ip{\Lambda(f,U,\lambda)}{e^{-in\lambda}f_n}=\|\Lambda(f,U,\lambda)\|^2$
+    for any $n\geq 1$ by lemma \ref{lem6}. This result can be used to determine
+    the inner product between the mean ergodic projection between two twisting
+    processes. With $\mu,\lambda\in\mbb{T}$, we have
+    \begin{align}
+        \ip{\Lambda(f,U,\lambda)}{\Lambda(f,U,\mu)}=\lim_{N\rightarrow\infty}\frac{1}{N}\sum_{n=1}^N\ip{e^{-in\lambda}f_n}{\Lambda(f,U,\mu)}&=\lim_{N\rightarrow\infty}\frac{1}{N}\sum_{n=1}^Ne^{-in(\lambda-\mu)}\ip{e^{-in\mu}f_n}{\Lambda(f,U,\mu)}\notag\\
+        &=\|\Lambda(f,U,\mu)\|^2\left(\lim_{N\rightarrow\infty}\frac{1}{N}\sum_{n=1}^Ne^{-in(\lambda-\mu)}\right)\label{eq4}
+    \end{align}
+    such that $\ip{\Lambda(f,U,\lambda)}{\Lambda(f,U,\mu)}=0$ whenever
+    $\lambda\neq\mu$. Thus, we have obtained an uncountable orthogonal family
+    $\{\Lambda(f,U,\lambda)\}_{\lambda\in\mbb{T}}\subseteq\mc{H}$. However,
+    assuming $\mc{H}$ to be separable (as we henceforth do) forces all but at
+    most countably many of these to be zero, allowing us to set
+    $\{\lambda\in\mbb{T}:\Lambda(f,U,\lambda)\neq
+    0\in\mc{H}\}=\{\lambda_j\}_{j=1}^\infty$. Extracting these $\lambda_j$ is analogous
+    to the discrete time Fourier transform of a signal, motivating the following definition.
+    \begin{definition}[Fourier Series for WS Processes {\cite[\S6]{Fan_1946}}]\label{def4}
+        With $\{\lambda_j\}_{j=1}^\infty$ as above, we call $\{\sum_{j=1}^\infty e^{in\lambda_j}\Lambda(f,U,\lambda_j)\}_{n\geq 1}$
+        the \textit{Fourier series} corresponding to $\{f_n\}_{n\geq 1}$.
+    \end{definition}
+    Foremost is the technical question of whether the series $\sum_{j=1}^\infty
+    e^{-in\lambda_j}\Lambda(f,U,\lambda_j)$ converges for $n\geq 1$, but also to
+    determine how these might be used to represent $f_n$. To address these, define
+    \begin{align}
+        P^N_n:=\sum_{j=1}^Ne^{in\lambda_j}\Lambda(f,U,\lambda_j),\quad\text{and}\quad Q^N_n:=f_n-P^N_n,\quad n,N\geq 1
+    \end{align}
+    yielding the decomposition $f_n=P^N_n+Q^N_n$ for $n\geq 1$. The following theorem addresses the behavior of this
+    representation as $N\rightarrow\infty$.
+    \begin{lemma}[{\cite[\S6]{Fan_1946}}]\label{lem7}
+        Fix any $N\geq 1$, and let $\{f_n\}_{n\geq 1}$, $\{P^N_n\}_{n\geq 1}$ and $\{Q^N_n\}_{n\geq 1}$ be as above. 
+        Then for any $n,m\geq 1$, $\ip{P^N_n}{Q^N_m}=0$, and we have both
+        \begin{align*}
+            \ip{f_n}{f_m}=\ip{P^N_n}{P^N_m}+\ip{Q^N_n}{Q^N_m},\quad\text{and}\quad\ip{P^N_n}{P^N_m}=\sum_{j=1}^N e^{i(n-m)\lambda_j}\Lambda(f,U,\lambda_j).
+        \end{align*}
+        In particular, both $\{P^N_n\}_{n\geq 1}$ and $\{Q^N_n\}_{n\geq 1}$ are WS.
+    \end{lemma}
+    \noindent\textbf{Proof.} Using (\ref{eq4}), for $j,n\geq1$ we obtain
+    \begin{align*}
+        \ip{\Lambda(f,U,\lambda_j)}{P^N_n}=\sum_{k=1}^N\ip{\Lambda(f,U,\lambda_j)}{e^{in\lambda_k}\Lambda(f,U,\lambda_k)}=\begin{cases}
+            e^{-in\lambda_j}\|\Lambda(f,U,\lambda_j)\|^2,\quad&\text{if $j\leq N$}\\
+            0,\quad&\text{otherwise.}
+        \end{cases}
+    \end{align*}
+    This, along with $\ip{\Lambda(f,U,\lambda_j)}{f_n}=e^{-in\lambda_j}\|\Lambda(f,U,\lambda_j)\|^2$ (which uses \ref{lem6}) immediately implies
+    \begin{align*}
+        \ip{\Lambda(f,U,\lambda_j)}{Q^N_n}=\ip{\Lambda(f,U,\lambda_j)}{f_n}-\ip{\Lambda(f,U,\lambda_j)}{P^N_n}=\begin{cases}
+            0,\quad&\text{if $j\leq N$}\\
+            e^{-in\lambda_j}\|\Lambda(f,U,\lambda_j)\|^2,\quad&\text{otherwise.}
+        \end{cases}
+    \end{align*}
+    The latter implies the first claim that $\{P^N_n\}_{n\geq 1}$ and $\{Q^N_n\}_{n\geq 1}$ are orthogonal, since for any $n,m\geq 1$,
+    \begin{align*}
+        \ip{P^N_n}{Q^n_m}=\sum_{j=1}^Ne^{in\lambda_j}\ip{\Lambda(f,U,\lambda_j)}{Q^N_m}=0.
+    \end{align*}
+    The second claim follows this orthogonality:
+    \begin{align*}
+        \ip{f_n}{f_m}=\ip{P^N_n+Q^N_n}{P^N_m+Q^N_m}&=\ip{P^N_n}{P^n_m}+\ip{P^N_n}{Q^N_m}+\ip{Q^N_n}{P^N_m}+\ip{Q^N_n}{Q^N_m}\\
+        &=\ip{P^N_n}{P^N_m}+\ip{Q^N_n}{Q^N_m}.
+    \end{align*}
+    The final claim follows from (\ref{eq4}), since
+    \begin{align*}
+        \ip{P^N_n}{P^N_m}=\sum_{j=1}^N\sum_{k=1}^Ne^{in\lambda_j}e^{-im\lambda_k}\ip{\Lambda(f,U,\lambda_j)}{\Lambda(f,U,\lambda_k)}=\sum_{j=1}^Ne^{i(n-m)\lambda_j}\|\Lambda(f,U,\lambda_j)\|^2
+    \end{align*}
+    which depends on only the difference $n-m$, meaning $\{P^N_n\}_{n\geq 1}$ is WS. It is plain from definition \ref{def3} that the difference of two WS processes is WS, so $\{Q^N_n\}_{n\geq 1}$ is WS also.\hfill{$\qed$}\\[5pt]
+    \indent Which is all that is needed to demonstrate the main result of this section. In particular, that the full, nontruncated Fourier series, formally defined
+    \begin{align*}
+        P_n:=\sum_{j=1}^\infty e^{in\lambda_j}\Lambda(f,U,\lambda_j),\quad\text{with remainder}\quad Q_n:=f_n-P_n,\quad n\geq 1
+    \end{align*}
+    converges in $\mc{H}$ uniformly in $n$.
+    \begin{theorem}[Fourier Decomposition of WS Processes {\cite[theorem 10]{Fan_1946}}]
+        Let $\{f_n\}_{n\geq 1}$ be WS in a separable Hilbert space $\mc{H}$ with dynamics $U$. Having extracted the frequencies $\{\lambda_j\}_{j=1}^\infty=\{\lambda\in\mbb{T}:\Lambda(f,U,\lambda)\neq 0\}$
+        via the mean ergodic theorem, the Fourier series $\{P_n\}_{n\geq 1}$ converges in $\mc{H}$ uniformly in $n$, both it and the remainders $\{Q_n\}_{n\geq 1}$ are
+        WS, and $\ip{P_n}{Q_m}=0$ for any $n,m\geq 1$. Further, the series $\sum_{j=1}^\infty\|\Lambda(f,U,\lambda_j)\|^2<\infty$, and in fact
+        \begin{align*}
+            \sum_{j=1}^\infty\|\Lambda(f,U,\lambda_j)\|^2\leq \|f_n\|^2
+        \end{align*}
+        for any $n\geq 1$. Lastly, $\{P_n\}_{n\geq 1}$ has the same Fourier series as $\{f_n\}_{n\geq 1}$, and the Fourier series of $\{Q_n\}_{n\geq 1}$ is null.
+    \end{theorem}
+    \noindent\textbf{Proof.} By lemma \ref{lem7}, for $n\geq 1$ we have $\ip{P^N_n}{P^N_n}=\sum_{j=1}^N\|\Lambda(f,U,\lambda_j)\|^2$, such that
+    \begin{align}
+        \|f_n\|^2=\|Q^N_n\|^2+\|P^N_n\|^2\quad\Rightarrow\quad 0\leq \|Q^N_n\|^2=\|f_n\|^2-\sum_{j=1}^N\|\Lambda(f,U,\lambda_j)\|^2\quad\Rightarrow\quad \sum_{j=1}^\infty\|\Lambda(f,U,\lambda_j)\|^2\leq \|f_n\|^2\label{eq5}
+    \end{align}
+    and so $\sum_{j=1}^\infty\|\Lambda(f,U,\lambda_j)\|^2<\infty$. In particular, the partial sums are Cauchy, so for $\varepsilon>0$, we may take $N>M\geq 1$ sufficiently large so guarantee $\sum_{j=1}^N\|\Lambda(f,U,\lambda_j)\|^2-\sum_{j=1}^{M-1}\|\Lambda(f,U,\lambda_j)\|^2=\sum_{j=M}^N\|\Lambda(f,U,\lambda_j)\|^2<\varepsilon$. Then,
+    \begin{align*}
+        \left\|\sum_{j=M}^Ne^{in\lambda_j}\Lambda(f,U,\lambda_j)\right\|^2=\sum_{j=M}^N\sum_{k=M}^Ne^{in\lambda_j}e^{-in\lambda_k}\ip{\Lambda(f,U,\lambda_j)}{\Lambda(f,U,\lambda_k)}&=\sum_{j=M}^N\|\Lambda(f,U,\lambda_j)\|^2<\varepsilon
+    \end{align*}
+    which follows from (\ref{eq4}), i.e. the orthogonality of $\{\Lambda(f,U,\lambda_j)\}_{j=1}^\infty$. But now the partial sums $\{\sum_{j=1}^Ne^{in\lambda_j}\Lambda(f,U,\lambda_j)\}_{N\geq 1}$ are Cauchy in $\mc{H}$, and the $N>M\geq 1$ required
+    for this $\varepsilon$-bound were independent of $n\geq 1$, so the $P_n$ converge uniformly in $n$. From lemma (\ref{lem7}),
+    \begin{align*}
+        \ip{P^N_n}{Q^N_m}=0\quad\Rightarrow\quad\lim_{N\rightarrow\infty}\ip{P^N_n}{Q^N_m}=\ip{P_n}{Q_m}=0
+    \end{align*} 
+    for $n,m\geq 1$. In the same way, we obtain $\ip{f_n}{f_m}=\ip{P_n}{P_m}+\ip{Q_n}{Q_m}$, but also
+    \begin{align*}
+        \ip{P_n}{P_m}=\lim_{N\rightarrow\infty}\ip{P^N_n}{P^N_m}=\sum_{j=1}^\infty e^{i(n-m)\lambda_j}\|\Lambda(f,U,\lambda_j)\|^2
+    \end{align*}
+    which signifies $\{P_n\}_{n\geq 1}$ (and hence $\{Q_n\}_{n\geq 1}$) as WS. [[Show $\{P_n\}_{n\geq 1}$ is its own Fourier series, and $\{Q_n\}_{n\geq 1}$'s is null following \cite[theorem 10]{Fan_1946}]]\hfill{$\qed$}\\[5pt]
+    \indent In order for $Q_n=0$ for $n\geq 1$, it is necessary and sufficient that $\sum_{j=1}^\infty e^{i\lambda_j}\Lambda(f,U,\lambda_j)=f_1$ since, when this holds:
+    \begin{align*}
+        f_1=P_1\quad\Rightarrow\quad f_2=UP_1\quad\Rightarrow\quad\cdots\quad\Rightarrow\quad f_n=U^{n-1}P_1,\quad n\geq 1.
+    \end{align*}
+    In this case, we have been able to express $\{f_n\}_{n\geq 1}\subseteq\mc{H}$ in terms of a set of nontrivial mean ergodic projections associated to a collection of twisting processes $\{e^{-in\lambda_j}f_n\}_{n\geq 1}$.\\[5pt] 
+    [[Concluding remarks, tying back to the narrative from the introduction]]
+    \newpage
+    \bibliography{CBraun-MET}
+    \bibliographystyle{ieeetr}
+\end{document}
+    % ==============================================
+    % \vspace{10pt}
+    % consider the set $F\subseteq\mc{H}$ for which the theorem holds:
+    % \[F:=\{f\in\mc{H}:\;\lim_{N\rightarrow\infty}C_N\proj_{\mc{H}_0}f=0\}.\]
+    % By the previous calculation, we have $\mc{H}_T\oplus(\ran(\mbb{I}-U))^\perp\subseteq F$, so if $F$ is closed, then $F=\mc{H}$. First, for $N\geq 1$
+    % \begin{align*}
+    %     \left\|C_N\right\|_{op}=\|\frac{1}{N}\sum_{n=0}^{N-1}U^n\|_{op}\leq\frac{1}{N}\sum_{n=0}^{N-1}\|U\|_{op}^n\leq 1
+    % \end{align*}
+    % so $C_N$ is a contraction for $N\geq 1$. Now consider a sequence $\{f_n\}_{n\geq 1}\subset F$ such that $f_n\rightarrow f$. Clearly, we then have $g_n:=\proj_{\mc{H}_0}f_n\rightarrow\proj_{\mc{H}_0}f=:g$. Fixing $\varepsilon>0$, take $n\geq 1$ large enough so that $\|g-g_n\|\leq\frac{\varepsilon}{2}$,
+    % and then $N$ large enough so that $\|C_Ng_n\|\leq\frac{\varepsilon}{2}$. Then,
+    % \begin{align*}
+    %     \|C_Ng\|\leq\|C_Ng-C_Ng_n\|+\|C_Ng_n\|\leq\|C_N(g-g_n)\|+\frac{\varepsilon}{2}\leq \varepsilon.
+    % \end{align*}
+    % Thus, $C_N\proj_{\mc{H}_0}f\rightarrow 0$, so $f\in F$, and $F$ is closed.
+    % \begin{lemma}[{\cite[lemma 8.2]{Eisner_Farkas_Haase_Nagel_2015}}]
+    %     Let $\mc{H}$ be a Hilbert space, $U_T\in\mc{B}(\mc{H})$, and for $N\geq 0$, define the \textit{Ces\`aro mean}
+    %     \begin{align*}
+    %         C_N:=\frac{1}{N}\sum_{n=0}^{N-1}U_T^{n}.
+    %     \end{align*}
+    %     Then we have the following facts:
+
+    %     \begin{enumerate}[(i)]
+    %         \item If $f\in\fix(U_T)$, then $C_Nf=f$ for all $f\in\mc{H}$.
+    %         \item If $C_Nf\overset{N\rightarrow\infty}{\rightarrow}g$, then $U_Tg=g$ and $C_NU_Tf\overset{N\rightarrow\infty}{\rightarrow}g$.
+    %         \item If $\frac{1}{N}U_T^Nf\rightarrow 0$ $\forall f\in\mc{H}$, then $C_Nf\rightarrow 0$ for all $f\in\ran(\mbb{I}-U_T)$.
+    %         \item If $C_Nf\overset{N\rightarrow\infty}{\rightarrow}g$, then $f-g\in\overline{\ran}(\mbb{I}-U_T)$.
+    %     \end{enumerate}
+    % \end{lemma}
+    % \noindent\textbf{Proof} [[Follow \cite[lemma 8.2]{Eisner_Farkas_Haase_Nagel_2015}. The proof is quite long and tedious, can this go in an appendix?]]
+    % \begin{lemma}[{\cite[lemma 8.3]{Eisner_Farkas_Haase_Nagel_2015}}]\label{lem2}
+    %     If $U_T\in\mc{B}(\mc{H})$, then $F:=\{f\mc{H}:\;P_Tf:=\lim_{N\rightarrow\infty}C_Nf$ exists$\}$ is $U_T$ invariant, and $\fix(U_T)\subseteq F$. Further,
+    %     $P_T:F\rightarrow F$ is a projection onto $\fix(U_T)$, and $U_TP_T=P_TU_T=P_T$.
+    % \end{lemma}
+    % \noindent\textbf{Proof} [[Follow \cite[lemma 8.3]{Eisner_Farkas_Haase_Nagel_2015}]]
+    % \begin{definition}[Mean Ergodicity]\label{def2}
+    %     The operator $P_T:F\rightarrow\fix(U_T)$ in lemma (\ref{lem2}) is called the \textit{mean ergodic projection} associated to $U_T$. Further, if $F=\mc{H}$, we call $U_T$ \textit{mean ergodic}.
+    % \end{definition}
+    % \begin{lemma}[Strong Convergence Lemma {\cite[p.123, ex.1]{Eisner_Farkas_Haase_Nagel_2015}}]\label{lem3}
+    %     Let $(V_n)_{n\geq 1}\subseteq\mc{B}(\mc{H})$. If $\exists M\geq 0$ such that $\sup_{n\geq 1}\|V_n\|_{op}\leq M$, then
+    %     \[G:=\{f\in\mc{H}:\lim_{n\rightarrow\infty}V_nf\;\text{exists}\}\]
+    %     is a closed subspace of $\mc{H}$ and the operator $V:G\rightarrow\mc{H}$ defined by $Vf=\lim_{n\rightarrow\infty}V_nf$, is a bounded linear operator.
+    % \end{lemma}
+    % \begin{lemma}
+    %     If $\sup_{N\geq 0}\|U_T^N\|_{op}<\infty$ and $\frac{1}{N}U_T^Nf\rightarrow 0$ for all $f\in\mc{H}$, then $F$
+    %     is closed, $P_T:F\rightarrow\fix(U_T)$ is bounded, and $\ker(P_T)=\overline{\ran}(\mbb{I}-U_T)$.
+    % \end{lemma}
+    % \noindent\textbf{Proof} [[We only need $F$ closed, $P_T:F\rightarrow F$ a projection onto $\fix(U_T)$ with kernel $\overline{\ran}(\mbb{I}-U_T)$. The first two are from lemma (\ref{lem3}), the third from lemma (\ref{lem2}) and the last is to be proven here.]]\\[5pt]
+    % \textbf{Proof of theorem \ref{thm1}}
+    % [[Perhaps I should spare myself the work and go straight to \cite[theorem 1.3.1]{Weber_2000}]]
+    % \

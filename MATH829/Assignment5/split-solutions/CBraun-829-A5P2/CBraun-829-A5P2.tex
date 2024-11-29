@@ -1,0 +1,157 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} \graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}} \newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}} \newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\ip}[2]{\left\langle#1,#2\right\rangle }
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\makeatletter
+\def\Ddots{\mathinner{\mkern1mu\raise\p@
+\vbox{\kern7\p@\hbox{.}}\mkern2mu
+\raise4\p@\hbox{.}\mkern2mu\raise7\p@\hbox{.}\mkern1mu}}
+\makeatother
+
+\def\powertower#1#2{#1\ifnum#2>1 ^{\powertower{#1}{\numexpr#2-1\relax}}\fi}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 5\hfill {\bf Connor Braun} \hfill {\bf 2024-10-16}
+    \end{center}
+    \vspace{5pt}
+    \noindent{\bf Problem 2}. For $n\in\mbb{Z}$, let $e_n(t)=\frac{e^{2int}}{\sqrt{\pi}}$, where $i=\sqrt{-1}$.\\[5pt]
+    {\bf a)} Assuming that $(e_n(t))_{n\in\mbb{Z}}$ is an orthonormal basis for the Hilbert space $L_2\left[-\frac{\pi}{2},\frac{\pi}{2}\right]$ with the usual inner product, prove that
+    \begin{align*}
+        \left\{\frac{1}{\sqrt{\pi}},\frac{\cos(2nt)}{\sqrt{\pi/2}},\frac{\sin(2nt)}{\sqrt{\pi/2}}\right\}_{n\geq 1}
+    \end{align*}
+    is also an orthonormal basis.\\[5pt]
+    {\bf Proof}. We shall denote $X:=L_2\left[-\frac{\pi}{2},\frac{\pi}{2}\right]$, and $D:=\left[-\frac{\pi}{2},\frac{\pi}{2}\right]$ for notational ease. Fixing some $x\in X$, $\exists!(\alpha_n)_{n\in\mbb{Z}}$ so that $x=\sum_{n=-\infty}^{\infty}\alpha_ne_n$ since $(e_n)_{n\in\mbb{Z}}$ is a basis. 
+    Recalling Euler's identity $e^{iy}=\cos(y)+i\sin(y)$ for $y\in\mbb{R}$, we can manipulate the basis expansion for $x$ to find for $t\in D$,
+    \begin{align*}
+        x(t)=\sum_{n=-\infty}^\infty\alpha_ne_n(t)=\sum_{n=-\infty}^\infty\alpha_n\frac{e^{2int}}{\sqrt{\pi}}&=\sum_{n=-\infty}^\infty\frac{\alpha_n}{\sqrt{\pi}}(\cos(2nt)+i\sin(2nt))\\
+        &=\frac{\alpha_0}{\sqrt{\pi}}+\sum_{n=1}^\infty\left[\frac{\alpha_n}{\sqrt{\pi}}(\cos(2nt)+i\sin(2nt))+\frac{\alpha_{-n}}{\sqrt{\pi}}(\cos(-2nt)+i\sin(-2nt))\right]\\
+        &=\frac{\alpha_0}{\sqrt{\pi}}+\sum_{n=1}^\infty\left[\frac{\alpha_n}{\sqrt{\pi}}(\cos(2nt)+i\sin(2nt))+\frac{\alpha_{-n}}{\sqrt{\pi}}(\cos(2nt)-i\sin(2nt))\right]\\
+        &=\frac{\alpha_0}{\sqrt{\pi}}+\sum_{n=1}^\infty\left[\frac{\alpha_n+\alpha_{-n}}{\sqrt{2}}\frac{\cos(2nt)}{\sqrt{\pi/2}}+i\frac{\alpha_n-\alpha_{-n}}{\sqrt{2}}\frac{\sin(2nt)}{\sqrt{\pi/2}}\right].
+    \end{align*}
+    From here, we define $\beta_0:=\alpha_0$, $g_0:=\frac{1}{\sqrt{\pi}}$, and for $n\geq 1$,
+    \begin{align*}
+        \beta_n:=\begin{cases}
+            \frac{\alpha_{\frac{n+1}{2}}+\alpha_{-\frac{n+1}{2}}}{\sqrt{2}},\quad&\text{if $2\nmid n$}\\
+            i\frac{\alpha_{\frac{n}{2}}-\alpha_{-\frac{n}{2}}}{\sqrt{2}},\quad&\text{if $2\mid n$}
+        \end{cases},\quad\text{and}\quad g_n(t):=\begin{cases}
+            \frac{\cos(2(\frac{n+1}{2})t)}{\sqrt{\pi/2}},\quad&\text{if $2\nmid n$}\\
+            \frac{\sin(2(\frac{n}{2})t)}{\sqrt{\pi/2}},\quad&\text{if $2\mid n$}
+        \end{cases},\quad t\in D.
+    \end{align*}
+    With this, our previous calculation yields $x(t)=\frac{\beta_0}{\sqrt{\pi}}+\sum_{n=1}^\infty\beta_ng_n(t)$, and the uniqueness of this representation in $(\beta_n)_{n\geq 0}$ follows the uniqueness of the $(\alpha_n)_{n\geq \mbb{Z}}$.\\[5pt]
+    \indent Lastly, we note that $(g_n)_{n\geq 0}$ is indeed an orthonormal system. To show this,
+    notice that since $D$ is symmetric about zero, $\int_Df(t)dt=0$ whenever $f\in X$ is an odd function (that is, whenever $f(-t)=-f(t)$ for $t\in D$). In particular, $\sin(kt)$ is odd for any $k\in\mbb{R}$. Then notice that via some well-known trigonometric identities:
+    \begin{align*}
+        \cos(k_1t)\sin(k_2t)=\frac{\sin((k_1+k_2)t)-\sin((k_1-k_2)t)}{2},\quad\text{and}\quad \sin(k_1t)\cos(k_2t)=\frac{\sin((k_1+k_2)t)+\sin((k_1-k_2)t)}{2}
+    \end{align*}
+    for $k_1,k_2\in\mbb{R}$. Therefore, we can immediately conclude that $\ip{g_n}{g_m}=0$ whenever $n,m>0$ are not of the same parity. Then, when $n,m\geq 1$:
+    \begin{align*}
+        \ip{g_{2n-1}}{g_{2m-1}}=\frac{2}{\pi}\int_D\cos(2nt)\cos(2mt)dt&=\frac{2}{2\pi}\left(\int_D\cos(2(n-m)t)dt+\int_D\cos(2(n+m)t)dt\right)\\
+        &=\begin{cases}
+            \frac{1}{\pi}\left(\pi+\frac{1}{2(n+m)}\sin(2(n+m)t)\bigg|^{\frac{\pi}{2}}_{-\frac{\pi}{2}}\right)=1,\quad&\text{if $n=m$}\\
+            \frac{1}{\pi}\left(\frac{1}{2(n-m)}\sin(2(n-m)t)\bigg|^{\frac{\pi}{2}}_{-\frac{\pi}{2}}+\frac{1}{2(n+m)}\sin(2(n+m)t)\bigg|^{\frac{\pi}{2}}_{-\frac{\pi}{2}}\right)=0,\quad&\text{if $n\neq m$}\\
+        \end{cases}\\
+        &=\delta_{n,m}\\
+        &=\delta_{2n-1,2m-1},\\
+        \ip{g_{2n}}{g_{2m}}=\frac{2}{\pi}\int_D\sin(2nt)\sin(2mt)dt&=\frac{2}{2\pi}\left(\int_D\cos(2(n-m)t)dt-\int_D\cos(2(n+m)t)dt\right)\\
+        &=\begin{cases}
+            \frac{1}{\pi}\left(\pi-\frac{1}{2(n+m)}\sin(2(n+m)t)\bigg|^{\frac{\pi}{2}}_{-\frac{\pi}{2}}\right)=1,\quad&\text{if $n=m$}\\
+            \frac{1}{\pi}\left(\frac{1}{2(n-m)}\sin(2(n-m)t)\bigg|^{\frac{\pi}{2}}_{-\frac{\pi}{2}}-\frac{1}{2(n+m)}\sin(2(n+m)t)\bigg|^{\frac{\pi}{2}}_{-\frac{\pi}{2}}\right)=0,\quad&\text{if $n\neq m$}\\
+        \end{cases}\\
+        &=\delta_{n,m}\\
+        &=\delta_{2n,2m}
+    \end{align*}
+    covering the cases where both indices are odd (the former) or even (the latter). Lastly, for any $n\geq 1$ we have one of three scenarios:
+    \begin{align*}
+        \left[2\nmid n\quad\Rightarrow\quad\ip{g_0}{g_n}=\frac{\sqrt{2}}{\pi}\int_{D}\cos(2\frac{n+1}{2}t)dt=0\right],\quad \left[2\mid n\quad\Rightarrow\quad\ip{g_0}{g_n}=\frac{\sqrt{2}}{\pi}\int_D\sin(2\frac{n}{2}t)dt=0\right]
+    \end{align*}
+    and $\ip{g_0}{g_0}=\frac{1}{\pi}\int_Ddt=\frac{\pi}{\pi}=1$, so indeed, for any $n,m\geq 0$, $\ip{g_n}{g_m}=\delta_{n,m}$. We conclude that the proposed set is indeed an orthornormal basis.\hfill{$\qed$}\\[5pt]
+    {\bf b)} Write $f_1(t)=t$ and $f_2(t)=t^2$ (both in $L_2(D)$) with respect to the basis found in (a).\\[5pt]
+    {\bf Solution}. Dealing with $f_1(t)$ first, for $n\geq 1$ we get
+    \begin{align*}
+        \ip{f_1}{g_0}&=\frac{1}{\sqrt{\pi}}\int_Dtdt=0,\quad\ip{f_1}{g_{2n-1}}=\frac{\sqrt{2}}{\sqrt{\pi}}\int_Dt\cos(2nt)dt=0
+    \end{align*}
+    since in both cases the integrand is an odd function and $D$ is symmetric about $0\in\mbb{R}$. Alternatively,
+    \begin{align*}
+        \ip{f_1}{g_{2n}}=\frac{\sqrt{2}}{\sqrt{\pi}}\int_Dt\sin(2nt)dt&=\frac{\sqrt{2}}{\sqrt{\pi}}\left[-\frac{t}{2n}\cos(2nt)\bigg|^{\frac{\pi}{2}}_{-\frac{\pi}{2}}+\int_D\frac{1}{2n}\cos(2nt)dt\right]\\
+        &=\frac{\sqrt{2}}{\sqrt{\pi}}\left[-\frac{\pi}{2n}\cos(n\pi)+\frac{1}{4n^2}\left(\sin(n\pi)-\sin(-n\pi)\right)\right]\\
+        &=\frac{\sqrt{\pi}}{\sqrt{2}n}(-1)\cos(n\pi)\\
+        &=\frac{\sqrt{\pi}}{\sqrt{2}n}(-1)^{n+1}.
+    \end{align*}
+    With this, we may express
+    \[f_1(t)=\sum_{n\geq 0}\ip{f_1}{g_n}g_n(t)=\sum_{n\geq 1}\ip{f_1}{g_{2n}}g_{2n}(t)=\sum_{n\geq 1}\frac{1}{n}(-1)^{n+1}\sin(2nt).\]
+    We may repeat a similar procedure for $f_2$:
+    \begin{align*}
+        \ip{f_2}{g_0}&=\frac{1}{\sqrt{\pi}}\int_Dt^2dt=\frac{1}{3\sqrt{\pi}}t^3\bigg|^{\frac{\pi}{2}}_{-\frac{\pi}{2}}=\frac{\pi^{5/2}}{12},\\
+        \ip{f_2}{g_{2n}}&=\frac{\sqrt{2}}{\sqrt{\pi}}\int_Dt^2\sin(2nt)dt=0
+    \end{align*}
+    where the latter holds since (once again) the integrand is an odd function. For the case of odd indices:
+    \begin{align*}
+        \ip{f_2}{g_{2n-1}}=\frac{\sqrt{2}}{\sqrt{\pi}}\int_Dt^2\cos{2nt}dt&=\frac{\sqrt{2}}{\sqrt{\pi}}\left[\frac{t^2}{2n}\sin(2nt)\bigg|^{\frac{\pi}{2}}_{-\frac{\pi}{2}}-\frac{1}{n}\int_Dt\sin(2nt)dt\right]\\
+        &=-\frac{\sqrt{2}}{\sqrt{\pi}n}\int_Dt\sin(2nt)dt\\
+        &=\frac{\sqrt{\pi}}{\sqrt{2}n^2}(-1)^n.
+    \end{align*}
+    The last equality holds since the second line is just $-\frac{1}{n}\ip{f_1}{g_{2n}}$ when $n\geq 1$. Now we have a representation of $f_2$ in the basis as well:
+    \begin{align*}
+        f_2(t)=\sum_{n\geq 0}\ip{f_2}{g_n}g_n(t)=\frac{\pi^{2}}{12}+\sum_{n\geq 1}\frac{1}{n^2}(-1)^n\cos(2nt).\tag*{$\qed$}
+    \end{align*}
+    {\bf c)} Use Parseval's identity to prove that
+    \begin{align*}
+        \sum_{n=1}^\infty\frac{1}{n^2}=\frac{\pi^2}{6},\quad\text{and}\quad\sum_{n=1}^\infty\frac{1}{n^4}=\frac{\pi^4}{90}.
+    \end{align*}
+    {\bf Solution.} Let $\|\cdot\|:L_2(D)\rightarrow\mbb{R}_+$ be the norm on $L_2(D)$ induced by $\ip{\cdot}{\cdot}$. From part (b), Parseval's identity tells us that
+    \begin{align*}
+        \sum_{n=0}^\infty|\ip{f_1}{g_n}|^2=\|f_1\|^2=\int_Dt^2dt=\frac{\pi^3}{12}\quad&\Rightarrow\quad \frac{\pi^3}{12}=\sum_{n=1}^\infty\left|\frac{\sqrt{\pi}}{\sqrt{2}n}(-1)^{n+1}\right|^2\\
+        &\Rightarrow\quad\frac{\pi^3}{12}=\sum_{n=1}^\infty \frac{\pi}{2n^2}\\
+        &\Rightarrow\quad\frac{\pi^2}{6}=\sum_{n=1}^\infty\frac{1}{n^2}
+    \end{align*}
+    which is the first equality. For the second, 
+    \begin{align*}
+        \sum_{n=0}^\infty|\ip{f_2}{g_n}|^2=\|f_2\|^2=\int_Dt^4dt=\frac{\pi^5}{80}\quad&\Rightarrow\quad\frac{\pi^5}{80}=\left|\frac{\pi^{5/2}}{12}\right|^2+\sum_{n=1}^\infty\left|\frac{\sqrt{\pi}}{\sqrt{2}n^2}\right|^2\\
+        &\Rightarrow\quad\frac{\pi^5}{80}-\frac{\pi^5}{144}=\frac{\pi}{2}\sum_{n=1}^\infty\frac{1}{n^4}\\
+        &\Rightarrow\quad\frac{\pi^4}{40}-\frac{\pi^4}{72}=\sum_{n=1}^\infty\frac{1}{n^4}\\
+        &\Rightarrow\quad\frac{9\pi^4-5\pi^4}{360}=\sum_{n=1}^\infty\frac{1}{n^4}\\
+        &\Rightarrow\quad\frac{\pi^4}{90}=\sum_{n=1}^\infty\frac{1}{n^4}
+    \end{align*}
+    and we are done.\hfill{$\qed$}\\[5pt]
+\end{document}

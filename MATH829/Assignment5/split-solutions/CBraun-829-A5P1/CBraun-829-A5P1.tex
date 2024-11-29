@@ -1,0 +1,102 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} \graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}} \newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}} \newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\ip}[2]{\left\langle#1,#2\right\rangle }
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\makeatletter
+\def\Ddots{\mathinner{\mkern1mu\raise\p@
+\vbox{\kern7\p@\hbox{.}}\mkern2mu
+\raise4\p@\hbox{.}\mkern2mu\raise7\p@\hbox{.}\mkern1mu}}
+\makeatother
+
+\def\powertower#1#2{#1\ifnum#2>1 ^{\powertower{#1}{\numexpr#2-1\relax}}\fi}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 5\hfill {\bf Connor Braun} \hfill {\bf 2024-10-16}
+    \end{center}
+    \vspace{5pt}
+    \begin{center}
+        \begin{minipage}{\dimexpr\paperwidth-10cm}
+            I did not work with anybody in completing this assignment.
+        \end{minipage}
+    \end{center}
+    \noindent{\bf Problem 1} Let $(X,\ip{\cdot}{\cdot})$ be a Hilbert space over $\mbb{K}\in\{\mbb{R},\mbb{C}\}$. Let $(e_j)_{j\geq 1}$ be an infinite orthonormal
+    system in $(X,\ip{\cdot}{\cdot})$ Prove that for every $x\in X$, we have the so-called {\it Bessel's inequality}
+    $\sum_{j=1}^\infty|\ip{x}{e_j}|^2\leq\|x\|^2$. Follow the steps below:\\[5pt]
+    {\bf a)} Let $y_n=\sum_{j=1}^n\ip{x}{e_j}e_j$. Show that $\ip{y_n}{x}=\sum_{j=1}^n|\ip{x}{e_j}|^2$.\\[5pt]
+    {\bf Solution}. For $n\geq 1$, we directly compute: 
+    \begin{align*}
+        \ip{y_n}{x}=\ip{\sum_{j=1}^n\ip{x}{e_j}e_j}{x}=\sum_{j=1}^n\ip{x}{e_j}\ip{e_j}{x}=\sum_{j=1}^n\ip{x}{e_j}\overline{\ip{x}{e_j}}=\sum_{j=1}^n|\ip{x}{e_j}|^2.\tag*{$\qed$}
+    \end{align*}
+    {\bf b)} Show that $\|y_n\|^2=\sum_{j=1}^n|\ip{x}{e_j}|^2$ for $n\geq 1$.\\[5pt]
+    {\bf Solution}. Fixing $n\geq 1$, we can again directly compute
+    \begin{align*}
+        \|y_n\|^2=\ip{y_n}{y_n}=\ip{\sum_{j=1}^n\ip{x}{e_j}e_j}{\sum_{j=1}^n\ip{x}{e_j}e_j}&=\sum_{j=1}^n\ip{x}{e_j}\ip{e_j}{\sum_{j=1}^n\ip{x}{e_j}e_j}\\
+        &=\sum_{j=1}^n\sum_{k=1}^n\ip{x}{e_j}\overline{\ip{x}{e_k}}\ip{e_j}{e_k}\\
+        &=\sum_{j=1}^n\sum_{k=1}^n\ip{x}{e_j}\overline{\ip{x}{e_k}}\delta_{j,k}\\
+        &=\sum_{j=1}^n\ip{x}{e_j}\overline{\ip{x}{e_j}}\\
+        &=\sum_{j=1}^n|\ip{x}{e_j}|^2
+    \end{align*}
+    where $\delta_{j,k}$ is the Kronecker delta evaluated at $j,k\geq 1$.\hfill{$\qed$}\\[5pt]
+    {\bf c)} Use Cauchy-Schwarz to show that $\sum_{j=1}^n|\ip{x}{e_j}|^2\leq \|x\|^2$.\\[5pt]
+    {\bf Solution}. For any $n\geq 1$, part (a) says that $\ip{y_n}{x}\geq 0$ (as a sum of nonnegative terms). Thus, $|\ip{y_n}{x}=\ip{y_n}{x}|$ so by applying Cauchy-Schwarz,
+    \begin{align*}
+        |\ip{y_n}{x}|\leq \|y_n\|\|x\|=\|x\|\left(\sum_{j=1}^n|\ip{x}{e_j}|^2\right)^{1/2}
+    \end{align*} 
+    where the equality follows (b). Provided $x\neq 0$, and $n$ is sufficiently large to have $\ip{x}{e_j}\neq 0$ for some $1\leq j\leq n$ (for otherwise $0=\sum_{j=1}^n|\ip{x}{e_j}|^2\leq\|x\|^2$ trivially) this implies
+    \begin{align*}
+        \sum_{j=1}^n|\ip{x}{e_j}|^2\leq \|x\|\left(\sum_{j=1}^n|\ip{x}{e_j}|^2\right)^{1/2}\quad\Rightarrow\quad \left(\sum_{j=1}^n|\ip{x}{e_j}|^2\right)^{1/2}\leq \|x\|\quad\Rightarrow\quad \sum_{j=1}^n|\ip{x}{e_j}|^2\leq \|x\|^2.\tag*{$\qed$}
+    \end{align*}
+    {\bf d)} Explain why the inequality from (c) implies Bessel's inequality.\hfill{$\qed$}\\[5pt]
+    {\bf Solution}. Since the above holds for all $n\geq1$ sufficiently large, we can take the limit to find
+    \begin{align*}
+        \lim_{n\rightarrow\infty}\sum_{j=1}^n|\ip{x}{e_j}|^2\leq\lim_{n\rightarrow\infty}\|x\|^2\quad\Rightarrow\quad\sum_{j=1}^\infty|\ip{x}{e_j}|^2\leq\|x\|^2
+    \end{align*}
+    which is Bessel's inequality precisely.\\[5pt]
+    {\bf e)} Let $(e_j)_{j\geq 1}$ be an infinite orthonormal system in $(X,\ip{\cdot}{\cdot})$. Show that for every $x\in X$, $\exists y\in X$ such that $y=\sum_{j=1}^\infty\ip{x}{e_j}e_j$.\\[5pt]
+    {\bf Proof.} Fix $x\in X$, and define $y_n:=\sum_{j=1}^n\ip{x}{e_j}e_j$ as in (a). Then, defining $y:=\sum_{j=1}^\infty\ip{x}{e_j}e_j=\lim_{n\rightarrow\infty}\sum_{j=1}^n\ip{x}{e_j}e_j=\lim_{n\rightarrow\infty}y_n$, we can use
+    (b) to show
+    \begin{align*}
+        \|y\|^2=\|\lim_{n\rightarrow\infty}y_n\|^2=\lim_{n\rightarrow\infty}\|y_n\|^2=\lim_{n\rightarrow\infty}\sum_{j=1}^n|\ip{x}{e_j}|^2=\sum_{j=1}^\infty|\ip{x}{e_j}|^2\leq \|x\|^2<\infty
+    \end{align*}
+    where the second equality follows from the continuity of the norm, the third from part (b), and the inequality used is Bessel's. From this, we conclude that $\|y\|<\infty$, so indeed $y\in X$.\\[5pt]
+\end{document}

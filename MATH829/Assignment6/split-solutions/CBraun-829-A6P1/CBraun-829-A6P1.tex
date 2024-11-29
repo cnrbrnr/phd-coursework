@@ -1,0 +1,80 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} \graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}} \newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}} \newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\ip}[2]{\left\langle#1,#2\right\rangle }
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\makeatletter
+\def\Ddots{\mathinner{\mkern1mu\raise\p@
+\vbox{\kern7\p@\hbox{.}}\mkern2mu
+\raise4\p@\hbox{.}\mkern2mu\raise7\p@\hbox{.}\mkern1mu}}
+\makeatother
+
+\def\powertower#1#2{#1\ifnum#2>1 ^{\powertower{#1}{\numexpr#2-1\relax}}\fi}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 6\hfill {\bf Connor Braun} \hfill {\bf 2024-10-25}
+    \end{center}
+    \vspace{5pt}
+    \begin{center}
+        \begin{minipage}{\dimexpr\paperwidth-10cm}
+            I did not work with anybody in completing this assignment.
+        \end{minipage}
+    \end{center}
+    \noindent\underline{\textbf{Project Title, Abstract and Bibliography}}\\[5pt]
+    \textbf{Title}: Mean Ergodicity and Harmonic Analysis of Weakly Stationary Processes\\[5pt]
+    \textbf{Abstract}: Following the accounts of \cite[ch. 1,8]{Eisner_etal_2015},\cite[ch. II.5]{Reed_Simon_1980}, a brief historical perspective on the statistical mechanical impetus
+    for ergodic theory is provided, along with the necessary background and some
+    physical interpretations. The main result, owing to \cite{Neumann_1932} is
+    then proven following the expositions of \cite{Eisner_etal_2015},\cite{Reed_Simon_1980}, \cite{Weber_2009} along with a
+    functional-analytic interpretation of ergodicity. Then, to emphasize the
+    wide applicability of ergodic theory, various sources of mean ergodic operators
+    are reviewed, including weakly stationary processes, measure-preserving
+    dynamics and irreducible stochastic matrices associated to finite-state Markov chains.
+    Finally, a mean-type Wiener-Wintner theorem \cite{Wiener_Wintner_1941}, \cite{Assani_2003} is
+    presented, following the presentation found in \cite{Weber_2009}. This yields an
+    uncountable system of orthogonal elements, such that when the subjacent
+    Hilbert space is separable nearly all of these are zero. Time (and space) permitting, we
+    shall explore how these special nonzero elements can be used to obtain a Fourier
+    decomposition for weakly stationary processes \cite[$\S$6]{Fan_1946}.
+    \bibliography{assignment6}
+    \bibliographystyle{ieeetr}
+\end{document}

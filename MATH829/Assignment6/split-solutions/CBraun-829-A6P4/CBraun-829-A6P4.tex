@@ -1,0 +1,74 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} \graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}} \newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}} \newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\ip}[2]{\left\langle#1,#2\right\rangle }
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\makeatletter
+\def\Ddots{\mathinner{\mkern1mu\raise\p@
+\vbox{\kern7\p@\hbox{.}}\mkern2mu
+\raise4\p@\hbox{.}\mkern2mu\raise7\p@\hbox{.}\mkern1mu}}
+\makeatother
+
+\def\powertower#1#2{#1\ifnum#2>1 ^{\powertower{#1}{\numexpr#2-1\relax}}\fi}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 6\hfill {\bf Connor Braun} \hfill {\bf 2024-10-25}
+    \end{center}
+    \vspace{5pt}
+    \noindent{\bf Problem 4}. Let $\Phi:\ell_\infty\rightarrow\mbb{C}$ be a positive linear functional on $\ell_\infty$. That is, for every $x=(x_n)_{n\geq 1}\in\ell_\infty$ satisfying $x_n\geq 0$ for $n\geq 1$ we have
+    $\Phi(x)\geq 0$ (with the provisio that a number $y\in\mbb{C}$ satisfying $y\geq 0$ implies $y\in\mbb{R}$). Prove that $\Phi$ is a bounded linear functional.\\[5pt]
+    {\bf Proof}. Let us first consider a sequence $x\in\ell_\infty$ so that $x_n\in\mbb{R}$ for $n\geq 1$, and $\|x\|_\infty=1$. Throughout, we shall denote $\mathbbm{1}:=(1,1,1,\dots)\in\ell_\infty$. Then
+    \[1=\|x\|_\infty =\sup_{n\geq 1}|x_n|\geq |x_k|,\quad k\geq 1\tag{8}\]
+    and so the sequences $\mathbbm{1}-x$ and $\mathbbm{1}+x$ have elements $1-x_n\geq 0$ and $1+x_n\geq 0$  for $n\geq 1$. Thus, via the positivity and linearity of $\Phi$ we find
+    \begin{align*}
+        0\leq \Phi(\mathbbm{1}-x)\quad&\Rightarrow\quad \Phi(x)\leq \Phi(\mathbbm{1}) \\
+        0\leq \Phi(\mathbbm{1}+x)\quad&\Rightarrow\quad -\Phi(x)\leq \Phi(\mathbbm{1})
+    \end{align*}
+    which, taken together, implies that $0\leq |\Phi(x)|\leq \Phi(\mathbbm{1})$ . Referring back to (8), it is clear that this holds for any real sequence $(z_n)_{n\geq 1}$ with $|z_n|\leq 1$ for $n\geq 1$.\\[5pt]
+    Now take $\xi=(\xi_n)_{n\geq 1}\in\ell_\infty$, satisfying $\|\xi\|_\infty=1$, and with $\xi_n=\alpha_n+i\beta_n$ for some $\alpha_n,\beta_n\in\mbb{R}$ $\forall n\geq 1$. Denote $\alpha:=(\alpha_n)_{n\geq 1}$ and $\beta=(\beta_n)_{n\geq 1}$. Then we have
+    \[1=\sup_{n\geq 1}|\xi_n|=\sup_{n\geq 1}(|\alpha_n|^2+|\beta_n|^2)^{1/2}\]
+    from which we can see that both $1\geq |\alpha_n|$ and $1\geq |\beta_n|$ for $n\geq 1$. Thus,
+    \begin{align*}
+        |\Phi(\xi)|=|\Phi(\alpha+i\beta)|=|\Phi(\alpha)+i\Phi(\beta)|\leq |\Phi(\alpha)|+|i||\Phi(\beta)|\leq 2\Phi(\mathbbm{1})<\infty
+    \end{align*}
+    which holds regardless of the $\xi$ chosen on the unit sphere in $\ell_\infty$. Thus, $\|\Phi\|_\ast<\infty$, so $\Phi$ is bounded.\hfill{$\qed$}
+\end{document}

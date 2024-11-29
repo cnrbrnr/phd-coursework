@@ -1,0 +1,215 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} \graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}} \newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}} \newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\ip}[2]{\left\langle#1,#2\right\rangle }
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\makeatletter
+\def\Ddots{\mathinner{\mkern1mu\raise\p@
+\vbox{\kern7\p@\hbox{.}}\mkern2mu
+\raise4\p@\hbox{.}\mkern2mu\raise7\p@\hbox{.}\mkern1mu}}
+\makeatother
+
+\def\powertower#1#2{#1\ifnum#2>1 ^{\powertower{#1}{\numexpr#2-1\relax}}\fi}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 6\hfill {\bf Connor Braun} \hfill {\bf 2024-10-25}
+    \end{center}
+    \vspace{5pt}
+    \begin{center}
+        \begin{minipage}{\dimexpr\paperwidth-10cm}
+            I did not work with anybody in completing this assignment.
+        \end{minipage}
+    \end{center}
+    \underline{\textbf{Project Title, Abstract and Bibliography}}\\[5pt]
+    \textbf{Title}: Mean Ergodicity and Harmonic Analysis of Weakly Stationary Processes\\[5pt]
+    \textbf{Abstract}: Following the accounts of \cite[ch. 1,8]{Eisner_etal_2015},\cite[ch. II.5]{Reed_Simon_1980}, a brief historical perspective on the statistical mechanical impetus
+    for ergodic theory is provided, along with the necessary background and some
+    physical interpretations. The main result, owing to \cite{Neumann_1932} is
+    then proven following the expositions of \cite{Eisner_etal_2015},\cite{Reed_Simon_1980}, \cite{Weber_2009} along with a
+    functional-analytic interpretation of ergodicity. Then, to emphasize the
+    wide applicability of ergodic theory, various sources of mean ergodic operators
+    are reviewed, including weakly stationary processes, measure-preserving
+    dynamics and irreducible stochastic matrices associated to finite-state Markov chains.
+    Finally, a mean-type Wiener-Wintner theorem \cite{Wiener_Wintner_1941}, \cite{Assani_2003} is
+    presented, following the presentation found in \cite{Weber_2009}. This yields an
+    uncountable system of orthogonal elements, such that when the subjacent
+    Hilbert space is separable nearly all of these are zero. Time (and space) permitting, we
+    shall explore how these special nonzero elements can be used to obtain a Fourier
+    decomposition for weakly stationary processes \cite[$\S$6]{Fan_1946}.
+    \bibliography{assignment6}
+    \bibliographystyle{ieeetr}
+    \newpage
+    \noindent{\bf Problem 2} For each of the following linear functions, say whether it is a bounded linear functional and -- if so -- find an upper bound for it s$\|\cdot\|_\ast$-norm.\\[5pt]
+    {\bf a)} $A:(\mc{C}([-1,1]), \|\cdot\|_\infty)\rightarrow\mbb{C}$, with $A(u)=u(0)$.\\[5pt]
+    {\bf Solution}. The functional $A$ is bounded. Let $u\in \mc{C}([-1,1])$ with $\|u\|_\infty=1$. Then
+    \[\|u\|_\infty=\max_{-1\leq t\leq 1}|u(t)|\geq |u(s)|,\quad s\in[-1,1].\]
+    In particular, we get $|Au|=|u(0)|\leq 1$. Then
+    \[\|A\|_\ast=\sup\{|Au|:\;u\in \mc{C}([-1,1]),\;\|u\|_\infty=1\}=\{|u(0)|:\;u\in \mc{C}([-1,1]),\;\|u\|_\infty=1\}\leq\sup\{1\}=1.\tag{1}\]
+    Henceforth, we shall allude to the logic encapsulated in (1) to obtain a bound in $\|\cdot\|_\ast$ once we have bounded $\Gamma x$ for any vector $x$ with $\|x\|=1$, and $\Gamma$
+    whatever linear functional that happens to be in question.\hfill{$\qed$}\\[5pt]
+    {\bf b)} $B:(\mc{C}([-1,1]),\|\cdot\|_\infty)\rightarrow\mbb{C}$, $B(u)=\int_-1^1t^8u(t)dt$.\\[5pt]
+    {\bf Solution}. The functional $B$ is bounded. Let $u\in \mc{C}([-1,1])$ be such that $\|u\|_\infty=1$. Then
+    \begin{align*}
+        |Bu|=\left|\int_{-1}^1t^8u(t)dt\right|\leq \int_{-1}^1|t^8||u(t)|dt\leq \int_{-1}^1t^8dt=\frac{1}{9}t^9\bigg|^{1}_{-1}=\frac{2}{9}.
+    \end{align*}
+    Referring back to (1), we get $\|B\|_\ast\leq\frac{2}{9}$.\hfill{$\qed$}\\[5pt]
+    {\bf c)} $C:\ell_3\rightarrow\mbb{C}$, $C(x)=\sum_{n=1}^\infty\frac{x_n}{n^{3/4}}$, where $x=(x_{n})_{n\geq 1}$.\\[5pt]
+    {\bf Solution}. The functional $C$ is bounded. We first observe that $\alpha=(1/n^{3/4})_{n\geq 1}\in\ell_{3/2}$, since
+    \begin{align*}
+        \|\alpha\|_{3/2}^{3/2}=\sum_{n=1}^\infty\left|\frac{1}{n^{3/4}}\right|^{3/2}=\sum_{n=1}^\infty\frac{1}{n^{9/8}}<\infty.
+    \end{align*}
+    With this, one can use H\"older's inequality to obtain a bound. Let $x\in\ell_3$. Then
+    \begin{align*}
+        |Cx|=\left|\sum_{n=1}^\infty\frac{x_n}{n^{3/4}}\right|\leq \sum_{n=1}^\infty\left|\frac{x_n}{n^{3/4}}\right|&\leq\left(\sum_{n=1}^\infty|x_n|^3\right)^{1/3}\left(\sum_{n=1}^\infty\|\frac{1}{n^{3/4}}\|^{3/2}\right)^{2/3}\\
+        &=\|\alpha\|_{3/2}\\
+        &<\infty
+    \end{align*}
+    where, by the logic in (1), $\|C\|_\ast\leq \|\alpha\|_{3/2}$.\hfill{$\qed$}\\[5pt]
+    {\bf d)} $D:(L_2([0,\pi]),\|\cdot\|_2)\rightarrow\mbb{C}$, $D(u)=\int_0^\pi\cos(t)u(t)dt$.\\[5pt]
+    {\bf Solution}. The functional $D$ is bounded. Let $u\in L_2([0,\pi])$, $\|u\|_2=1$. Then notice
+    \[\|\cos\|_2^2=\int_0^\pi|cos(t)|^2dt\leq \int_0^\pi dt=\pi.\]
+    Just as for (c), an application of H\"older's inequality yields
+    \begin{align*}
+        |D(u)|=\left|\int_0^\pi\cos(t)u(t)dt\right|\leq\int_0^\pi|cos(t)u(t)|dt&\leq\left(\int_0^\pi|\cos(t)|^2dt\right)^{1/2}\left(\int_0^\pi |u(t)|^2dt\right)^{1/2}\\
+        &\leq\sqrt{\pi}\|u\|_2\\
+        &=\sqrt{\pi}. 
+    \end{align*}
+    This implies $\|D\|_\ast\leq \sqrt{\pi}$ via (1).\hfill{$\qed$}\\[5pt]
+    {\bf e)} $E:\ell_2\rightarrow\mbb{C}$, $E(x)=\sum_{n=1}^\infty\frac{x_n+x_{n+1}}{2^n}$, $x=(x_n)_{n\geq 1}$.\\[5pt]
+    {\bf Solution}. The functional $E$ is bounded. We begin by computing bounds on some series to be used later. First, wit $\alpha=(\frac{1}{2^n})_{n\geq 1}$,
+    \begin{align*}
+        \|\alpha\|_2^2=\sum_{n=1}^\infty\left|\frac{1}{2^n}\right|^2=\sum_{n=1}^\infty\left(\frac{1}{4}\right)^n=-1+\sum_{n=0}^\infty\left(\frac{1}{4}\right)^n=\frac{1}{1-1/4}-1=\frac{1}{3}
+    \end{align*}
+    so $\|\alpha\|_2=\frac{1}{\sqrt{3}}$. Now, when $x\in\ell_2$ is such that $\|x\|_2=1$, we have
+    \begin{align*}
+        \sum_{n=1}^\infty\left|\frac{x_{n+1}}{2^n}\right|&\leq \left(\sum_{n=1}^\infty|x_{n+1}|^2\right)^{1/2}\left(\sum_{n=1}^\infty\left|\frac{1}{2^n}\right|^2\right)^{1/2}\\
+        &\leq\left(\sum_{n=1}^\infty|x_n|^2\right)^{1/2}\frac{1}{\sqrt{3}}\\
+        &=\|x\|_2\frac{1}{\sqrt{3}}\\
+        &=\frac{1}{\sqrt{3}}\tag{2}.
+    \end{align*}
+    Quite clearly, an identical application of H\"older's inequality also yields $\sum_{n=1}^\infty|\frac{x_n}{2^n}|\leq\frac{1}{\sqrt{3}}$. The convergence of these two series
+    justifies the convergence of $Ex$ and allows us to determine a bound on its norm as follows:
+    \begin{align*}
+        |Ex|=\left|\sum_{n=1}^\infty\frac{x_{n}+x_{n+1}}{2^n}\right|\leq \sum_{n=1}^\infty\left|\frac{x_n}{2^n}+\frac{x_{n+1}}{2^n}\right|&\leq \sum_{n=1}^\infty\left|\frac{x_{n}}{2^n}\right|+\left|\frac{x_{n+1}}{2^n}\right|\\
+        &=\lim_{N\rightarrow\infty}\sum_{n=1}^N\left|\frac{x_{n}}{2^n}\right|+\left|\frac{x_{n+1}}{2^n}\right|\\
+        &=\lim_{N\rightarrow\infty}\sum_{n=1}^N\left|\frac{x_{n}}{2^n}\right|+\lim_{N\rightarrow\infty}\sum_{n=1}^N\left|\frac{x_{n+1}}{2^n}\right|\tag{3}\\
+        &\leq \frac{2}{\sqrt{3}}
+    \end{align*}
+    where step (3) is justified by the convergence of both limits, as found in (2). With this, we conclude $\|E\|_\ast\leq \frac{2}{\sqrt{3}}$, by the same calculation as in (1).\hfill{$\qed$}\\[5pt]
+    {\bf Problem 3}. For each of the following complex-valued functions on a Hilbert space, verify that they are linear and continuous. Then find the vector in the space representing them (in the sense of Riesz representation).\\[5pt]
+    {\bf a)} $\Phi:\ell_2\rightarrow\mbb{C}$, $\Phi(x)=\sum_{k=2}^\infty\frac{x_{k+1}-x_{k-1}}{k}$.\\[5pt]
+    {\bf Solution}. We follow a similar program as in problem 1.e. First, note that $\alpha=(1/k)_{k\geq 1}\in\ell^2$, since
+    \begin{align*}
+        \|\alpha\|_2^2=\sum_{k=1}^\infty\frac{1}{k^2}=\frac{\pi^2}{6}
+    \end{align*}
+    as we have shown in problem 2.c of assignment 5. Then, via H\"older's inequality, fow any $x\in\ell_2$ with $\|x\|_2=1$,
+    \begin{align*}
+        \sum_{n=2}^\infty\left|\frac{x_{n-1}}{n}\right|=\sum_{n=1}^\infty\left|\frac{x_n}{(n+1)}\right|&\leq\left(\sum_{n=1}^\infty|x_n|^2\right)^{1/2}\left(\sum_{n=1}^\infty\left|\frac{1}{n+1}\right|^2\right)^{1/2}\\
+        &\leq\|x\|_2\left(\sum_{n=1}^\infty\frac{1}{n^2}\right)^{1/2}\\
+        &=\frac{\pi}{\sqrt{6}}\tag{4}
+    \end{align*}
+    where in the second last line we simply added $1$ inside the (increasing) square root to convert the factor to $\|\alpha\|_2$. In an extremely similar manner:
+    \begin{align*}
+        \sum_{n=2}^\infty\left|\frac{x_{n+1}}{n}\right|=\sum_{n=3}^\infty\left|\frac{x_n}{n-1}\right|&\leq\left(\sum_{n=3}^\infty|x_n|^2\right)^{1/2}\left(\sum_{n=3}^\infty\frac{1}{(n-1)^2}\right)^{1/2}\\
+        &\leq \left(\sum_{n=1}^\infty|x_n|^2\right)^{1/2}\left(\sum_{n=1}^\infty\frac{1}{n^2}\right)^{1/2}\\
+        &=\frac{\pi}{\sqrt{6}}\tag{5}
+    \end{align*}
+    where in the second line we have added $|x_1|^2+|x_2|^2$ to the first factor and $1$ to the second to obtain the norms of $x$ and $\alpha$, respectively. We may now compute a bound on $\|\Phi\|_\ast$:
+    \begin{align*}
+        |\Phi(x)|=\left|\sum_{n=2}^\infty\frac{x_{n+1}-x_{n-1}}{n}\right|&\leq\sum_{n=2}^\infty\left|\frac{x_{n+1}}{n}\right|+\left|\frac{x_{n-1}}{n}\right|\\
+        &=\sum_{n=2}^\infty\left|\frac{x_{n+1}}{n}\right|+\sum_{n=2}^\infty\left|\frac{x_{n-1}}{n}\right|\tag{6}\\
+        &\leq\frac{2\pi}{\sqrt{6}}\\
+        &=\frac{\sqrt{2}\pi}{\sqrt{3}}
+    \end{align*}
+    and so $\Phi$ is bounded. To establish linearity $\alpha,\beta\in\mbb{C}$, and $z,y\in\ell_2$. Then:
+    \begin{align*}
+        \Phi(\alpha y+\beta z)=\sum_{n=2}^\infty\frac{(\alpha y_{n+1}+\beta z_{n+1})-(\alpha y_{n-1}-\beta z_{n-1})}{n}&=\sum_{n=2}^\infty\alpha\frac{y_{n+1}-y_{n-1}}{n}+\beta\frac{z_{n+1}-z_{n-1}}{n}\\
+        &=\alpha\sum_{n=1}^\infty\frac{y_{n+1}-y_{n-1}}{n}+\beta\sum_{n=2}^\infty\frac{z_{n+1}-z_{n-1}}{n}\\
+        &=\alpha\Phi(y)+\beta\Phi(z)
+    \end{align*}
+    which holds since all series involved here are absolutely convergent. That is, $\Phi$ is linear, which along with its boundedness implies it is also continuous. To find the representing vector, call it $\xi=(\xi_n)_{n\geq 1}$, we note that for any $z\in\ell_2$, $\Phi(z)$ is stable under rearrangements
+    since it is absolutely convergent (see for example, \cite[p.78, theorem 3.55]{Rudin_1976}). Then we compute
+    \begin{align*}
+        \Phi(z)=\sum_{n=2}^\infty\frac{z_{n+1}-z_{n-1}}{n}&=-\frac{1}{2}z_1-\frac{1}{3}z_2+\left(\frac{1}{2}-\frac{1}{4}\right)z_3+\left(\frac{1}{3}-\frac{1}{5}\right)z_4+\left(\frac{1}{4}-\frac{1}{6}\right)z_5+\dots\\
+        &=\sum_{n=1}^\infty z_1\overline{\xi_n}\\
+        &=\ip{z}{\xi}
+    \end{align*}
+    provided $\xi_1=-\frac{1}{2}$, $\xi_2=-\frac{1}{3}$, and for $n\geq 3$, $\xi_n=\frac{2}{n^2-1}$. To verify that this makes sense, we need to confirm that $\xi\in\ell_2$ under this choice. But this is easily seen, since
+    \begin{align*}
+        \|\xi\|_2^2=\frac{1}{4}+\frac{1}{9}+\sum_{n=3}^\infty\left(\frac{2}{n^2-1}\right)^2\leq 1+\sum_{n=3}^\infty\left(\frac{2}{n^2}\right)^2&\leq4\sum_{n=1}^\infty\frac{1}{n^4}=\frac{2\pi^4}{45}<\infty
+    \end{align*}
+    where $\sum_{n=1}^\infty\frac{1}{n^4}=\frac{\pi^4}{90}$ is as per problem 3.c of assignment 5. Thus, $\xi\in\ell_2$, and we are able to conclude that $\Phi(\cdot)=\ip{\cdot}{\xi}$. \hfill{$\qed$}\\[5pt]
+    {\bf b)} $\Psi:L_2([0,1])\rightarrow\mbb{C}$, $\Psi(u)=\int_0^1 tu(t^3)dt$.\\[5pt]
+    {\bf Solution}. Take $u,v\in L_2([0,1])$ and $\alpha,\beta\in\mbb{C}$. Then
+    \begin{align*}
+        \Psi(\alpha u+\beta v)=\int_0^1t(\alpha u(t)+\beta v(t))dt=\alpha\int_0^1tu(t)dt+\beta\int_0^1tv(t)dt=\alpha\Psi(u)+\beta\Psi(v)
+    \end{align*}
+    so $\Psi$ is linear. As in 3.b, we will establish continuity of $\Psi$ by showing it is bounded. For this, let $f\in L_2([0,1])$ be such that $\|f\|_2=1$. Then
+    \begin{align*}
+        |\Psi(f)|=\left|\int_0^1tf(t^3)dt\right|\leq\int_0^1|tf(t^3)|dt&=\int_0^1|\mu^{1/3} f(\mu)|d\mu\tag{substituting $t=\mu^{1/3}$.}\\
+        &\leq\left(\int_0^1\mu^{2/3}d\mu\right)^{1/2}\left(\int_0^1|f(\mu)|^2d\mu\right)^{1/2}\tag{7}\\
+        &=\|f\|_2\left(\frac{3}{5}\mu^{5/3}\bigg|^1_0\right)^{1/2}\\
+        &=\sqrt{3/5}
+    \end{align*}
+    so $\|\Psi\|_\ast<\infty$. Since $\Psi$ is a linear and bounded functional on $L_2([0,1])$, it is continuous. Further, for any $g\in L_2([0,1])$, using the same substitution as above we get
+    \begin{align*}
+        \Psi(g)=\int_0^1g(\mu)\mu^{1/3}d\mu=\int_{0}^{1}g(t)\overline{t^{1/3}}dt=\ip{g}{\xi}
+    \end{align*}
+    provided we set $\xi(t)=t^{1/3}$ for $t\in[0,1]$. The computation in (7) verifies that $\xi\in L_2([0,1])$, and since $g\in L_2([0,1])$ was arbitrary, we conclude that $\Psi(\cdot)=\ip{\cdot}{\xi}$.\hfill{$\qed$}\\[5pt]
+    {\bf Problem 4}. Let $\Phi:\ell_\infty\rightarrow\mbb{C}$ be a positive linear functional on $\ell_\infty$. That is, for every $x=(x_n)_{n\geq 1}\in\ell_\infty$ satisfying $x_n\geq 0$ for $n\geq 1$ we have
+    $\Phi(x)\geq 0$ (with the provisio that a number $y\in\mbb{C}$ satisfying $y\geq 0$ implies $y\in\mbb{R}$). Prove that $\Phi$ is a bounded linear functional.\\[5pt]
+    {\bf Proof}. Let us first consider a sequence $x\in\ell_\infty$ so that $x_n\in\mbb{R}$ for $n\geq 1$, and $\|x\|_\infty=1$. Throughout, we shall denote $\mathbbm{1}:=(1,1,1,\dots)\in\ell_\infty$. Then
+    \[1=\|x\|_\infty =\sup_{n\geq 1}|x_n|\geq |x_k|,\quad k\geq 1\tag{8}\]
+    and so the sequences $\mathbbm{1}-x$ and $\mathbbm{1}+x$ have elements $1-x_n\geq 0$ and $1+x_n\geq 0$  for $n\geq 1$. Thus, via the positivity and linearity of $\Phi$ we find
+    \begin{align*}
+        0\leq \Phi(\mathbbm{1}-x)\quad&\Rightarrow\quad \Phi(x)\leq \Phi(\mathbbm{1}) \\
+        0\leq \Phi(\mathbbm{1}+x)\quad&\Rightarrow\quad -\Phi(x)\leq \Phi(\mathbbm{1})
+    \end{align*}
+    which, taken together, imply that $0\leq |\Phi(x)|\leq \Phi(\mathbbm{1})$ . Referring back to (8), it is clear that this holds for any real sequence $(z_n)_{n\geq 1}$ with $|z_n|\leq 1$ for $n\geq 1$.\\[5pt]
+    Now take $\xi=(\xi_n)_{n\geq 1}\in\ell_\infty$, satisfying $\|\xi\|_\infty=1$, and with $\xi_n=\alpha_n+i\beta_n$ for some $\alpha_n,\beta_n\in\mbb{R}$ $\forall n\geq 1$. Denote $\alpha:=(\alpha_n)_{n\geq 1}$ and $\beta=(\beta_n)_{n\geq 1}$. Then we have
+    \[1=\sup_{n\geq 1}|\xi_n|=\sup_{n\geq 1}(|\alpha_n|^2+|\beta_n|^2)^{1/2}\]
+    from which we can see that both $1\geq |\alpha_n|$ and $1\geq |\beta_n|$ for $n\geq 1$. Thus,
+    \begin{align*}
+        |\Phi(\xi)|=|\Phi(\alpha+i\beta)|=|\Phi(\alpha)+i\Phi(\beta)|\leq |\Phi(\alpha)|+|i||\Phi(\beta)|\leq 2\Phi(\mathbbm{1})<\infty
+    \end{align*}
+    which holds regardless of the $\xi$ chosen on the unit sphere in $\ell_\infty$. Thus, $\|\Phi\|_\ast<\infty$, so $\Phi$ is bounded.\hfill{$\qed$}
+    \end{document}

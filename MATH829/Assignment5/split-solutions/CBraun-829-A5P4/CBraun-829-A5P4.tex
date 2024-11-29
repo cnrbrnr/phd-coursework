@@ -1,0 +1,73 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} \graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}} \newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}} \newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\ip}[2]{\left\langle#1,#2\right\rangle }
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+
+\makeatletter
+\def\Ddots{\mathinner{\mkern1mu\raise\p@
+\vbox{\kern7\p@\hbox{.}}\mkern2mu
+\raise4\p@\hbox{.}\mkern2mu\raise7\p@\hbox{.}\mkern1mu}}
+\makeatother
+
+\def\powertower#1#2{#1\ifnum#2>1 ^{\powertower{#1}{\numexpr#2-1\relax}}\fi}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 5\hfill {\bf Connor Braun} \hfill {\bf 2024-10-16}
+    \end{center}
+    \vspace{5pt}
+    \begin{center}
+        \begin{minipage}{\dimexpr\paperwidth-10cm}
+            I did not work with anybody in completing this assignment.
+        \end{minipage}
+    \end{center}
+    \noindent{\bf Problem 4}. Let $(X,\ip{\cdot}{\cdot})$ be a Hilbert space, and let $L\subset X$ be a subspace. The orthogonal complement of $L$ is defined $L^\perp:=\{x\in X:\ip{x}{y}=0\;\text{for every $y\in L$}\}$. Show that $L$ is closed if and only if $(L^\perp)^\perp=L$.\\[5pt]
+    {\bf Proof}. Let us begin by supposing that $L$ is closed. Note that $(L^\perp)^\perp:=\{x\in X:\;\ip{x}{y}=0\;\text{for every $y\in L^\perp$.}\}$. Then, if $x\in L$, we have $\ip{x}{y}=0$ for all $y\in L^\perp$, so $x\in (L^\perp)^\perp$, and further $L\subseteq (L^\perp)^\perp$.
+    For the reverse inclusion, now consider $x\in (L^\perp)^\perp$. Since $L$ is closed, $X=L\oplus L^\perp$, so $x=x_L+x_{L^\perp}$ for some $x_L\in L$ and $x_{L^\perp}\in L^\perp$. Assume for the purpose of deriving a contradiction that $x\notin L$. Then $x_{L^\perp}\neq 0$, 
+    and thus
+    \[0=\ip{x}{x_{L^\perp}}=\ip{x_L+x_{L^\perp}}{x_{L^\perp}}=\ip{x_L}{x_{L^\perp}}+\ip{x_{L^\perp}}{x_{L^\perp}}=\|x_{L^\perp}\|^2>0\]
+    a contradiction. We conclude that $(L^\perp)^\perp\subseteq L$, so now $L=(L^\perp)^\perp$.\\[5pt]
+    For the converse, suppose that $L=(L^\perp)^\perp$ and let $(\ell_j)_{j\geq 1}\subseteq L$ be such that $\ell_j\rightarrow\ell\in X$ as $j\rightarrow\infty$. But then, for all $y\in L^\perp$ and $j\geq 1$, $\ip{\ell_j}{y}=0$ since $\ell_j\in L=(L^\perp)^\perp$. Taking the limit:
+    \begin{align*}
+        0=\lim_{j\rightarrow\infty}\ip{\ell_j}{y}=\ip{\lim_{j\rightarrow\infty}\ell_j}{y}=\ip{\ell}{y}
+    \end{align*}
+    so $\ell\in (L^\perp)^\perp=L$. We conclude that any convergent sequence in $L$ has its limit in $L$, so $L$ is closed.\hfill{$\qed$} 
+\end{document}

@@ -1,0 +1,253 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.3cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{bbm} 
+\usepackage{dutchcal} % [dutchcal, calrsfs, pzzcal] calligraphic fonts
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[tracking]{microtype}
+
+% Palatino for text goes well with Euler
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+\usepackage[euler-digits,small]{eulervm}
+
+% Command initialization
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} \graphicspath{{./images/}}
+
+% Custom Commands
+\newcommand{\bs}[1]{\boldsymbol{#1}} \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\bp}[1]{\left({#1}\right)} \newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\1}[1]{\mathbbm{1}_{#1}} \newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\nck}[2]{{#1\choose#2}} \newcommand{\pc}[1]{\pazocal{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand*{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\ip}[2]{\left\langle#1,#2\right\rangle }
+
+\DeclareMathOperator{\Var}{Var} \DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\ran}{range}
+
+\makeatletter
+\def\Ddots{\mathinner{\mkern1mu\raise\p@
+\vbox{\kern7\p@\hbox{.}}\mkern2mu
+\raise4\p@\hbox{.}\mkern2mu\raise7\p@\hbox{.}\mkern1mu}}
+\makeatother
+
+\def\powertower#1#2{#1\ifnum#2>1 ^{\powertower{#1}{\numexpr#2-1\relax}}\fi}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+    \begin{center}
+        {\bf\large{MATH 829: FUNCTIONAL ANALYSIS AND QUANTUM MECHANICS}}
+        \smallskip
+        \hrule
+        \smallskip
+        {\bf Assignment} 7\hfill {\bf Connor Braun} \hfill {\bf 2024-10-30}
+    \end{center}
+    \vspace{5pt}
+    \begin{center}
+        \begin{minipage}{\dimexpr\paperwidth-10cm}
+            I would like to thank Ben van Eden for the discussion regarding problem 3. In particular, for the construction of $(x^k)_{k\geq 1}$ 
+            used to show that $\mc{D}(A^\ast)\subseteq\mc{D}(A)$. All other problems were completed independently.
+        \end{minipage}
+    \end{center}
+    {\bf Problem 1}. Let $(X,\ip{\cdot}{\cdot})$ be a Hilbert space, and
+    $A:\mc{D}(A)\subset X\rightarrow X$ be a densely defined linear operator.
+    Prove that $(\ran(A))^\perp=\ker(A^\ast)$.\\[5pt]
+    {\bf Proof}. Recalling that $\ker(A^\ast):=\{x\in\mc{D}(A^\ast):A^\ast
+    x=0\}$, take $y\in\ran(A)$. Then $y=Az$ for some $z\in\mc{D}(A)$, and
+    \[\ip{x}{y}=\ip{x}{Az}=\overline{\ip{Az}{x}}=\overline{\ip{z}{A^\ast x}}=0\]
+    where the penultimate equality holds since $x\in\ker(A^\ast)\subseteq
+    \mc{D}(A^\ast)$ and $z\in\mc{D}(A)$. Thus, $x\in(\ran(A))^\perp$, and
+    $\ker(A^\ast)\subseteq(\ran(A))^\perp$. For the reverse inclusion, take
+    $y\in(\ran(A))^\perp$. It is easy to see that $y\in\mc{D}(A^\ast)$, since
+    for any $x\in\mc{D}(A)$
+    \[|\ip{Ax}{y}|=0\leq 1\cdot\|x\|\] where the first equality
+    holds since $Ax\in\ran(A)$ and $y\perp\ran(A)$. But then, for all
+    $z\in\mc{D}(A)$:
+    \[0=\ip{Az}{x}=\ip{z}{A^\ast x}\] so $A^\ast x\perp\mc{D}(A)$. Since
+    $\mc{D}(A)$ is dense in $X$, we conclude that $A^\ast x=0$, so
+    $x\in\ker(A^\ast)$. Thus, $(\ran(A))^\perp\subseteq\ker(A^\ast)$, so
+    $(\ran(A))^\perp=\ker(A^\ast)$.\hfill{$\qed$}\\[5pt]
+    {\bf Problem 2}. Let $(X,\ip{\cdot}{\cdot})$ be a Hilbert space over
+    $\mbb{K}$ and denote $X^2:=X\times X$.\\[5pt]
+    {\bf a)} Let $\ip{\cdot}{\cdot}_{X^2}:X^2\times X^2\rightarrow\mbb{K}$ be
+    defined as
+    $\ip{(x,y)}{(x^\prime,y^\prime)}_{X^2}:=\ip{x}{x^\prime}+\ip{y}{y^\prime}$.
+    Show that $\ip{\cdot}{\cdot}_{X^2}$ is an inner product on $X^2$. Specify
+    the norm induced by this inner product, and show $X^2$ equipped with it is
+    itself a Hilbert space.\\[5pt]
+    {\bf Proof}. First we'll show that this new function satisfies the necessary
+    properties of an inner product. Take $(u,v)\in X^2$. Then
+    \[\ip{(u,v)}{(u,v)}_{X^2}=\ip{u}{u}+\ip{v}{v}\geq0.\] If instead $(u,v)$ are
+    such that $\ip{(u,v)}{(u,v)}_{X^2}=0$, Then both $\ip{u}{u}$ and $\ip{v}{v}$
+    must be zero, so both $u,v=0$. For the final two axioms, take
+    $\alpha,\beta\in\mbb{K}$ and $(u,v),(x,y),(w,z)\in X^2$, all arbitrary. Then
+    linearity in the first argument follows:
+    \begin{align*}
+        \ip{\alpha(u,v)+\beta(x,y)}{(w,z)}_{X^2}=\ip{(\alpha u+\beta x, \alpha v+\beta y)}{(w,z)}_{X^2}&=\ip{\alpha u+\beta x}{w}+\ip{\alpha v+\beta y}{z}\\
+        &=\alpha\ip{u}{w}+\beta\ip{x}{w}+\alpha\ip{v}{z}+\beta\ip{y}{z}\\
+        &=\alpha(\ip{u}{w}+\ip{v}{z})+\beta(\ip{x}{w}+\ip{y}{z})\\
+        &=\alpha\ip{(u,v)}{(w,z)}_{X^2}+\beta\ip{(x,y)}{(w,z)}_{X^2}.
+    \end{align*}
+    Conjugate symmetry follows similarly:
+    \begin{align*}
+        \ip{(u,v)}{(x,y)}_{X^2}=\ip{u}{x}+\ip{v}{y}=\overline{\ip{x}{u}}+\overline{\ip{y}{v}}=\overline{\ip{x}{u}+\ip{y}{v}}=\overline{\ip{(x,y)}{(u,v)}}_{X^2}.
+    \end{align*}
+    With this, we can conclude so far that $(X^2,\ip{\cdot}{\cdot}_{X^2})$ is
+    pre-Hilbert. The norm induced by this inner product is
+    \begin{align*}
+        \|(x,y)\|_{X^2}=\left[\ip{(x,y)}{(x,y)}\right]^{1/2}=\left[\ip{x}{x}+\ip{y}{y}\right]^{1/2}=\left[\|x\|^2+\|y\|^2\right]^{1/2}.
+    \end{align*}
+    Henceforth, we shall drop the subscript on the norm and inner product when
+    the subjacent space is contextually apparent. Finally, we claim that $X^2$ is Banach when equipped with this norm. 
+    Suppose that $\{(x_n,y_n)\}_{n\geq 1}\subseteq X^2$ is Cauchy. That is, for $\varepsilon>0$ fixed we can find $N\geq 1$ so that $n,m\geq N$ implies
+    \begin{align*}
+        \|(x_n,y_n)-(x_m,y_m)\|^2<\varepsilon\quad\Rightarrow\quad \|(x_n-x_m, y_n-y_m)\|^2<\varepsilon\quad\Rightarrow\quad\|x_n-x_m\|^2+\|y_n-y_m\|^2<\varepsilon.
+    \end{align*}
+    This lattermost implication means that both $\|x_n-x_m\|^2<\varepsilon$ and $\|y_n-y_m\|^2<\varepsilon$. That is, both $(x_n)_{n\geq 1}$ and $(y_n)_{n\geq 1}$ are Cauchy in $X$.
+    Since $X$ is complete, $\exists x,y\in X$ so that $x_n\rightarrow x$ and $y_n\rightarrow y$ both as $n\rightarrow\infty$. Thus,
+    \begin{align*}
+        \lim_{n\rightarrow\infty}\|(x_n,y_n)-(x,y)\|^2=\lim_{n\rightarrow\infty}\|(x_n-x,y_n-y)\|^2=\lim_{n\rightarrow\infty}\|x_n-x\|^2+\lim_{n\rightarrow\infty}\|y_n-y\|^2=0
+    \end{align*}
+    certifying that $(x_n,y_n)\rightarrow(x,y)$ as $n\rightarrow\infty$ in $X^2$. Thus, $(X,\|\cdot\|_{X^2})$ is Banach, and we may further conclude $(X^2,\ip{\cdot}{\cdot}_{X^2})$ is a Hilbert space.\hfill{$\qed$}\\[5pt]
+    {\bf b)} Let $A:\mc{D}(X)\subset X\rightarrow X$ be a linear operator. Then, let $\mc{U}:X^2\rightarrow X^2$ be the operator defined $\mc{U}(x,y)=(y,-x)$. Prove that if $A$ is densely defined, then
+    \[\Gamma(A^\ast)=(\mc{U}(\Gamma(A)))^\perp\]
+    where the orthocomplement is with respect to the inner product germane to $X^2$.\\[5pt]
+    {\bf Proof}. First, suppose that $(x,y)\in\Gamma(A^\ast)$, such that $y=A^\ast x$ and $\exists C_x>0$ so that $|\ip{Az}{x}|\leq C_x\|z\|$ for all $z\in\mc{D}(A)$ (that is, $x\in \mc{D}(A^\ast)$).
+    Now, take $(w,z)\in\mc{U}(\Gamma(A))$, so that $(-z,w)\in\Gamma(A)$. That is, $-z\in D(A)$ and $w=-Az$. Then we compute
+    \begin{align*}
+        \ip{(x,y)}{(w,z)}=\ip{x}{w}+\ip{y}{z}&=\ip{x}{-Az}+\ip{A^\ast x}{z}\\
+        &=-\overline{\ip{Az}{x}}+\ip{A^\ast x}{z}\\
+        &=-\overline{\ip{z}{A^\ast x}}+\ip{A^\ast x}{z}\tag{1}\\
+        &=\ip{A^\ast x}{z}-\ip{A^\ast x}{z}\\
+        &=0
+    \end{align*}
+    Where (1) holds since $x\in\mc{D}(A^\ast)$ and $z\in\mc{D}(A)$ by assumption. Since $(x,y)\perp \mc{U}(\Gamma(A))$, $\Gamma(A^\ast)\subseteq(\mc{U}(\Gamma(A)))^\perp$.
+    Before proceeding, we require a technical lemma:
+    \begin{lemma}\label{lem1}
+        With $\mc{U}$, $X^2$ as above and $M\subseteq X^2$ we have
+        \begin{align*}
+            \mc{U}(M^\perp)=(\mc{U}(M))^\perp.
+        \end{align*}
+    \end{lemma}
+    {\bf Proof}. If $(x,y)\in\mc{U}(M^\perp)$, then $(-y,x)\perp M$. Then, with $(w,z)\in\mc{U}(M)$, $(-z,w)\in M$, so 
+    \[0=\ip{(-y,x)}{(-z,w)}=\ip{-y}{-z}+\ip{x}{w}=\ip{y}{z}+\ip{x}{w}=\ip{(x,y)}{(w,z)}\]
+    so $(x,y)\perp\mc{U}(M)$, and $\mc{U}(M^\perp)\subseteq(\mc{U}(M))^\perp$. Conversely, with $(x,y)\in(\mc{U}(M))^\perp$,
+    we have for any $(w,z)\in M$ that
+    \[0=\ip{(x,y)}{\mc{U}(w,z)}=\ip{x}{z}+\ip{y}{-w}\tag{2}\]
+    since $\mc{U}(w,z)\in\mc{U}(M)$. At the same time, noting $(x,y)=\mc{U}(-y,x)$, we have
+    \begin{align*}
+        \ip{(-y,x)}{(w,z)}=\ip{-y}{w}+\ip{x}{z}=\ip{y}{-w}+\ip{x}{z}=0
+    \end{align*}
+    where the final equality was found in (2). This says $(-y,x)\perp M$, so $(x,y)=\mc{U}(-y,x)\in\mc{U}(M^\perp)$, and therefore $(\mc{U}(M))^\perp\subseteq\mc{U}(M^\perp)$.
+    Thus, $\mc{U}(M^\perp)=(\mc{U}(M))^\perp$, as claimed.\hfill{$\qed$}\\[5pt]
+    Armed with this, suppose instead that $(x,y)\in(\mc{U}(\Gamma(A)))^\perp$. By lemma \ref{lem1}, $(x,y)\in\mc{U}((\Gamma(A))^\perp)$, so $(-y,x)\in\Gamma(A)^\perp$. We proceed to argue that $x\in\mc{D}(A^\ast)$.
+    For this, take $w\in\mc{D}(A)$ and define $z=Aw$
+    so that $(w,z)\in\Gamma(A)$. Then we have
+    \begin{align*}
+        0=\ip{(-y,x)}{(w,z)}=\ip{-y}{w}+\ip{x}{z}\quad\Rightarrow\quad\ip{x}{z}=\ip{y}{w}\quad\Rightarrow\quad \overline{\ip{Aw}{x}}=\overline{\ip{w}{y}}
+    \end{align*}
+    and thus,
+    \begin{align*}
+        |\ip{Aw}{x}|=|\ip{w}{y}|\leq\|y\|\|w\|
+    \end{align*}
+    by the Cauchy-Schwarz inequality. Since $w\in\mc{D}(A)$ was arbitrary and $\|y\|$ is independent of $w$, we have $x\in\mc{D}(A^\ast)$.
+    Now suppose $(u,v)\in \mc{U}(\Gamma(A))$, so that $(-v,u)\in\Gamma(A)$ and further both $-v\in\mc{D}(A)$ (and $v\in\mc{D}(A)$, since $D(A)$ is a vector subspace of $X$) and $u=-Av$.
+    With these facts, we compute
+    \begin{align*}
+        0=\ip{(x,y)}{(u,v)}=\ip{x}{u}+\ip{y}{v}\quad\Rightarrow\quad \ip{x}{-Av}+\ip{y}{v}=0\quad&\Rightarrow\quad \ip{y}{v}-\ip{A^\ast x}{v}=0\tag{3}\\
+        &\Rightarrow\quad \ip{y-A^\ast x}{v}=0
+    \end{align*}
+    which says that $y-A^\ast x\perp\mc{D}(A)$ since $v\in\mc{D}(A)$ was arbitrary. But $\mc{D}(A)$ is dense in $X$, so we conclude that $y-A^\ast x=0$, i.e. $y=A^\ast x$. Since $x\in\mc{D}(A^\ast)$ and $y=A^\ast x$, $(x,y)\in\Gamma(A^\ast)$,
+    so now $(\mc{U}(\Gamma(A)))^\perp\subseteq\Gamma(A^\ast)$. With both inclusions, we conclude that indeed $\Gamma(A^\ast)=(\mc{U}(\Gamma(A)))^\perp$.\hfill{$\qed$}\\[5pt]
+    {\bf c)} Explain why (b) implies that if $(\mc{U}(\Gamma(A)))^\perp$ is the graph of some operator, then this operator is $A^\ast$.\\[5pt]
+    {\bf Proof}. Let $B:\mc{D}(B)\subseteq X\rightarrow X$ be a linear operator with graph $\Gamma(B)$, and suppose that $\Gamma(B)=(\mc{U}(\Gamma(A)))^\perp$. Then (b) shows that $\Gamma(B)=\Gamma(A^\ast)$. If $x\in\mc{D}(B)$ and $y:=Bx$, then $(x,y)\in\Gamma(B)=\Gamma(A)$,
+    so $x\in\mc{D}(A)$ and $y=Ax$. The reverse is obviously true, so $\mc{D}(B)=\mc{D}(A)$, and $Ax=Bx$ for all $x\in\mc{D}(A)$. Thus $A\subset B$ and $B\subset A$, so $B=A$. \hfill{$\qed$}\\[5pt]
+    {\bf d)} Suppose that $A$ is a densely defined and closed linear operator. Show that both $X^2=\mc{U}(\Gamma(A))\oplus\Gamma(A^\ast)$ and $X^2=\mc{U}(\Gamma(A^\ast))\oplus\Gamma(A)$.\\[5pt]
+    {\bf Proof}. Let us simply assert that $\mc{D}(A)$ is a vector subspace of $X$. This is manifestly obvious, for otherwise would violate the linearity of $A$. Similarly, it is clear that $\Gamma(A)$ and $\mc{U}(\Gamma(A))$ are vector subspaces of $X^2$, and
+    we shall spare ourselves the tedious exercise of showing this -- suffice to say that these follow from the linearity of $A$ and $\mc{U}$. Let us show that $\mc{U}(\Gamma(A))$ is closed. Suppose $\{(x_n,y_n)\}_{n\geq 1}\subseteq\mc{U}(\Gamma(A))$
+    and $(x_n,y_n)\rightarrow(x,y)$ as $n\rightarrow\infty$ with respect to $\|\cdot\|_{X^2}$. Then for $n\geq 1$, $(-y_n,x_n)\in\Gamma(A)$ and
+    \begin{align*}
+        \lim_{n\rightarrow\infty}\|(-y_n,x_n)-(-y,x)\|^2=\lim_{n\rightarrow\infty}\|x_n-x\|^2+\lim_{n \rightarrow\infty}\|y_n-y\|^2=0
+    \end{align*}
+    so $(-y_n,x_n)\rightarrow(-y,x)$ as $n\rightarrow\infty$. Since $\Gamma(A)$ is closed, $(-y,x)\in\Gamma(A)$, and $\mc{U}(-y,x)=(x,y)\in\mc{U}(\Gamma(A))$. Thus, $\mc{U}(\Gamma(A))$ is closed, so
+    \[X^2=\mc{U}(\Gamma(A))\oplus(\mc{U}(\Gamma(A)))^\perp=\mc{U}(\Gamma(A))\oplus\Gamma(A^\ast)\]
+    as desired. For the second claim, since $\mc{U}(\Gamma(A))$ was found to be closed, we have
+    \[\mc{U}(\Gamma(A))=((\mc{U}(\Gamma(A)))^\perp)^\perp=\Gamma(A^\ast)^\perp.\]
+    Now, observe that $\mc{U}\circ\mc{U}\equiv-\mbb{I}$, where $\mbb{I}$ is the identity operator on $X^2$, since for any $(x,y)\in X^2$, $\mc{U}^2(x,y)=(-x,-y)=-(x,y)$.
+    But $\Gamma(A)$ is a linear subspace of $X^2$, so $\mc{U}^2(\Gamma(A))=\Gamma(A)$. Thus,
+    \[\Gamma(A)=\mc{U}(\Gamma(A^\ast)^\perp)=(\mc{U}(\Gamma(A^\ast)))^\perp\tag{4}\]
+    where the last equality follows from lemma \ref{lem1}. Finally, observe that $\Gamma(A^\ast)$ was found to be the orthocomplement of $\mc{U}(\Gamma(A))$, and is thus closed. Just as we showed that $\Gamma(A)$ closed implies $\mc{U}(\Gamma(A))$ is too, we have
+    $\mc{U}(\Gamma(A^\ast))$ is closed. Thus:
+    \begin{align*}
+        X^2=\mc{U}(\Gamma(A^\ast))\oplus(\mc{U}(\Gamma(A^\ast)))^\perp=\mc{U}(\Gamma(A^\ast))\oplus\Gamma(A)
+    \end{align*}
+    where the last equality follows from (4), and we are done.\hfill{$\qed$}\\[5pt]
+    {\bf e)} Explain why parts (c) and (d) together imply that if $A$ is a densely defined and closed linear operator, then $\Gamma(A)$ is the graph of $A^{\ast\ast}$. In particular, this shows that under these hypotheses $A=A^{\ast\ast}$.\\[5pt]
+    {\bf Proof}. In class we proved that when $A$ is densely defined and closed, $A^\ast$ is densely defined. Thus $A^{\ast\ast}$ is uniquely defined. From (b), we now have
+    \begin{align*}
+        \Gamma(A^{\ast\ast})=(\mc{U}(\Gamma(A^\ast)))^\perp.
+    \end{align*}
+    But from (d), the equality (4) says $\Gamma(A)=(\mc{U}(\Gamma(A^\ast)))^\perp$, and (c) thus guarantees that $\Gamma(A)=\Gamma(A^{\ast\ast})$, and further $A=A^{\ast\ast}$.\hfill{$\qed$}\\[5pt]
+    {\bf Problem 3}. Let $A:\mc{D}(A)\subset \ell_2\rightarrow \ell_2$ be the operator so that $Ax=(nx_n)_{n\geq 1}$ for any $x=(x_n)_{n\geq 1}\in\mc{D}(A)$. We define
+    \begin{align*}
+        \mc{D}(A):=\left\{x\in\ell_2:\sum_{n=1}^\infty|nx_n|^2<\infty\right\}.
+    \end{align*} 
+    Prove that $A$ is self-adjoint.\\[5pt]
+    {\bf Proof}. We first show that $A$ is densely defined. Let $z=(z_n)_{n\geq 1}\in\ell_2$, and define $x^k=(x^k_n)_{n\geq 1}$ so that $x_n^k=z_n$ for $1\leq n\leq k$ and $x^k_n=0$ when $n>k$. Clearly $\{x^k\}_{N\geq 1}\subseteq\mc{D}(A)$, since
+    \begin{align*}
+        \sum_{n=1}^\infty|nx^k_n|^2=\sum_{n=1}^k|nx^k_n|^2<\infty
+    \end{align*}
+    since this is a finite sum of finite terms. However:
+    \begin{align*}
+        \|z-x^k\|^2=\sum_{n=1}^\infty|z_n-x^k_n|^2=\sum_{n>k}|z_n|^2=\sum_{n=1}^\infty|z_n|^2-\sum_{n=1}^k|z_n|^2,\quad k\geq 1
+    \end{align*}
+    so $\lim_{k\rightarrow\infty}\|z-x^k\|^2=\|z\|^2-\|z\|^2=0$, so $x^k\rightarrow z$ as $k\rightarrow\infty$, and we conclude that $\mc{D}(A)$ is dense in $\ell_2$.
+    Now take $x,y\in\mc{D}(A)$ arbitrary. We find
+    \begin{align*}
+        |\ip{Ax}{y}|=\left|\sum_{n=1}^\infty nx_n\overline{y_n}\right|\leq\sum_{n=1}^\infty |x_n n\overline{y_n}|\leq\left(\sum_{n=1}^\infty|x_n|^2\right)^{1/2}\left(\sum_{n=1}^\infty|ny_n|^2\right)^{1/2}=:C_y\|x\|
+    \end{align*}
+    where $0<C_y<\infty$ since $y\in\mc{D}(A)$. But this says that $y\in\mc{D}(A^\ast)$, so $\mc{D}(A)\subseteq\mc{D}(A^\ast)$. Now, take $y\in\mc{D}(A^\ast)$ and consider the sequence $x^k=(x^k_n)_{n\geq 1}$ with
+    \begin{align*}
+        x^k_n=\begin{cases}
+            \frac{ny_n}{\left(\sum_{n=1}^k|ny_n|^2\right)^{1/2}},\quad&\text{for $1\leq n\leq k$}\\
+            0,\quad&\text{when $n>k$.}
+        \end{cases}
+    \end{align*}
+    In particular, it is easy to see that
+    \[\|x^k\|^2=\frac{1}{\left(\sum_{n=1}^k|ny_n|^2\right)}\sum_{n=1}^\infty |x^k_n|^2=\frac{1}{\left(\sum_{n=1}^k|ny_n|^2\right)}\sum_{n=1}^k |ny_n|^2=1,\quad k\geq 1.\]
+    Furthermore, $x^k\in\mc{D}(A)$ for any $k\geq 1$ since 
+    \begin{align*}
+        \sum_{n=1}^\infty |nx^k_n|^2=\frac{1}{\left(\sum_{n=1}^k|ny_n|^2\right)}\sum_{n=1}^kn^4|y_n|^2<\infty
+    \end{align*}
+    once again because the sum is finite. Now, we find
+    \begin{align*}
+        \frac{1}{\left(\sum_{n=1}^k|ny_n|^2\right)^{1/2}}\sum_{n=1}^k|ny_n|^2&=\frac{1}{\left(\sum_{n=1}^k|ny_n|^2\right)^{1/2}}\left|\sum_{n=1}^kn(ny_n)(\overline{y_n})\right|\\
+        &=\left|\sum_{n=1}^knx^k_n(\overline{y_n})\right|\tag{5}\\
+        &=\left|\sum_{n=1}^\infty nx^k_n\overline{y_n}\right|\tag{6}\\
+        &=\left|\ip{Ax^k}{y}\right|\\
+        &\leq C_y\|x^k\|\tag{7}\\
+        &=C_y.\tag{8}
+    \end{align*}
+    To elaborate: (5) holds by moving the fraction into the sum, (6) since $x^k_n=0$ for $n>k$ and (7) since $y\in\mc{D}(A^\ast)$ and $x^k\in\mc{D}(A)$. The constant $0<C_y<\infty$ is furnished by the definition of $y\in\mc{D}(A^\ast)$, and (8)
+    follows since $\|x^k\|=1$ for $k\geq 1$. Taking limits,
+    \begin{align*}
+        \lim_{k\rightarrow\infty}\frac{1}{\left(\sum_{n=1}^k|ny_n|^2\right)^{1/2}}\sum_{n=1}^k|ny_n|^2\leq C_y\quad\Rightarrow\quad\frac{1}{\left(\sum_{n=1}^\infty|ny_n|^2\right)^{1/2}}\sum_{n=1}^\infty|ny_n|^2\leq C_y\quad\Rightarrow\quad \left(\sum_{n=1}^\infty|ny_n|^2\right)^{1/2}<C_y<\infty
+    \end{align*}
+    so $y\in\mc{D}(A)$, and $\mc{D}(A)\subseteq\mc{D}(A^\ast)$, and we conclude $\mc{D}(A)=\mc{D}(A^\ast)$. Finally, we observe that for any $x,y\in\mc{D}(A)=\mc{D}(A^\ast)$,
+    \begin{align*}
+        \ip{Ax}{y}=\sum_{n=1}^\infty nx_n\overline{y_n}=\sum_{n=1}^\infty x_n\overline{ny_n}=\ip{x}{Ay}
+    \end{align*}
+    which says that $A^\ast\big|_{\mc{D}(A)}=A$, and $A\big|_{\mc{D}(A^\ast)}=A^\ast$, so $A^\ast\subset A$ and $A\subset A^\ast$, so $A=A^\ast$ -- i.e., $A$ is self-adjoint.\hfill{$\qed$}
+    \end{document}
