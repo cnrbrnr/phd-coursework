@@ -4,11 +4,21 @@
 
 # ======================================
 # Exclude all compiler-generated filetypes
+# >> (corresponding to .tex)
 # ======================================
 **/*.aux
-**/*.fdk_latexmk
+**/*.fdb_latexmk
 **/*.fls
 **/*.log
 **/*.pdf
 **/*.synctex.gz
+# ======================================
+
+# ======================================
+# Exclude all BibTex-generated filetypes 
+# >> (corresponding to .bib)
+# ======================================
+**/*.bbl
+**/*.blg
+**/*.out
 # ======================================

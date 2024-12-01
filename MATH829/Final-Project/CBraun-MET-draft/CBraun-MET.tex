@@ -119,7 +119,7 @@ urlcolor={black} }
     \indent At this point we face two practical limitations. First, it is not
     possible to determine $x_n$ for any $n\geq 0$ precisely, ($N$ could be on
     the order of $10^{23}$ for even a small quantity of gas) so we instead fix
-    an observable $f\in L_2(\mbb{X})$ so that $f:(\mbb{X},T)\rightarrow\mbb{R}$
+    an observable $f\in L^2(\mbb{X})$ so that $f:(\mbb{X},T)\rightarrow\mbb{R}$
     (perhaps $f(x)$ returns a temperature reading associated to a state
     $x\in\mbb{X}$) inducing a new trajectory $\{f(x_n)\}_{n\geq 0}$. Second, for
     $n\geq 0$ we assume that $x_n\mapsto x_{n+1}$ spans an extremely short
@@ -137,7 +137,7 @@ urlcolor={black} }
     (ergodic hypothesis) \cite{Hasenöhrl_Boltzmann_2012} (see
     \cite{Boltzmann_2019} for a translation). This was a sufficient condition on
     the dynamical system $(\mbb{X},T)$ to deduce the existence of a functional
-    $\mu^T:L_2(\mbb{X})\rightarrow\mbb{R}$ such that
+    $\mu^T:L^2(\mbb{X})\rightarrow\mbb{R}$ such that
     \begin{align}
         \lim_{N\rightarrow\infty}\mu_N^T(f,x_0)=\mu^T(f)\label{eq2}
     \end{align}
@@ -240,7 +240,7 @@ urlcolor={black} }
         \frac{1}{N}\sum_{n=0}^{N-1}U^n(f+g-Ug)=\frac{1}{N}\sum_{n=0}^{N-1}U^nf+\frac{1}{N}\sum_{n=0}^{N-1}(U^ng-U^{n+1}g)=f+\frac{1}{N}(g-U^Ng)\overset{N\rightarrow\infty}{\longrightarrow} f.\label{eq3}
     \end{align}
     Further, $\proj_{\mc{H}_T}h=f=P_Th$. Note that in (\ref{eq3}) we have also
-    shown that $P_Tf=f$ for all $f\in\mc{H}_T$, and $C_N(g-Ug)\rightarrow 0$ for
+    shown that $P_Tf=f$ for all $f\in\mc{H}_T$, and $P_T(g-Ug)=0$ for
     all $g\in\mc{H}$. To complete the proof, fix $f\in\mc{H}$, $\varepsilon>0$,
     and a sequence $\{f_n\}_{n\geq 1}\subseteq\mc{H}_T\oplus\ran(\mbb{I}-U)$ so
     that $f_n\rightarrow f$. For $n\geq 1$, we can find $g_n\in\mc{H}_T$,
@@ -265,9 +265,9 @@ urlcolor={black} }
     \end{align*}
     \indent Perhaps the most natural question following this is on the nature of
     $\mc{H}_T$; for which $f\in\mc{H}$ do we have $Uf=f$? Returning to the
-    physical case where $U_T$ is the Koopman operator and $\mc{H}=L_2(\mbb{X})$,
+    physical case where $U_T$ is the Koopman operator and $\mc{H}=L^2(\mbb{X})$,
     the answer is determined entirely by $T$. However, for any constant function
-    $f\in L_2(\mbb{X})$ and $x\in\mbb{X}$, we have $U_Tf(x)=(f\circ T)(x)=f(x)$
+    $f\in L^2(\mbb{X})$ and $x\in\mbb{X}$, we have $U_Tf(x)=(f\circ T)(x)=f(x)$
     regardless of $T$. In light of theorem \ref{thm1}, one can therefore regard
     constant functions as equilibrium observations in the sense that what one
     "observes" via $\{f(x_n)\}_{n\geq 1}$ will converge over time, regardless of

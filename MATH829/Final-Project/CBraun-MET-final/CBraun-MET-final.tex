@@ -70,9 +70,10 @@ urlcolor={black} }
         November, 2024
     \end{center}
     \vspace{5pt}
-    \textbf{Acknowledgements} I would like to sincerely thank Professor Francesco Cellarosi for directing me to
-    the book by Weber (\cite{Weber_2000}) and for our many illuminating conversations on ergodic theory and its applications.\\[5pt]
-    \textbf{Abstract} [[Synopsis]]
+    \begin{center}
+        \textbf{Acknowledgements}\\I would like to sincerely thank Professor Francesco Cellarosi for directing me to
+        the book by Weber (\cite{Weber_2000}) and for our many illuminating conversations on ergodic theory and its diverse applications.\\[5pt]
+    \end{center}
     \section{Introduction}\label{sec0} At a glance, the old adage: "physical systems tend to
     equilibrium" (as codified by the laws of thermodynamics) appears quite banal
     and unassuming. However, if one recognizes equilibrium as a
@@ -99,12 +100,15 @@ urlcolor={black} }
     space to be separable, we then showcase an early application to harmonic
     analysis, owing to \cite{Fan_1946}, yielding a sort of Fourier transform for
     a large class of dynamical systems.\\[5pt]
-    \indent The document is organized as follows: in $\S$\ref{sec1},
-    a high level overview of the conceptual basis, history and impetus for ergodic
-    are provided from the perspective of classical statistical mechanics. In $\S$\ref{sec2},
-    we define the Koopman operator and its fixed space in order to prove a generalized, operator-theoretic
-    version of the mean ergodic theorem, of which von Neumann's is an immediate corollary.
-
+    \indent The document is organized as follows: in $\S$\ref{sec1}, a high
+    level overview of the conceptual basis, history and impetus for ergodic are
+    provided from the perspective of classical statistical mechanics. In
+    $\S$\ref{sec2}, we define the Koopman operator and its fixed space in order
+    to prove a generalized, operator-theoretic version of the mean ergodic
+    theorem, of which von Neumann's is an immediate corollary. Finally, in $\S$4
+    and $\S$5 we characterize the dynamics of weakly stationary processes, and
+    obtain a uniformly convergent Fourier-type representation for these, but with
+    eigenfunction modes obtained via the aforeshown mean ergodic theorem.
     \section{Conceptual Background}\label{sec1}
     Following the expositions of \cite[ch.1]{Eisner_Farkas_Haase_Nagel_2015},
     and \cite[ch.2, $\S$5]{Reed_Simon_1972} we first examine the conceptual
@@ -140,7 +144,7 @@ urlcolor={black} }
     and we might intuitively expect the \textit{time mean}
     $\lim_{N\rightarrow\infty}\mu^T_N(f,x_0)$, assuming it exists, to furnish
     some notion of equilibrium at the macroscale. Of course, (\ref{eq1}) is not
-    yet satisfactory since it still depends on an $f(x_0)$. This brings us to
+    yet satisfactory since it still depends on our ability to resolve $f(x_0)$. This brings us to
     1885, when Boltzmann proposed the the so-called \textit{Ergodenhypothese}
     (ergodic hypothesis) \cite{Hasenöhrl_Boltzmann_2012} (see
     \cite{Boltzmann_2019} for a translation). This was a sufficient condition on
@@ -178,14 +182,17 @@ urlcolor={black} }
         $U_T:\mc{H}\rightarrow \mc{H}$ defined by $U_Tf:=f\circ T$ for all $f\in
         \mc{H}$ is called the \textit{Koopman operator} associated to $T$.
     \end{definition}
-    This definition implicitly requires some regularity of $T$, which we shall
-    clarify in the sequel. For a Koopman operator $U_T$, its \textit{fixed
-    space} is defined
-    \[\fix(U_T):=\{f\in\mc{H}:U_Tf=f\}=\ker(\mbb{I}-U_T)\] which is closed since
-    $\ker(\mbb{I}-U_T)=(\ran(\mbb{I}-U_t^\ast))^{\perp}$. Note that $\fix(U_T)$ is nothing more than the eigenspace
-    of $U_T$ corresponding to eigenvalue $1$. We shall denote
-    $\mc{H}_T:=\fix(U_T)$ for notational expediency. These objects are
-    sufficient to state the main result, which can be found in \cite[theorem
+    One might impose some regularity on $T$ in order to guarantee that $U_T$ is
+    sufficiently "nice". We shall clarify what "nice" means to us in theorem
+    \ref{thm1}, and a commonly considered form of dynamical regularity following
+    example \ref{ex1}. For a Koopman operator $U_T$, its \textit{fixed space} is
+    defined
+    \[\fix(U_T):=\{f\in\mc{H}:U_Tf=f\}=\ker(\mbb{I}-U_T)\]
+    which is closed since $\ker(\mbb{I}-U_T)=(\ran(\mbb{I}-U_t^\ast))^{\perp}$.
+    Note that $\fix(U_T)$ is nothing more than the eigenspace of $U_T$
+    corresponding to eigenvalue $1$. We shall denote $\mc{H}_T:=\fix(U_T)$ for
+    notational expediency. These objects are sufficient to state the main
+    result, which can be found in \cite[theorem
     8.6]{Eisner_Farkas_Haase_Nagel_2015}.
     \begin{theorem}[Mean Ergodic Theorem {\cite[theorem
         8.6]{Eisner_Farkas_Haase_Nagel_2015}}, {\cite[theorem
@@ -201,8 +208,9 @@ urlcolor={black} }
     \end{theorem}
     We say that $U$ is a \textit{contraction} if and only if $\|U\|_{op}\leq 1$. Note that this
     is weaker than the notion of contraction in the Banach fixed point theorem, which calls for $\|U\|_{op}<1$ instead.
-    In what follows we can think of $U$ as the Koopman operator associated to $T$, writing $P_T:=P_{U}$ and $\mc{H}_T=\fix(U)$, but this need not be the case, in general.
-    The rest of the section is dedicated to the proof of
+    In what follows we can think of $U$ as the Koopman operator associated to $T$, writing $P_T:=P_{U}$ and $\mc{H}_T=\fix(U)$, but this need not be the case and, indeed, will
+    not be the case in $\S$\ref{sec3}-\ref{sec4}.
+    The rest of the current section is dedicated to the proof of
     this theorem, following \cite[theorem 1.3.1]{Weber_2000} for which we induce
     the \textit{Ces\`aro averages}:
     \[C_N:=\frac{1}{N}\sum_{n=0}^{N-1}U^n,\quad N\geq 0.\]
@@ -251,11 +259,11 @@ urlcolor={black} }
         \frac{1}{N}\sum_{n=0}^{N-1}U^n(f+g-Ug)=\frac{1}{N}\sum_{n=0}^{N-1}U^nf+\frac{1}{N}\sum_{n=0}^{N-1}(U^ng-U^{n+1}g)=f+\frac{1}{N}(g-U^Ng)\overset{N\rightarrow\infty}{\longrightarrow} f.\label{eq3}
     \end{align}
     Further, $\proj_{\mc{H}_T}h=f=P_Th$. Note that in (\ref{eq3}) we have also
-    shown that $P_Tf=f$ for all $f\in\mc{H}_T$, and $C_N(g-Ug)\rightarrow 0$ for
+    shown that $P_Tf=f$ for all $f\in\mc{H}_T$, and $P_T(g-Ug)=0$ for
     all $g\in\mc{H}$. To complete the proof, fix $f\in\mc{H}$, $\varepsilon>0$,
     and a sequence $\{f_n\}_{n\geq 1}\subseteq\mc{H}_T\oplus\ran(\mbb{I}-U)$ so
     that $f_n\rightarrow f$. For $n\geq 1$, we can find $g_n\in\mc{H}_T$,
-    $h_n\in\ran(\mbb{I}-U)$ so that $f_n=g_n+h_n-Uh_n$, and 
+    $h_n\in\ran(\mbb{I}-U)$ so that $f_n=g_n+h_n-Uh_n$ and 
     \begin{align*}
         f_n=g_n+h_n-Uh_n\longrightarrow g+h-Uh=f
     \end{align*}
@@ -266,23 +274,23 @@ urlcolor={black} }
     1$ large enough such that $\|C_N(h_n-Uh_n)\|\leq\frac{\varepsilon}{2}$.
     Then,
     \begin{align*}
-        \|C_N\proj_{\mc{H}_0}f\|\leq\|C_N[(h-Uh)-(h_n-Uh_n)]\|+\|C_N(h_n-Uh_n)\|\leq \varepsilon
+        \|C_N\proj_{\mc{H}_0}f\|\leq\|C_N[(h-Uh)-(h_n-Uh_n)]\|+\|C_N(h_n-Uh_n)\|\leq\frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon
     \end{align*}
-    since $C_N$ is a contraction. This means that
+    where the inequality holds since $C_N$ is itself a contraction. This means that
     $C_N\proj_{\mc{H}_0}f\rightarrow 0$, (i.e., $P_T\proj_{\mc{H}_0}f=0$) from
     which we finally obtain that for all $f\in\mc{H}$:
     \begin{align*}
         P_Tf=P_T(\proj_{\mc{H}_T}f+\proj_{\mc{H}_0}f)=\proj_{\mc{H}_T}f.\tag*{$\qed$}
     \end{align*}
     \indent Perhaps the most natural question following this is on the nature of
-    $\mc{H}_T$; for which $f\in\mc{H}$ should we expect to have $Uf=f$? Returning to the
-    physical case where $U_T$ is the Koopman operator and $\mc{H}=L^2(\mbb{X})$,
-    the answer is determined entirely by $T$. However, for any constant function
-    $f\in L^2(\mbb{X})$ and $x\in\mbb{X}$, we have $U_Tf(x)=(f\circ T)(x)=f(x)$
-    regardless of $T$. In light of theorem \ref{thm1}, one can therefore regard
-    constant functions as equilibrium observations in the sense that what one
-    "observes" via $\{f(x_n)\}_{n\geq 1}$ will converge over time, regardless of
-    where the system began. This discussion motivates the following definition.
+    $\mc{H}_T$; for which $f\in\mc{H}$ should we expect to have $Uf=f$?
+    Returning to the physical case where $U_T$ is the Koopman operator and
+    $\mc{H}=L^2(\mbb{X})$, the answer is determined entirely by the dynamics
+    $T$. However, for any constant function $f\in L^2(\mbb{X})$ and
+    $x\in\mbb{X}$, we have $U_Tf(x)=(f\circ T)(x)=f(x)$ regardless of $T$ --
+    that is, $f\in\fix(U_T)$. In light of theorem \ref{thm1}, one can therefore
+    regard a constant limit $P_Tg$ (with $g\in\mc{H}_T$ not necessarily constant) as an equilibrium observation in the sense that what
+    one "observes" via $\{g(x_n)\}_{n\geq 1}$ will converge over time independent of the initialization $x_0\in\mbb{X}$. This discussion motivates the following definition.
     \begin{definition}[Ergodicity]\label{def2} We call $T$ \textit{ergodic} if
         and only if $\mc{H}_T=\{f\in\mc{H}:\;\text{$f$ is constant}\}$.
     \end{definition}
@@ -291,7 +299,7 @@ urlcolor={black} }
     space -- both of which are formalized measure-theoretically \cite[$\S$II.5,
     p.59]{Reed_Simon_1972}. Let us now illustrate this concept with a relatively
     intuitive application of theorem \ref{thm1}.
-    \begin{example}[Rotations on the Unit Sphere in $\mbb{C}$]
+    \begin{example}[Rotations on the Unit Sphere in $\mbb{C}$]\label{ex1}
         Let $\mbb{X}:=\{z\in\mbb{C}:|z|=1\}=\{e^{2\pi xi}:x\in[0,1)\}$. For
         $\alpha\in[0,1)$, consider dynamics $T_\alpha:\mbb{X}\rightarrow\mbb{X}$
         such that $T_\alpha z=e^{2\pi\alpha i}z$. That is, $T_\alpha$ rotates
@@ -311,26 +319,33 @@ urlcolor={black} }
         inverse $U^{-1}_\alpha:=U_{-\alpha}$) means $U_\alpha$ is unitary, so
         $\|U\|_{op}=1$. Then by theorem \ref{thm1},
         \begin{align*}
-            \frac{1}{N}\sum_{n=0}^{N-1}U^n_\alpha f\longrightarrow\proj_{\mc{H}_{T_\alpha}}f
+            \frac{1}{N}\sum_{n=0}^{N-1}U^n_\alpha f\overset{N\rightarrow\infty}{\longrightarrow}\proj_{\mc{H}_{T_\alpha}}f
         \end{align*}
         where $\mc{H}_{T_\alpha}:=\fix(U_\alpha)=\{g\in\mc{H}:g(e^{2\pi\alpha
         i}z)=g(z)\;\forall z\in\mbb{X}\}$, the set of observables which are
         invariant under rotations of $2\pi\alpha$ radians. It turns out that
-        $T_\alpha$ is ergodic if and only if $\alpha\in[0,1)\setminus\mbb{Q}$.
-        For a complete proof of this fact, we refer the reader to
-        \cite[proposition 7.15]{Eisner_Farkas_Haase_Nagel_2015}. For some
+        $T_\alpha$ is ergodic if and only if $\alpha\in[0,1)\setminus\mbb{Q}$
+        (for a proof of this fact, we refer the reader to
+        \cite[proposition 7.15]{Eisner_Farkas_Haase_Nagel_2015}). For some
         intuition as to why $T_\alpha$ is not ergodic when $\alpha$ is rational,
         let $\alpha=\frac{1}{2}$ and consider $h\in\mc{H}$ given by
         $h(z)=\1{\arg(z)\in[0,\frac{1}{2}\pi)}+\1{\arg(z)\in[\pi,\frac{3}{2}\pi)}$.
         Then $h\in\mc{H}_{T_\alpha}$, since $\arg(T_\alpha z)=\arg(e^{\pi
         i}z)\in[\pi,\frac{3}{2}\pi)$ $\forall z\in\mbb{X}$ with
-        $\arg(z)\in[0,\frac{1}{2}\pi)$, and vise versa, but $h$ is not constant
+        $\arg(z)\in[0,\frac{1}{2}\pi)$, and vise versa, yet $h$ is not constant
         on $\mbb{X}$.
     \end{example}
-    We conclude this section by noting that the statement of von Neumann's mean ergodic theorem \cite{Neumann_1932} is identical to theorem \ref{thm1},
-    but specifically for Koopman operators $U_T$ associated to $T$ from so-called \textit{measure preserving} dynamical systems $(\mbb{X},T)$. That this is an immediate corollary of theorem \ref{thm1} follows that fact that if $T$ is measure preserving,
-    then $U_T$ is unitary \cite[Koopman's lemma; p.57]{Reed_Simon_1972}. In particular, $\|U_T\|_{op}=1$, so theorem \ref{thm1} applies.\\[5pt]
-    \indent Having sidestepped the foundational notions of measure-theoretic ergodic theory, we proceed to some applications of perhaps more esoteric mathematical intrigue.
+    We conclude this section by noting that the statement of von Neumann's mean
+    ergodic theorem \cite{Neumann_1932} is identical to theorem \ref{thm1}, but
+    specifically for Koopman operators $U_T$ associated to $T$ from so-called
+    \textit{measure preserving} dynamical systems $(\mbb{X},T)$. That this is an
+    immediate corollary of theorem \ref{thm1} follows the fact that if $T$ is
+    measure preserving, then $U_T$ is unitary \cite[Koopman's lemma;
+    p.57]{Reed_Simon_1972}. In particular, $\|U_T\|_{op}=1$, so theorem
+    \ref{thm1} applies.\\[5pt]
+    \indent Having sidestepped the foundational notions of measure-theoretic
+    ergodic theory, we proceed to some applications of perhaps more esoteric
+    mathematical intrigue. 
     \section{Weakly Stationary Sequences}\label{sec3} In  \S\ref{sec2} we
     found that any contraction $U$ on a Hilbert space $\mc{H}$ is mean ergodic
     in the sense that $P_U:f\mapsto \overline{f}$ exists for all $f\in\mc{H}$.
@@ -417,22 +432,20 @@ urlcolor={black} }
     $U:\mc{H}_F\rightarrow\mc{H}_F$ is unitary. Lastly, we may recharacterize WS
     processes as those satisfying $\ip{f_n}{f_m}=\Gamma(n-m)$ for $n\geq m\geq
     0$ and some function $\Gamma$. Indeed, when this is the case we get
-    \begin{align*}
-        \ip{f_{n+k}}{f_{m+k}}=\Gamma(n+k-m-k)=\Gamma(n-m)=\ip{f_n}{f_m}.
-    \end{align*}
-    To handle the case where $n<m$, simply define
-    $\Gamma(n-m)=\overline{\Gamma(m-n)}$. Conversely, if we begin with a WS
+    $\ip{f_{n+k}}{f_{m+k}}=\Gamma(n+k-m-k)=\Gamma(n-m)=\ip{f_n}{f_m}$
+    (to handle the case where $n<m$, simply define
+    $\Gamma(n-m)=\overline{\Gamma(m-n)}$). Conversely, if we begin with a WS
     sequence having dynamics $U$, then
     $\ip{f_n}{f_m}=\ip{U^nf_0}{U^mf_0}=\ip{U^{n-m}f_0}{f_0}=:\Gamma(n-m)$ since
     $U^\ast=U^{-1}$. For example, any orthonormal system
     $\{e_n\}_{n\in\mbb{Z}}\subseteq\mc{H}$ is WS, since
     $\ip{e_n}{e_m}=\delta_{n-m}$. A similarly trivial example is
-    $\{e^{-in\lambda}f_n\}_{n\geq 1}$ where we set
+    $\{e^{-in\lambda}f_n\}_{n\geq 1}$, taking
     $\lambda\in\mbb{T}:=\{x\mod2\pi:x\in\mbb{R}\}$, provided $\{f_n\}_{n\geq 1}$
     is WS to begin with. Indeed,
     $\ip{e^{-in\lambda}f_n}{e^{-im\lambda}f_m}=e^{-i(n-m)\lambda}\ip{f_n}{f_m}$.
     Simple though it may be, this observation, in conjunction with the mean
-    ergodic theorem, enables a sort of Fourier-type representation for any WS
+    ergodic theorem, enables a sort of Fourier-type representation of any WS
     process.
     \section{Harmonic Decomposition of Weakly Stationary Processes}\label{sec4}
     Let $\mbb{T}:=\{x\mod2\pi:x\in\mbb{R}\}$ and $F=\{f_n\}_{n\geq
@@ -447,7 +460,7 @@ urlcolor={black} }
         \Lambda(f,U,\lambda):=\lim_{N\rightarrow\infty}\frac{1}{N}\sum_{n=1}^N e^{-in\lambda}U^nf,\quad\lambda\in\mbb{T}
     \end{align}
     which exists for all $\lambda\in\mbb{T}$, $f\in\mc{H}$ by theorem \ref{thm1}.
-    For this, we shall follow the steps found in\cite[\S6]{Fan_1946} closely. Our first observation is
+    For this, we shall follow the steps found in \cite[\S6]{Fan_1946} closely. Our first observation is
     that the inner product of WS $f_n$ with its mean ergodic projection is constant in $n\geq 1$.
     \begin{lemma}[{\cite[corollary 4]{Fan_1946}}]\label{lem6}
         Let $U:\mc{H}\rightarrow\mc{H}$, be unitary and $f\in\mc{H}$ so that
@@ -459,7 +472,7 @@ urlcolor={black} }
     \begin{align*}
         \left\|P_Uf-\frac{1}{N}\sum_{n=2}^{N+1}U^nf\right\|=\left\|UP_Uf-U\left(\frac{1}{N}\sum_{n=1}^{N}U^nf\right)\right\|=\left\|P_Uf-\frac{1}{N}\sum_{n=1}^NU^nf\right\|\overset{N\rightarrow\infty}{\longrightarrow} 0
     \end{align*}
-    since $U$ is unitary. Repeating this, we obtain
+    since $U$ is unitary. Repeating this, we can obtain
     $P_Uf=\lim_{N\rightarrow\infty}\frac{1}{N}\sum_{n=m}^{N+m-1}U^nf$ for $m\geq1$
     by induction. For $n,m\geq 1$,
     \begin{align*}
@@ -544,7 +557,7 @@ urlcolor={black} }
         P_n:=\sum_{j=1}^\infty e^{in\lambda_j}\Lambda(f,U,\lambda_j),\quad\text{with remainder}\quad Q_n:=f_n-P_n,\quad n\geq 1
     \end{align*}
     converges in $\mc{H}$ uniformly in $n$.
-    \begin{theorem}[Fourier Decomposition of WS Processes {\cite[theorem 10]{Fan_1946}}]
+    \begin{theorem}[Fourier Decomposition of WS Processes {\cite[theorem 10]{Fan_1946}}]\label{thm3}
         Let $\{f_n\}_{n\geq 1}$ be WS in a separable Hilbert space $\mc{H}$ with dynamics $U$. Having extracted the frequencies $\{\lambda_j\}_{j=1}^\infty=\{\lambda\in\mbb{T}:\Lambda(f,U,\lambda)\neq 0\}$
         via the mean ergodic theorem, the Fourier series $\{P_n\}_{n\geq 1}$ converges in $\mc{H}$ uniformly in $n$, both it and the remainders $\{Q_n\}_{n\geq 1}$ are
         WS, and $\ip{P_n}{Q_m}=0$ for any $n,m\geq 1$. Further, the series $\sum_{j=1}^\infty\|\Lambda(f,U,\lambda_j)\|^2<\infty$, and in fact
@@ -570,13 +583,46 @@ urlcolor={black} }
     \begin{align*}
         \ip{P_n}{P_m}=\lim_{N\rightarrow\infty}\ip{P^N_n}{P^N_m}=\sum_{j=1}^\infty e^{i(n-m)\lambda_j}\|\Lambda(f,U,\lambda_j)\|^2
     \end{align*}
-    which signifies $\{P_n\}_{n\geq 1}$ (and hence $\{Q_n\}_{n\geq 1}$) as WS. [[Show $\{P_n\}_{n\geq 1}$ is its own Fourier series, and $\{Q_n\}_{n\geq 1}$'s is null following \cite[theorem 10]{Fan_1946}]]\hfill{$\qed$}\\[5pt]
+    which signifies $\{P_n\}_{n\geq 1}$ (and hence $\{Q_n\}_{n\geq 1}$) as WS. Lastly, we claim that $\Lambda(P_1,U_P,\lambda_j)=\Lambda(f,U,\lambda_j)$ for all $j\geq 1$, and
+    $\Lambda(P_1,U_P,\lambda)=0$ when $\lambda\notin\{\lambda_j\}_{j\geq 1}$, where $U_P$ are (unitary) dynamics of the WS process $\{P_n\}_{n\geq 1}$. In particular, this would imply that $\{P_n\}_{n\geq 1}$ is its own Fourier series.
+    For this claim, we compute:
+    \begin{align*}
+        \Lambda(P,U_P,\lambda)=\lim_{N\rightarrow\infty}\frac{1}{N}\sum_{k=1}^Ne^{-ik\lambda}P_k&=\sum_{j=1}^\infty\lim_{N\rightarrow\infty}\left(\frac{1}{N}\sum_{k=1}^N e^{ik(\lambda_j-\lambda)}\Lambda(f,U,\lambda_j)\right)
+    \end{align*}
+    invoking the uniform convergence of $P_k$ to interchange the limit and series. But now the summand satisfies
+    \begin{align*}
+        \lim_{N\rightarrow\infty}\frac{1}{N}\sum_{k=1}^Ne^{ik(\lambda_j-\lambda)}\Lambda(f,U,\lambda_j)=\begin{cases}
+            \Lambda(f,U,\lambda_j),\quad&\text{if $\lambda=\lambda_j$}\\
+            0,\quad&\text{otherwise}.
+        \end{cases}
+    \end{align*}
+    which proves the claim. Note that the first of these cases holds since $\frac{1}{N}\sum_{k=1}^N\Lambda(f,U,\lambda_j)=\Lambda(f,U,\lambda_j)$ for $N\geq 1$. Then for the latter case, notice $\|e^{i(\lambda_j-\lambda)}\mbb{I}\|_{op}=1$ and the fixed space $\fix(e^{i(\lambda_j-\lambda)}\mbb{I})=\{g\in\mc{H}:(e^{i(\lambda_j-\lambda)}-1)g=0\}=\{0\}\subset\mc{H}$, so 
+    by theorem \ref{thm1}: 
+    \begin{align*}
+        \lim_{N\rightarrow\infty}\sum_{k=1}^Ne^{ik(\lambda_j-\lambda)}\Lambda(f,U,\lambda_j)=\proj_{\fix(e^{i(\lambda_j-\lambda)}\mbb{I})}\Lambda(f,U,\lambda_j)=0. 
+    \end{align*}
+    That $\Lambda(Q_n,U_Q,\lambda)=0$ (where $U_Q$ are the unitary dynamics of the WS process $\{Q_n\}_{n\geq 1}$) for all $n\geq 1$, $\lambda\in\mbb{T}$ follows from the fact that $Q_n=f_n-P_n$ for $n\geq 1$. This completes the proof. \hfill{$\qed$}\\[5pt]
     \indent In order for $Q_n=0$ for $n\geq 1$, it is necessary and sufficient that $\sum_{j=1}^\infty e^{i\lambda_j}\Lambda(f,U,\lambda_j)=f_1$ since, when this holds:
     \begin{align*}
         f_1=P_1\quad\Rightarrow\quad f_2=UP_1\quad\Rightarrow\quad\cdots\quad\Rightarrow\quad f_n=U^{n-1}P_1,\quad n\geq 1.
     \end{align*}
-    In this case, we have been able to express $\{f_n\}_{n\geq 1}\subseteq\mc{H}$ in terms of a set of nontrivial mean ergodic projections associated to a collection of twisting processes $\{e^{-in\lambda_j}f_n\}_{n\geq 1}$.\\[5pt] 
-    [[Concluding remarks, tying back to the narrative from the introduction]]
+    In this case, we have been able to express $\{f_n\}_{n\geq 1}\subseteq\mc{H}$ in terms of a set of nontrivial mean ergodic projections, or mean ergodic modes, associated to a collection of twisting processes $\{e^{-in\lambda_j}f_n\}_{n\geq 1}$.
+    \section{Conclusion}\label{sec5} While pointwise, measure-theoretic ergodic
+    theorems seem to dominate the physics literature, mean-type ergodic theorems
+    (such as von Neumann's) are powerful standalone tools for analysis in
+    Hilbert spaces. To wit, theorem \ref{thm3} allows one to express each point
+    of a discrete, unitary evolution $\{U^nf\}_{n\geq 1}$ in a $L^2$ space using
+    a sequence of mean ergodic modes $\{\Lambda(f,U,\lambda_j)\}_{j\geq 1}$ in
+    analogy with Fourier series. Further, this constitutes an eigenfunction
+    expansion since
+    $U\Lambda(f,U,\lambda_j)=e^{i\lambda_j}\Lambda(f,U,\lambda_j)$ for $j\geq
+    1$. There is surely much more to say on the utility/applications of this
+    result both within and beyond mathematics. As parting questions to ponder: (i) might there be some use in representing a
+    (discrete-time, unitary) evolution of a wavefunction obtained from
+    Schr\"odinger's equation according to theorem \ref{thm3}? (ii) Is it ever the case that
+    $\{\lambda_j\}_{j=1}^\infty$ is precisely the point spectrum of $U$?
+
+
     \newpage
     \bibliography{CBraun-MET}
     \bibliographystyle{ieeetr}
@@ -587,7 +633,7 @@ urlcolor={black} }
     % \[F:=\{f\in\mc{H}:\;\lim_{N\rightarrow\infty}C_N\proj_{\mc{H}_0}f=0\}.\]
     % By the previous calculation, we have $\mc{H}_T\oplus(\ran(\mbb{I}-U))^\perp\subseteq F$, so if $F$ is closed, then $F=\mc{H}$. First, for $N\geq 1$
     % \begin{align*}
-    %     \left\|C_N\right\|_{op}=\|\frac{1}{N}\sum_{n=0}^{N-1}U^n\|_{op}\leq\frac{1}{N}\sum_{n=0}^{N-1}\|U\|_{op}^n\leq 1
+    %     \left\|C_N\right\|_{op}=\|\frac{1}{N}\sum_{n=0}^{N-1}U^n\|_{op}\leq\frac{1}{N}\sum_{n=0}^{N-1}\|U\|_{op}^n\leq 1since
     % \end{align*}
     % so $C_N$ is a contraction for $N\geq 1$. Now consider a sequence $\{f_n\}_{n\geq 1}\subset F$ such that $f_n\rightarrow f$. Clearly, we then have $g_n:=\proj_{\mc{H}_0}f_n\rightarrow\proj_{\mc{H}_0}f=:g$. Fixing $\varepsilon>0$, take $n\geq 1$ large enough so that $\|g-g_n\|\leq\frac{\varepsilon}{2}$,
     % and then $N$ large enough so that $\|C_Ng_n\|\leq\frac{\varepsilon}{2}$. Then,
